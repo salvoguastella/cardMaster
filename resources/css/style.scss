@@ -97,6 +97,17 @@ h1,h2,h3,h4,h5,h6{
 	border-radius:2px;
 }
 
+#cardPreview{
+  display: block;
+  position:absolute;
+  top:0;
+  left:0;
+  width:250px;
+  img{
+    width:100%;
+  }
+}
+
 .header_wrapper{
 	.message-bar{
 		font-weight:400;

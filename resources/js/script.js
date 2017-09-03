@@ -99,7 +99,7 @@ function _combo(options){
 	this.getCardImages = function(){
 		var imageString = "";
 		this.cards.forEach(function(card){
-			imageString = imageString + "<img src='./resources/img/cardRenders/"+card+".png'>";
+			imageString = imageString + "<img class='cardZoom' src='./resources/img/cardRenders/"+card+".png'>";
 		});
 		return imageString;
 	}
@@ -108,6 +108,35 @@ function _combo(options){
 cardMaster.getPage = function(){
 	return document.title;
 }
+
+cardMaster.cardZoom = function(){
+	var selector = ".cardZoom";
+	var target = $("<div>",{
+						id: "cardPreview"
+					})
+	var targetImg = $("<img>");
+	target.append(targetImg);
+
+	$(document).on("mouseenter", selector, function(){
+		var source = $(this).attr("src");
+		if(source=="") source = $(this).find("img").attr("src");
+		console.log(source);
+		targetImg.attr("src",source);
+		$("body").append(target);
+	})
+	$(document).on("mouseleave", selector, function(){
+		console.log("out");
+		target.remove();
+	})
+	$( document ).on( "mousemove", function( event ) {
+		if(target){
+			target.css({
+				top:event.pageY-50,
+				left:event.pageX+20
+			});
+		}
+	});
+};
 
 cardMaster.collection.syncArchetypes = function(){
 	var selector=$("select.card_class");
@@ -790,6 +819,7 @@ cardMaster.combos.addNewComboCard = function(){
 						"data-index": cardValue
 					});
 		var addedCardImg = $("<img>", {
+						class: "cardZoom",
 						src: "./resources/img/cardRenders/"+cardValue+".png"
 					});
 		addedCard.append(addedCardImg);
@@ -846,6 +876,7 @@ cardMaster.init = function(){
 	cardMaster.collection.generateFlags();
 	cardMaster.collection.showServantFields();
 	cardMaster.collection.createCard();
+	cardMaster.cardZoom();
 
 	//page scripts
 	console.log(cardMaster.getPage());
