@@ -86,15 +86,11 @@ function _combo(options){
 	this.description = options.description || "no description";
 	this.class = options.class || 1;
 	this.cards = options.cards || [];
-	this.getName = function(lang){
-		lang = lang || "eng";
-		if(lang == "ita") return this.name_ita;
-		else return this.name_eng;
+	this.getName = function(){
+		return this.name;
 	}
-	this.getDescription = function(lang){
-		lang = lang || "eng";
-		if(lang == "ita") return this.description_ita;
-		else return this.description_eng;
+	this.getDescription = function(){
+		return this.description;
 	}
 	this.getCardImages = function(){
 		var imageString = "";
@@ -727,8 +723,6 @@ cardMaster.collection.renderCard = function(selRow){
 };
 
 cardMaster.combos.loadComboList = function(callback){
-	console.log("will load combo list");
-
 
 	//var filters = cardMaster.cardFilter.toQueryString();
 	//console.log(filters);
@@ -768,6 +762,107 @@ cardMaster.combos.loadComboList = function(callback){
 
 cardMaster.combos.renderComboList= function(){
 	console.log("will render combo list");
+	var selector = $("#comboList");
+	//wipe cardList before render
+	selector.html("");
+	var tabFields = [
+		"name",
+		"card_number",
+		"class",
+		"commands",
+		"content"
+	];
+	$.each(cardMaster.comboList, function(i,row){
+
+		var comboRow = $("<div>", {
+			class: "row combo",
+			"data-id": row.id
+		})
+		//generate other rows and append them
+		tabFields.forEach(function(el) {
+			var textValue = row[el];
+			switch(el){
+				case "name":
+					var name = row.getName().replace(/\\'/g, "'");
+					var description = row.getDescription().replace(/\\'/g, "'");
+					var comboField= $("<span>", {
+						class: "combo__"+el,
+						text: name,
+						title: description
+					});
+					comboField.bind("click", function(){
+						//add show preview on click 
+						//expand combo details
+					});
+					break;
+				case "card_number":
+					var comboField= $("<span>", {
+						class: "combo__"+el,
+						text: row.cards.length+" cards"
+					});
+					break;
+				case "class":
+					var comboField= $("<span>", {
+						class: "combo__"+el,
+						text: cardMaster.classes[textValue].name,
+						"data-index": textValue
+					});
+					break;
+				case "commands":
+
+					var show = $("<i>", {
+						class: "fa fa-eye control show",
+						title: "Show"
+					});
+
+					var duplicate = $("<i>", {
+						class: "fa fa-files-o control duplicate",
+						title: "Duplicate"
+					});
+
+					var remove = $("<i>", {
+						class: "fa fa-remove control remove",
+						title: "Delete"
+					});
+
+					var comboField= $("<span>", {
+						class: "combo__"+el
+					});
+
+					show.on("click", function(){
+						console.log("collapse panel");
+					});
+
+					duplicate.on("click", function(){
+						console.log("duplicate combo");
+					});
+
+					remove.on("click", function(){
+						console.log("remove combo");
+					});
+
+					comboField.append(show);
+					comboField.append(duplicate);
+					comboField.append(remove);
+					break;
+				case "content":
+					var combo_content = "";
+					var comboField= $("<div>", {
+						class: "combo__"+el,
+						html: combo_content
+					});
+					break;
+				default:
+					var comboField= $("<span>", {
+						class: "combo__"+el,
+						text: textValue
+					});
+			}
+			comboRow.append(comboField);
+		});
+		//generate inline controls HERE
+		selector.append(comboRow);
+	});
 }
 
 cardMaster.combos.toggleNewComboFormStatus = function(){
@@ -897,7 +992,9 @@ cardMaster.init = function(){
 		cardMaster.collection.stickyPanel();
 	}
 	if(cardMaster.getPage() == "combos"){
-		cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
+		cardMaster.loadLiteralElements(function(){
+			cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
+		});
 		cardMaster.combos.toggleNewComboForm();
 		cardMaster.combos.resetNewComboForm();
 		cardMaster.combos.addNewComboCard();

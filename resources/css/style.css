@@ -568,6 +568,26 @@ h1, h2, h3, h4, h5, h6 {
     display: none; }
   .combo-list .new-combo.active .new-combo__bottom .new-combo__actions {
     display: block; }
+  .combo-list .combo span {
+    width: 100px;
+    display: block;
+    float: left; }
+    .combo-list .combo span:nth-child(1) {
+      width: 20%; }
+    .combo-list .combo span:nth-child(2) {
+      width: 15%; }
+    .combo-list .combo span:nth-child(3) {
+      width: 15%; }
+    .combo-list .combo span:nth-child(4) {
+      width: 50%; }
+    .combo-list .combo span:empty {
+      height: 14px; }
+  .combo-list .combo .combo__commands .control {
+    cursor: pointer;
+    margin-right: 20px; }
+  .combo-list .combo .combo__content {
+    float: left;
+    width: 100%; }
   .combo-list .combo.active {
     background-color: white; }
 
