@@ -778,6 +778,12 @@ cardMaster.combos.renderComboList= function(){
 			class: "row combo",
 			"data-id": row.id
 		})
+		var topComboRow = $("<div>", {
+			class: "top"
+		})
+		var bottomComboRow = $("<div>", {
+			class: "bottom"
+		})
 		//generate other rows and append them
 		tabFields.forEach(function(el) {
 			var textValue = row[el];
@@ -791,15 +797,16 @@ cardMaster.combos.renderComboList= function(){
 						title: description
 					});
 					comboField.bind("click", function(){
-						//add show preview on click 
-						//expand combo details
+						cardMaster.combos.startEdit($(this));
 					});
+					topComboRow.append(comboField);
 					break;
 				case "card_number":
 					var comboField= $("<span>", {
 						class: "combo__"+el,
 						text: row.cards.length+" cards"
 					});
+					topComboRow.append(comboField);
 					break;
 				case "class":
 					var comboField= $("<span>", {
@@ -807,6 +814,7 @@ cardMaster.combos.renderComboList= function(){
 						text: cardMaster.classes[textValue].name,
 						"data-index": textValue
 					});
+					topComboRow.append(comboField);
 					break;
 				case "commands":
 
@@ -831,6 +839,7 @@ cardMaster.combos.renderComboList= function(){
 
 					show.on("click", function(){
 						console.log("collapse panel");
+						cardMaster.combos.startEdit($(this));
 					});
 
 					duplicate.on("click", function(){
@@ -844,22 +853,27 @@ cardMaster.combos.renderComboList= function(){
 					comboField.append(show);
 					comboField.append(duplicate);
 					comboField.append(remove);
+					topComboRow.append(comboField);
 					break;
 				case "content":
-					var combo_content = "";
+					var combo_content = "xxx";
 					var comboField= $("<div>", {
 						class: "combo__"+el,
 						html: combo_content
 					});
+					bottomComboRow.append(comboField);
 					break;
 				default:
 					var comboField= $("<span>", {
 						class: "combo__"+el,
 						text: textValue
 					});
+					topComboRow.append(comboField);
 			}
-			comboRow.append(comboField);
+			
 		});
+		comboRow.append(topComboRow);
+		comboRow.append(bottomComboRow);
 		//generate inline controls HERE
 		selector.append(comboRow);
 	});
@@ -962,6 +976,49 @@ cardMaster.combos.createCombo = function(){
 			cardMaster.showMessage("Connection error", "error");
 		})
 	});
+}
+
+cardMaster.combos.startEdit = function(selRow){
+	cardMaster.editMode = true;
+	var row_selector = $("#comboList .combo");
+	var base = selRow.closest(".row.combo");
+	var rowID = base.data("id");
+	var editBox = $("#editComboBox");
+	var rowBottom = base.find(".combo__content");
+	rowBottom.html("");
+	editBox.appendTo(rowBottom);
+	row_selector.removeClass('active')
+	base.addClass("active");
+	console.log(rowID);
+	/*
+	var editForm = $("#modifyCardForm");
+	editForm.find(".card_id").val("");
+	editForm.find(".card_mode").val("edit");
+	cardMaster.collection.resetCardForm();
+
+	var row_selector = $("#cardList .card");
+	var rowID = selRow.parent().data("id");
+	row_selector.removeClass('active')
+	selRow.parent().addClass("active");
+	var selectedCard = cardMaster.getCardDataById(rowID);
+	editForm.find(".card_id").val(selectedCard.id);
+	editForm.find(".card_name").val(selectedCard.getName().replace(/\\'/g, "'"));
+	editForm.find(".card_description").val(selectedCard.getDescription().replace(/\\'/g, "'"));
+	editForm.find(".card_class").val(selectedCard.class);
+	editForm.find(".card_archetype").val(selectedCard.archetype);
+	editForm.find(".card_type").val(selectedCard.type).trigger("change");
+	editForm.find(".card_attack").val(selectedCard.attack);
+	editForm.find(".card_health").val(selectedCard.health);
+	_flags = JSON.parse(selectedCard.flags);
+	_flags.forEach(function(flag){
+		var ID_bit = cardMaster.flags[flag.index].name;
+		//console.log(ID_bit);
+		var checkbox = $(".card_form .flag_"+ID_bit);
+		if(flag.value == 1)checkbox.prop("checked",true);
+		else checkbox.prop("checked",false);
+		checkbox.trigger("change");
+	});
+	*/
 }
 
 cardMaster.init = function(){

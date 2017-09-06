@@ -452,39 +452,38 @@ h1, h2, h3, h4, h5, h6 {
 .combo-list {
   float: left;
   width: calc(100% - 380px); }
-  .combo-list .row {
+  .combo-list .row:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .combo-list .row.header {
     height: 28px;
     display: flex;
     flex-flow: row wrap;
     align-items: center; }
-    .combo-list .row:after {
-      content: "";
-      display: table;
-      clear: both; }
     .combo-list .row.header span {
       border-bottom: 1px solid black;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-size: 10px; }
+      font-size: 10px;
+      width: 100px;
+      display: block;
+      float: left; }
       .combo-list .row.header span.sortable {
         cursor: pointer; }
       .combo-list .row.header span.sorted {
         color: #00D640; }
-  .combo-list .header span {
-    width: 100px;
-    display: block;
-    float: left; }
-    .combo-list .header span:nth-child(1) {
-      width: 20%; }
-    .combo-list .header span:nth-child(2) {
-      width: 15%; }
-    .combo-list .header span:nth-child(3) {
-      width: 15%; }
-    .combo-list .header span:nth-child(4) {
-      width: 50%; }
-    .combo-list .header span:empty {
-      height: 14px; }
+      .combo-list .row.header span:nth-child(1) {
+        width: 20%; }
+      .combo-list .row.header span:nth-child(2) {
+        width: 15%; }
+      .combo-list .row.header span:nth-child(3) {
+        width: 15%; }
+      .combo-list .row.header span:nth-child(4) {
+        width: 50%; }
+      .combo-list .row.header span:empty {
+        height: 14px; }
   .combo-list .new-combo__top {
     height: auto;
     overflow: hidden;
@@ -568,27 +567,133 @@ h1, h2, h3, h4, h5, h6 {
     display: none; }
   .combo-list .new-combo.active .new-combo__bottom .new-combo__actions {
     display: block; }
-  .combo-list .combo span {
-    width: 100px;
-    display: block;
-    float: left; }
-    .combo-list .combo span:nth-child(1) {
-      width: 20%; }
-    .combo-list .combo span:nth-child(2) {
-      width: 15%; }
-    .combo-list .combo span:nth-child(3) {
-      width: 15%; }
-    .combo-list .combo span:nth-child(4) {
-      width: 50%; }
-    .combo-list .combo span:empty {
-      height: 14px; }
-  .combo-list .combo .combo__commands .control {
-    cursor: pointer;
-    margin-right: 20px; }
-  .combo-list .combo .combo__content {
-    float: left;
+  .combo-list .edit-combo {
+    display: none; }
+    .combo-list .edit-combo__top {
+      height: auto; }
+      .combo-list .edit-combo__top #editCombo:after {
+        content: "";
+        display: table;
+        clear: both; }
+      .combo-list .edit-combo__top__left {
+        float: left;
+        width: calc(100% - 250px); }
+        .combo-list .edit-combo__top__left .input-row {
+          margin-bottom: 20px; }
+          .combo-list .edit-combo__top__left .input-row:after {
+            content: "";
+            display: table;
+            clear: both; }
+          .combo-list .edit-combo__top__left .input-row input[type='text'], .combo-list .edit-combo__top__left .input-row select {
+            width: 40%;
+            max-width: 200px;
+            height: 30px; }
+          .combo-list .edit-combo__top__left .input-row input[type='text'] {
+            float: left; }
+          .combo-list .edit-combo__top__left .input-row select {
+            float: right; }
+        .combo-list .edit-combo__top__left .added-cards-row:after {
+          content: "";
+          display: table;
+          clear: both; }
+        .combo-list .edit-combo__top__left .added-cards-row .added-card {
+          float: left;
+          width: calc(33.333% - 20px);
+          margin-right: 20px;
+          padding-bottom: 42%;
+          height: 0;
+          margin-bottom: 20px; }
+          .combo-list .edit-combo__top__left .added-cards-row .added-card img {
+            width: 100%; }
+          .combo-list .edit-combo__top__left .added-cards-row .added-card.new-card {
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: calc(42% - 26px);
+            border: 3px dashed black;
+            border-radius: 10px;
+            position: relative; }
+            .combo-list .edit-combo__top__left .added-cards-row .added-card.new-card span {
+              font-size: 18px;
+              font-weight: 700;
+              display: block;
+              margin-bottom: 20px; }
+            .combo-list .edit-combo__top__left .added-cards-row .added-card.new-card select {
+              display: block;
+              width: 100%; }
+            .combo-list .edit-combo__top__left .added-cards-row .added-card.new-card .btn {
+              display: inline-block;
+              position: absolute;
+              bottom: 20px;
+              width: calc(100% - 40px); }
+      .combo-list .edit-combo__top__right {
+        width: 250px;
+        float: left;
+        padding-left: 20px; }
+        .combo-list .edit-combo__top__right textarea {
+          width: 100%;
+          height: 200px; }
+    .combo-list .edit-combo__bottom {
+      background-color: white;
+      padding: 10px 30px;
+      cursor: pointer; }
+      .combo-list .edit-combo__bottom .new-combo__trigger {
+        display: block; }
+      .combo-list .edit-combo__bottom .new-combo__actions {
+        display: none; }
+        .combo-list .edit-combo__bottom .new-combo__actions span {
+          margin-right: 20px;
+          cursor: pointer; }
+    .combo-list .edit-combo.active .new-combo__top {
+      max-height: 1500px; }
+    .combo-list .edit-combo.active .new-combo__bottom .new-combo__trigger {
+      display: none; }
+    .combo-list .edit-combo.active .new-combo__bottom .new-combo__actions {
+      display: block; }
+  .combo-list .combo .top {
+    height: 28px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
     width: 100%; }
-  .combo-list .combo.active {
-    background-color: white; }
+    .combo-list .combo .top:after {
+      content: "";
+      display: table;
+      clear: both; }
+    .combo-list .combo .top span {
+      width: 100px;
+      display: block;
+      float: left; }
+      .combo-list .combo .top span:nth-child(1) {
+        width: 20%;
+        cursor: pointer; }
+      .combo-list .combo .top span:nth-child(2) {
+        width: 15%; }
+      .combo-list .combo .top span:nth-child(3) {
+        width: 15%; }
+      .combo-list .combo .top span:nth-child(4) {
+        width: 50%; }
+      .combo-list .combo .top span:empty {
+        height: 14px; }
+    .combo-list .combo .top .combo__commands .control {
+      cursor: pointer;
+      margin-right: 20px; }
+  .combo-list .combo .bottom {
+    width: 100%; }
+    .combo-list .combo .bottom .combo__content {
+      float: left;
+      width: 100%;
+      overflow: hidden;
+      height: auto;
+      max-height: 0;
+      -webkit-transition: 0.3s all ease-in-out;
+      -moz-transition: 0.3s all ease-in-out;
+      -ms-transition: 0.3s all ease-in-out;
+      -o-transition: 0.3s all ease-in-out;
+      transition: 0.3s all ease-in-out; }
+      .combo-list .combo .bottom .combo__content .edit-combo {
+        display: block; }
+  .combo-list .combo.active .combo__content {
+    max-height: 1500px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -567,11 +567,11 @@ h1,h2,h3,h4,h5,h6{
 	width:calc(100% - 380px);
 	.row{
 		@include clearfix;
-		height:$cardListRowHeight;
-		display: flex;
-		flex-flow: row wrap;
-		align-items:center;
 		&.header{
+			height:$cardListRowHeight;
+			display: flex;
+			flex-flow: row wrap;
+			align-items:center;
 			span{
 				border-bottom:1px solid black;
 				font-weight:600;
@@ -584,29 +584,28 @@ h1,h2,h3,h4,h5,h6{
 				&.sorted{
 					color: $confirmGreen;
 				}
+				width:100px;
+				display: block;
+				float: left;
+				&:nth-child(1){
+					width:20%;
+				}
+				&:nth-child(2){
+					width:15%;
+				}
+				&:nth-child(3){
+					width:15%;
+				}
+				&:nth-child(4){
+					width:50%;
+				}
+				&:empty{
+					height:14px;
+				}
 			}
 		}
 	}
-	.header span{
-		width:100px;
-		display: block;
-		float: left;
-		&:nth-child(1){
-			width:20%;
-		}
-		&:nth-child(2){
-			width:15%;
-		}
-		&:nth-child(3){
-			width:15%;
-		}
-		&:nth-child(4){
-			width:50%;
-		}
-		&:empty{
-			height:14px;
-		}
-	}
+
 	.new-combo{
 
 		&__top{
@@ -713,44 +712,166 @@ h1,h2,h3,h4,h5,h6{
 			}
 		}
 	}
-	.combo{
-		//change height 
-		span{
-			width:100px;
-			display: block;
-			float: left;
-			&:nth-child(1){
-				width:20%;
+	.edit-combo{
+		display:none;
+		&__top{
+			height:auto;
+			#editCombo{
+				@include clearfix;
 			}
-			&:nth-child(2){
-				width:15%;
+			&__left{
+				float: left;
+				width: calc(100% - 250px);
+				.input-row{
+					margin-bottom: 20px;
+					@include clearfix;
+					input[type='text'], select{
+						width:40%;
+						max-width: 200px;
+						height:30px;
+					}
+					input[type='text']{
+						float:left;
+					}
+					select{
+						float:right;
+					}
+				}
+				.added-cards-row{
+					@include clearfix;
+					.added-card{
+						float:left;
+						width: calc(33.333% - 20px);
+						margin-right: 20px;
+						padding-bottom: 42%;
+    					height: 0;
+    					margin-bottom:20px;
+						img{
+							width:100%;
+						}
+						&.new-card{
+							padding-top:20px;
+							padding-left:20px;
+							padding-right:20px;
+							padding-bottom: calc(42% - 26px);
+							border: 3px dashed black;
+							border-radius: 10px;
+							position:relative;
+							span{
+								font-size: 18px;
+								font-weight:700;
+								display: block;
+								margin-bottom: 20px;
+							}
+							select{
+								display: block;
+								width:100%;
+							}
+							.btn{
+								display:inline-block;
+								position:absolute;
+								bottom:20px;
+								width:calc(100% - 40px);
+							}
+						}
+					}
+				}
 			}
-			&:nth-child(3){
-				width:15%;
-			}
-			&:nth-child(4){
-				width:50%;
-			}
-			&:empty{
-				height:14px;
+			&__right{
+				width:250px;
+				float:left;
+				padding-left:20px;
+				textarea{
+					width:100%;
+					height:200px;
+				}
 			}
 		}
-		.combo__commands{
-			.control{
-				cursor: pointer;
-				margin-right:20px;
+		&__bottom{
+			background-color: white;
+			padding:10px 30px;
+			cursor:pointer;
+			.new-combo__trigger{
+				display:block;
 			}
-		}
-
-		.combo__content{
-			float:left;
-			width:100%;
-
-			//height:5px;
-			//background-color:red;
+			.new-combo__actions{
+				display:none;
+				span{
+					margin-right:20px;
+					cursor:pointer;
+				}
+			}
 		}
 		&.active{
-			background-color: white;
+			.new-combo__top{
+				max-height: 1500px;
+			}
+			.new-combo__bottom{
+				.new-combo__trigger{
+					display:none;
+				}
+				.new-combo__actions{
+					display:block;
+				}
+			}
+		}
+	}
+
+	.combo{
+		.top{
+			@include clearfix;
+			height:$cardListRowHeight;
+			display: flex;
+			flex-flow: row wrap;
+			align-items:center;
+			width:100%;
+			span{
+				width:100px;
+				display: block;
+				float: left;
+				&:nth-child(1){
+					width:20%;
+					cursor:pointer;
+				}
+				&:nth-child(2){
+					width:15%;
+				}
+				&:nth-child(3){
+					width:15%;
+				}
+				&:nth-child(4){
+					width:50%;
+				}
+				&:empty{
+					height:14px;
+				}
+			}
+			.combo__commands{
+				.control{
+					cursor: pointer;
+					margin-right:20px;
+				}
+			}
+
+		}
+		.bottom{
+			width:100%;
+			.combo__content{
+				float:left;
+				width:100%;
+				overflow:hidden;
+				height:auto;
+				max-height: 0;
+				@include transition(0.3s all ease-in-out);
+				.edit-combo{
+					display:block;
+				}
+			}
+		}
+		&.active{
+			.combo__content{
+				max-height: 1500px;
+			}
 		}
 	}
 }

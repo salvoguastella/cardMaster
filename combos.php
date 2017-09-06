@@ -51,7 +51,41 @@
             	</div>
             </div>
             <div id="comboList">
-				<div class="combo"></div>
+
+            </div>
+            <div class="edit-combo" id="editComboBox">
+                <div class="edit-combo__top">
+                    <form action="resources/php_scripts/edit_combo.php" id="editCombo" class="panel">
+                        <div class="edit-combo__top__left">
+                            <div class="input-row">
+                                <input type="text" name="name" placeholder="Combo name...">
+                                <?php
+                                $element = "class";
+                                include("resources/php_scripts/generate_dropdown.php");
+                                ?>
+                            </div>
+                            <input type="hidden" name="cards">
+                            <div class="added-cards-row">
+                                <div class="added-card new-card">
+                                    <span>New card</span>
+                                    <?php
+                                        require("resources/php_scripts/getCardNames.php");
+                                    ?>
+                                    <div class="btn">Add</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="edit-combo__top__right">
+                            <textarea name="description" placeholder="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="edit-combo__bottom">
+                    <div class="edit-combo__actions">
+                        <span class="edit-combo__save"><i class="fa fa-floppy-o"></i> Save</span>
+                        <span class="edit-combo__cancel"><i class="fa fa-remove"></i> Cancel</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="control-area">
