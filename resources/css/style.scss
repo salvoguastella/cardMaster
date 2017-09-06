@@ -637,7 +637,8 @@ h1,h2,h3,h4,h5,h6{
 					@include clearfix;
 					.added-card{
 						float:left;
-						width: calc(33.333% - 20px);
+						//width: calc(33.333% - 20px);
+						width:168px;
 						margin-right: 20px;
 						padding-bottom: 42%;
     					height: 0;
@@ -741,10 +742,11 @@ h1,h2,h3,h4,h5,h6{
 					@include clearfix;
 					.added-card{
 						float:left;
-						width: calc(33.333% - 20px);
+						//width: calc(33.333% - 20px);
+						width:168px;
 						margin-right: 20px;
-						padding-bottom: 42%;
-    					height: 0;
+						//padding-bottom: 42%;
+    					//height: 0;
     					margin-bottom:20px;
 						img{
 							width:100%;
@@ -753,7 +755,8 @@ h1,h2,h3,h4,h5,h6{
 							padding-top:20px;
 							padding-left:20px;
 							padding-right:20px;
-							padding-bottom: calc(42% - 26px);
+							//padding-bottom: calc(42% - 26px);
+							height:234px;
 							border: 3px dashed black;
 							border-radius: 10px;
 							position:relative;
@@ -825,6 +828,10 @@ h1,h2,h3,h4,h5,h6{
 			flex-flow: row wrap;
 			align-items:center;
 			width:100%;
+			overflow:hidden;
+			max-height: $cardListRowHeight;
+			@include transition(0.3s all ease-in-out);
+
 			span{
 				width:100px;
 				display: block;
@@ -869,6 +876,9 @@ h1,h2,h3,h4,h5,h6{
 			}
 		}
 		&.active{
+			.top{
+				max-height: 0;
+			}
 			.combo__content{
 				max-height: 1500px;
 			}

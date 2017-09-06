@@ -515,7 +515,7 @@ h1, h2, h3, h4, h5, h6 {
         clear: both; }
       .combo-list .new-combo__top__left .added-cards-row .added-card {
         float: left;
-        width: calc(33.333% - 20px);
+        width: 168px;
         margin-right: 20px;
         padding-bottom: 42%;
         height: 0;
@@ -598,10 +598,8 @@ h1, h2, h3, h4, h5, h6 {
           clear: both; }
         .combo-list .edit-combo__top__left .added-cards-row .added-card {
           float: left;
-          width: calc(33.333% - 20px);
+          width: 168px;
           margin-right: 20px;
-          padding-bottom: 42%;
-          height: 0;
           margin-bottom: 20px; }
           .combo-list .edit-combo__top__left .added-cards-row .added-card img {
             width: 100%; }
@@ -609,7 +607,7 @@ h1, h2, h3, h4, h5, h6 {
             padding-top: 20px;
             padding-left: 20px;
             padding-right: 20px;
-            padding-bottom: calc(42% - 26px);
+            height: 234px;
             border: 3px dashed black;
             border-radius: 10px;
             position: relative; }
@@ -655,7 +653,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    width: 100%; }
+    width: 100%;
+    overflow: hidden;
+    max-height: 28px;
+    -webkit-transition: 0.3s all ease-in-out;
+    -moz-transition: 0.3s all ease-in-out;
+    -ms-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
+    transition: 0.3s all ease-in-out; }
     .combo-list .combo .top:after {
       content: "";
       display: table;
@@ -693,6 +698,8 @@ h1, h2, h3, h4, h5, h6 {
       transition: 0.3s all ease-in-out; }
       .combo-list .combo .bottom .combo__content .edit-combo {
         display: block; }
+  .combo-list .combo.active .top {
+    max-height: 0; }
   .combo-list .combo.active .combo__content {
     max-height: 1500px; }
 

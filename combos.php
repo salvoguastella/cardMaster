@@ -25,7 +25,7 @@
             				</div>
 							<input type="hidden" name="cards">
 							<div class="added-cards-row">
-								<div class="added-card new-card">
+								<div class="added-card new-card new-card-to-combo">
 									<span>New card</span>
 									<?php
 										require("resources/php_scripts/getCardNames.php");
@@ -66,7 +66,7 @@
                             </div>
                             <input type="hidden" name="cards">
                             <div class="added-cards-row">
-                                <div class="added-card new-card">
+                                <div class="added-card new-card new-card-to-combo">
                                     <span>New card</span>
                                     <?php
                                         require("resources/php_scripts/getCardNames.php");

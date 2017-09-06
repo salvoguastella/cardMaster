@@ -95,9 +95,15 @@ function _combo(options){
 	this.getCardImages = function(){
 		var imageString = "";
 		this.cards.forEach(function(card){
-			imageString = imageString + "<img class='cardZoom' src='./resources/img/cardRenders/"+card+".png'>";
+
+			imageString = imageString + "<div class='added-card' data-index='"+card+"'>"+
+				"<img class='cardZoom' src='./resources/img/cardRenders/"+card+".png'>"+
+				"</div>";
 		});
 		return imageString;
+	}
+	this.cardsIdToString = function(){
+		return this.cards.join("|");
 	}
 }
 
@@ -116,12 +122,12 @@ cardMaster.cardZoom = function(){
 	$(document).on("mouseenter", selector, function(){
 		var source = $(this).attr("src");
 		if(source=="") source = $(this).find("img").attr("src");
-		console.log(source);
+		//console.log(source);
 		targetImg.attr("src",source);
 		$("body").append(target);
 	})
 	$(document).on("mouseleave", selector, function(){
-		console.log("out");
+		//console.log("out");
 		target.remove();
 	})
 	$( document ).on( "mousemove", function( event ) {
@@ -209,6 +215,17 @@ cardMaster.getCardDataById = function(id){
 		}
 	});
 	return foundCard;
+};
+
+cardMaster.getComboDataById = function(id){
+	var foundCombo = "none";
+	cardMaster.comboList.forEach(function(combo){
+		var testId = parseInt(combo.id);
+		if(testId == id){
+			foundCombo = combo;
+		}
+	});
+	return foundCombo;
 };
 
 cardMaster.collection.sendChangeRequest = function(form){
@@ -683,7 +700,7 @@ cardMaster.collection.setImageToCard = function(rowID, imageID, src){
 	})
 }
 
-cardMaster.collection.stickyPanel = function(){
+cardMaster.stickyPanel = function(){
 	var selector = $(".control-area");
 	$(document).on("scroll", function(){
 		if($(document).scrollTop()>60){
@@ -751,7 +768,7 @@ cardMaster.combos.loadComboList = function(callback){
 			cardMaster.comboList.push(combo);
 		});
 		console.dir(cardMaster.comboList);
-		//cardMaster.collection.updateCount();
+		cardMaster.combos.updateCount();
 		if(typeof callback === "function") callback();
 	})
 	.fail(function() {
@@ -856,7 +873,7 @@ cardMaster.combos.renderComboList= function(){
 					topComboRow.append(comboField);
 					break;
 				case "content":
-					var combo_content = "xxx";
+					var combo_content = "";
 					var comboField= $("<div>", {
 						class: "combo__"+el,
 						html: combo_content
@@ -870,13 +887,18 @@ cardMaster.combos.renderComboList= function(){
 					});
 					topComboRow.append(comboField);
 			}
-			
+
 		});
 		comboRow.append(topComboRow);
 		comboRow.append(bottomComboRow);
-		//generate inline controls HERE
 		selector.append(comboRow);
 	});
+}
+
+cardMaster.combos.updateCount = function(){
+	var selector = $("#comboCount");
+	var comboCount = cardMaster.comboList.length;
+	selector.text(comboCount);
 }
 
 cardMaster.combos.toggleNewComboFormStatus = function(){
@@ -892,8 +914,8 @@ cardMaster.combos.toggleNewComboForm = function(){
 	});
 }
 
-cardMaster.combos.resetNewComboFormStatus = function(){
-	var target = $("#newCombo");
+cardMaster.combos.resetComboFormStatus = function(formSelector){
+	var target = $(formSelector);
 	var name = target.find("input[name='name']");
 	var _class = target.find("select[name='class']");
 	var cards = target.find("input[name='cards']");
@@ -912,16 +934,17 @@ cardMaster.combos.resetNewComboForm = function(){
 	var target = $(".new-combo");
 	var trigger = target.find(".new-combo__cancel");
 	trigger.on("click", function(){
-		cardMaster.combos.resetNewComboFormStatus();
+		cardMaster.combos.resetComboFormStatus("#newCombo");
 		cardMaster.combos.toggleNewComboFormStatus();
 	});
 }
 
 cardMaster.combos.addNewComboCard = function(){
-	var newCardForm = $(".new-combo .new-card");
-	var trigger = newCardForm.find(".btn");
+	var trigger = $(".new-card-to-combo .btn");
 	trigger.on("click", function(){
+		var newCardForm = $(this).closest(".new-card-to-combo");
 		var cardValue = newCardForm.find("select").val();
+		console.log("value "+cardValue);
 		var container = newCardForm.parent();
 		var addedCard = $("<div>", {
 						class: "added-card",
@@ -935,6 +958,7 @@ cardMaster.combos.addNewComboCard = function(){
 		container.prepend(addedCard);
 		var formCardsField = container.parent().find("input[name='cards']");
 		var formCards = formCardsField.val();
+		console.log("contain "+formCards);
 		if(formCards != ""){
 			formCards = formCardsField.val().split("|");
 			formCards.push(cardValue);
@@ -966,7 +990,7 @@ cardMaster.combos.createCombo = function(){
 				cardMaster.showMessage("This combo already exists in DB", "error");
 			}
 			else{
-				cardMaster.combos.resetNewComboFormStatus();
+				cardMaster.combos.resetComboFormStatus("#newCombo");
 				cardMaster.combos.toggleNewComboFormStatus();
 				cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
 				cardMaster.showMessage(res, "confirm");
@@ -990,35 +1014,23 @@ cardMaster.combos.startEdit = function(selRow){
 	row_selector.removeClass('active')
 	base.addClass("active");
 	console.log(rowID);
-	/*
-	var editForm = $("#modifyCardForm");
-	editForm.find(".card_id").val("");
-	editForm.find(".card_mode").val("edit");
-	cardMaster.collection.resetCardForm();
 
-	var row_selector = $("#cardList .card");
-	var rowID = selRow.parent().data("id");
-	row_selector.removeClass('active')
-	selRow.parent().addClass("active");
-	var selectedCard = cardMaster.getCardDataById(rowID);
-	editForm.find(".card_id").val(selectedCard.id);
-	editForm.find(".card_name").val(selectedCard.getName().replace(/\\'/g, "'"));
-	editForm.find(".card_description").val(selectedCard.getDescription().replace(/\\'/g, "'"));
-	editForm.find(".card_class").val(selectedCard.class);
-	editForm.find(".card_archetype").val(selectedCard.archetype);
-	editForm.find(".card_type").val(selectedCard.type).trigger("change");
-	editForm.find(".card_attack").val(selectedCard.attack);
-	editForm.find(".card_health").val(selectedCard.health);
-	_flags = JSON.parse(selectedCard.flags);
-	_flags.forEach(function(flag){
-		var ID_bit = cardMaster.flags[flag.index].name;
-		//console.log(ID_bit);
-		var checkbox = $(".card_form .flag_"+ID_bit);
-		if(flag.value == 1)checkbox.prop("checked",true);
-		else checkbox.prop("checked",false);
-		checkbox.trigger("change");
-	});
-	*/
+	var selectedCombo = cardMaster.getComboDataById(rowID);
+	cardMaster.combos.resetComboFormStatus("#editComboBox");
+
+	var name = editBox.find("input[name='name']");
+	var _class = editBox.find("select[name='class']");
+	var cards = editBox.find("input[name='cards']");
+	var description = editBox.find("textarea[name='description']");
+	var select = editBox.find("select[name='newComboCard']");
+	var cardHolder = editBox.find(".added-cards-row");
+	name.val(selectedCombo.getName());
+	_class.val(selectedCombo.class);
+	cards.val(selectedCombo.cardsIdToString());
+	description.val(selectedCombo.getDescription());
+	var firstValue = select.find("option:first").val();
+	select.val(firstValue);
+	cardHolder.prepend(selectedCombo.getCardImages());
 }
 
 cardMaster.init = function(){
@@ -1029,6 +1041,7 @@ cardMaster.init = function(){
 	cardMaster.collection.showServantFields();
 	cardMaster.collection.createCard();
 	cardMaster.cardZoom();
+	cardMaster.stickyPanel();
 
 	//page scripts
 	console.log(cardMaster.getPage());
@@ -1046,7 +1059,7 @@ cardMaster.init = function(){
 		cardMaster.collection.deleteCard();
 		cardMaster.collection.selectTab();
 		cardMaster.collection.iconBox();
-		cardMaster.collection.stickyPanel();
+
 	}
 	if(cardMaster.getPage() == "combos"){
 		cardMaster.loadLiteralElements(function(){
