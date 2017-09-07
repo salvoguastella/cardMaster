@@ -1011,7 +1011,7 @@ cardMaster.combos.startEdit = function(selRow){
 	var rowBottom = base.find(".combo__content");
 	rowBottom.html("");
 	editBox.appendTo(rowBottom);
-	row_selector.removeClass('active')
+	row_selector.removeClass('active');
 	base.addClass("active");
 	console.log(rowID);
 
@@ -1031,6 +1031,22 @@ cardMaster.combos.startEdit = function(selRow){
 	var firstValue = select.find("option:first").val();
 	select.val(firstValue);
 	cardHolder.prepend(selectedCombo.getCardImages());
+}
+
+cardMaster.combos.cancelEdit = function(){
+	var row_selector = $("#comboList .combo");
+	row_selector.removeClass('active');
+	cardMaster.combos.resetComboFormStatus("#editComboBox");
+	cardMaster.editMode = false;
+}
+
+cardMaster.combos.editControls = function(){
+	var saveSelector = $("#editComboBox .edit-combo__save");
+	var cancelSelector = $("#editComboBox .edit-combo__cancel");
+
+	cancelSelector.on("click", function(){
+		cardMaster.combos.cancelEdit();
+	});
 }
 
 cardMaster.init = function(){
@@ -1069,6 +1085,7 @@ cardMaster.init = function(){
 		cardMaster.combos.resetNewComboForm();
 		cardMaster.combos.addNewComboCard();
 		cardMaster.combos.createCombo();
+		cardMaster.combos.editControls();
 	}
 };
 
