@@ -151,6 +151,36 @@ h1,h2,h3,h4,h5,h6{
 	}
 }
 
+.message-toast-wrapper{
+	position:fixed;
+	bottom:5px;
+	right:30px;
+	display:none;
+	z-index:10;
+	.message-toast{
+		border-radius: 5px;
+		box-shadow:0px 0px 5px rgba(0,0,0,0.5);
+		width:350px;
+		position:relative;
+		padding:30px;
+		background: $toastGreen;
+		font-size: 12px;
+		line-height: 18px;
+		color:$confirmGreen;
+		&.error{
+			background: $toastRed;
+			color:$errorRed;
+		}
+		&__close{
+			position:absolute;
+			right:15px;
+			top:10px;
+			font-size:10px;
+			cursor:pointer;
+		}
+	}
+}
+
 .main{
 	padding:15px;
 	@include clearfix;

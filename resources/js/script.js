@@ -356,6 +356,34 @@ cardMaster.showMessage = function(msg,type){
 	selector.addClass(type);
 	selector.find("span").text(msg+" - "+cardMaster.getTimeStamp());
 	console.log(msg+" - "+cardMaster.getTimeStamp());
+	cardMaster.showToast(msg+" - "+cardMaster.getTimeStamp(), type);
+};
+
+cardMaster.showToast = function(msg,type){
+	if($(".message-toast-wrapper").size() > 0) $(".message-toast-wrapper").remove();
+	type = type || "confirm";
+	var wrapper = $("<div>",{
+		class:"message-toast-wrapper "
+	});
+	var toast = $("<div>",{
+		class:"message-toast "+type,
+		text: msg
+	});
+	var close = $("<div>",{
+		class:"message-toast__close",
+		text: "Close"
+	});
+
+	close.on("click", function(){
+		wrapper.fadeOut('300', function() {
+			wrapper.remove();
+		});
+	});
+
+	toast.append(close);
+	wrapper.append(toast);
+	$("body").append(wrapper);
+	wrapper.fadeIn('300');
 };
 
 cardMaster.getTimeStamp = function(){
