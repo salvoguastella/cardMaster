@@ -55,9 +55,10 @@
             </div>
             <div class="edit-combo" id="editComboBox">
                 <div class="edit-combo__top">
-                    <form action="resources/php_scripts/edit_combo.php" id="editCombo" class="panel">
+                    <form action="resources/php_scripts/modify_combo.php" id="editCombo" class="panel">
                         <div class="edit-combo__top__left">
                             <div class="input-row">
+                                <input type="hidden" name="id">
                                 <input type="text" name="name" placeholder="Combo name...">
                                 <?php
                                 $element = "class";

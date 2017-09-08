@@ -916,11 +916,13 @@ cardMaster.combos.toggleNewComboForm = function(){
 
 cardMaster.combos.resetComboFormStatus = function(formSelector){
 	var target = $(formSelector);
+	var id = target.find("input[name='id']");
 	var name = target.find("input[name='name']");
 	var _class = target.find("select[name='class']");
 	var cards = target.find("input[name='cards']");
 	var description = target.find("textarea[name='description']");
 	var select = target.find("select[name='newComboCard']");
+	id.val("");
 	name.val("");
 	_class.val(1);
 	cards.val("");
@@ -1018,12 +1020,14 @@ cardMaster.combos.startEdit = function(selRow){
 	var selectedCombo = cardMaster.getComboDataById(rowID);
 	cardMaster.combos.resetComboFormStatus("#editComboBox");
 
+	var id = editBox.find("input[name='id']");
 	var name = editBox.find("input[name='name']");
 	var _class = editBox.find("select[name='class']");
 	var cards = editBox.find("input[name='cards']");
 	var description = editBox.find("textarea[name='description']");
 	var select = editBox.find("select[name='newComboCard']");
 	var cardHolder = editBox.find(".added-cards-row");
+	id.val(selectedCombo.id);
 	name.val(selectedCombo.getName());
 	_class.val(selectedCombo.class);
 	cards.val(selectedCombo.cardsIdToString());
@@ -1033,16 +1037,45 @@ cardMaster.combos.startEdit = function(selRow){
 	cardHolder.prepend(selectedCombo.getCardImages());
 }
 
+cardMaster.combos.sendChangeRequest = function(form){
+		$.ajax({
+			url: form.attr("action"),
+			type: "POST",
+			dataType: 'text',
+			data: form.serialize(),
+		})
+		.done(function(res) {
+			if(res == "data_error"){
+				cardMaster.showMessage("Error updating DB", "error");
+			}
+			else{
+				cardMaster.combos.resetComboFormStatus();
+				$("#editComboBox").insertAfter("#comboList");
+				cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
+				cardMaster.showMessage(res, "confirm");
+				cardMaster.editMode = false;
+			}
+		})
+		.fail(function() {
+			cardMaster.showMessage("Connection error", "error");
+		})
+};
+
 cardMaster.combos.cancelEdit = function(){
 	var row_selector = $("#comboList .combo");
 	row_selector.removeClass('active');
 	cardMaster.combos.resetComboFormStatus("#editComboBox");
+	$("#editComboBox").insertAfter("#comboList");
 	cardMaster.editMode = false;
 }
 
 cardMaster.combos.editControls = function(){
 	var saveSelector = $("#editComboBox .edit-combo__save");
 	var cancelSelector = $("#editComboBox .edit-combo__cancel");
+
+	saveSelector.on("click", function(){
+		cardMaster.combos.sendChangeRequest($("#editCombo"));
+	});
 
 	cancelSelector.on("click", function(){
 		cardMaster.combos.cancelEdit();
