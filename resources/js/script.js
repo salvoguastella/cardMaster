@@ -96,9 +96,23 @@ function _combo(options){
 		var imageString = "";
 		this.cards.forEach(function(card){
 
-			imageString = imageString + "<div class='added-card' data-index='"+card+"'>"+
-				"<img class='cardZoom' src='./resources/img/cardRenders/"+card+".png'>"+
-				"</div>";
+			var addedCard = $("<div>", {
+				class: "added-card",
+				"data-index": card
+			});
+			var addedCardImg = $("<img>", {
+				class: "cardZoom",
+				src: "./resources/img/cardRenders/"+card+".png"
+			});
+			var removeCardControl = $("<div>", {
+				class: "remove-inline-card",
+				html: "<i class='fa fa-remove'></i> Remove card"
+			});
+
+			addedCard.append(addedCardImg);
+			addedCard.append(removeCardControl);
+
+			imageString = imageString + addedCard[0].outerHTML;
 		});
 		return imageString;
 	}
@@ -842,6 +856,7 @@ cardMaster.combos.renderComboList= function(){
 						title: description
 					});
 					comboField.bind("click", function(){
+						cardMaster.combos.cancelNewComboForm();
 						cardMaster.combos.startEdit($(this));
 					});
 					topComboRow.append(comboField);
@@ -934,11 +949,17 @@ cardMaster.combos.toggleNewComboFormStatus = function(){
 	target.toggleClass('active');
 }
 
+cardMaster.combos.cancelNewComboForm = function(){
+	var target = $(".new-combo");
+	target.removeClass('active');
+}
+
 cardMaster.combos.toggleNewComboForm = function(){
 	var target = $(".new-combo");
 	var trigger = target.find(".new-combo__trigger");
 	trigger.on("click", function(){
 		cardMaster.combos.toggleNewComboFormStatus();
+		cardMaster.combos.cancelEdit();
 	});
 }
 
@@ -984,7 +1005,12 @@ cardMaster.combos.addNewComboCard = function(){
 						class: "cardZoom",
 						src: "./resources/img/cardRenders/"+cardValue+".png"
 					});
+		var removeCardControl = $("<div>", {
+						class: "remove-inline-card",
+						html: "<i class='fa fa-remove'></i> Remove card"
+					});
 		addedCard.append(addedCardImg);
+		addedCard.append(removeCardControl);
 		container.prepend(addedCard);
 		var formCardsField = container.parent().find("input[name='cards']");
 		var formCards = formCardsField.val();
@@ -998,6 +1024,30 @@ cardMaster.combos.addNewComboCard = function(){
 			formCardsField.val(cardValue);
 		}
 	});
+}
+
+cardMaster.combos.removeComboCard = function(){
+	var trigger = ".remove-inline-card";
+
+	$(document).on("click", trigger, function(){
+		var form = $(this).closest("form");
+		var cardsField = form.find("input[name='cards']");
+		var value = cardsField.val();
+		if(value != ""){
+			var valueArray = value.split("|");
+			var target = $(this).parent().data("index");
+			var removeIndex;
+			valueArray.forEach(function(v,i){
+				if(v == target) removeIndex = i;
+			});
+			if(removeIndex > -1){
+				valueArray.splice(removeIndex,1);
+				cardsField.val(valueArray.join("|"));
+				$(this).parent().remove();
+			}
+		}
+	});
+
 }
 
 cardMaster.combos.createCombo = function(){
@@ -1147,6 +1197,7 @@ cardMaster.init = function(){
 		cardMaster.combos.addNewComboCard();
 		cardMaster.combos.createCombo();
 		cardMaster.combos.editControls();
+		cardMaster.combos.removeComboCard();
 	}
 };
 

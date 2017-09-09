@@ -548,6 +548,13 @@ h1, h2, h3, h4, h5, h6 {
         margin-bottom: 20px; }
         .combo-list .new-combo__top__left .added-cards-row .added-card img {
           width: 100%; }
+        .combo-list .new-combo__top__left .added-cards-row .added-card .remove-inline-card {
+          display: block;
+          text-align: center;
+          color: #CB1E24;
+          cursor: pointer;
+          font-size: 12px;
+          line-height: 16px; }
         .combo-list .new-combo__top__left .added-cards-row .added-card.new-card {
           padding-top: 20px;
           padding-left: 20px;
@@ -626,9 +633,17 @@ h1, h2, h3, h4, h5, h6 {
           float: left;
           width: 168px;
           margin-right: 20px;
+          height: 234px;
           margin-bottom: 20px; }
           .combo-list .edit-combo__top__left .added-cards-row .added-card img {
             width: 100%; }
+          .combo-list .edit-combo__top__left .added-cards-row .added-card .remove-inline-card {
+            display: block;
+            text-align: center;
+            color: #CB1E24;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 16px; }
           .combo-list .edit-combo__top__left .added-cards-row .added-card.new-card {
             padding-top: 20px;
             padding-left: 20px;
