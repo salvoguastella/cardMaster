@@ -255,6 +255,7 @@ cardMaster.collection.sendChangeRequest = function(form){
 			}
 			else{
 				cardMaster.collection.resetCardForm();
+				cardMaster.collection.removeCardPreview();
 				cardMaster.collection.loadCards(cardMaster.collection.renderCardList);
 				cardMaster.showMessage(res, "confirm");
 				cardMaster.editMode = false;
@@ -780,6 +781,12 @@ cardMaster.collection.renderCard = function(selRow){
 		})
 	});
 };
+
+cardMaster.collection.removeCardPreview = function(){
+	var $selector = $("#updateCard");
+	var $image = $selector.parent().find(".card_render");
+	$image.prop("src", "");
+}
 
 cardMaster.combos.loadComboList = function(callback){
 

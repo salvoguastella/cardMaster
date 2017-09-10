@@ -259,7 +259,67 @@
 					$card->insert($imageLayer, 'top-left', 0,0);
 
 					//add triggers
+					$cardText = stripslashes($row->description);
+					$cardText = explode("|", $cardText);
+
+					if(count($cardText)>1){
+						$checkCardText = $cardText[1];
+					}
+					else{
+						$checkCardText = $cardText[0];
+					}
+
+					$extraSymbolsOffsetX = 90;
+					$baseExtraSymbolsOffsetY = 170;
+
+					$triggerSymbols=array(
+						"active"=>array("path"=>"active.svg","selector"=>"Active:"),
+						"destruction"=>array("path"=>"destruction.svg","selector"=>"Destruction:"),
+						"end"=>array("path"=>"end.svg","selector"=>"Duel end:"),
+						"passive"=>array("path"=>"passive.svg","selector"=>"Passive:"),
+						"preparation"=>array("path"=>"preparation.svg","selector"=>"Preparation:"),
+						"reaction"=>array("path"=>"reaction.svg","selector"=>"Reaction:"),
+						"start"=>array("path"=>"start.svg","selector"=>"Duel start:"),
+						"summon"=>array("path"=>"summon.svg","selector"=>"Summon:")
+					);
+					$addedExtraSymbols = 0;
+					foreach ($triggerSymbols as $key => $t_symbol) {
+						$checkSelector = $t_symbol["selector"];
+						if(strpos($checkCardText, $checkSelector) !== false){
+							$extraSymbolPath = $mainPath.'/resources/img/card_parts/triggers/'.$t_symbol["path"];
+							$extraSymbol = $manager->make($extraSymbolPath)->resize(50,50);
+							$extraSymbolRowOffset = $extraSymbol->height() + 20;
+							$extraSymbol->opacity(80);
+							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $addedExtraSymbols;
+							$card->insert($extraSymbol, 'top-left' , $extraSymbolsOffsetX, $extraSymbolOffsetY);
+							$addedExtraSymbols++;
+						}
+					}
 					//add proprieties
+					$propertySymbols=array(
+						"bound"=>array("path"=>"bound.svg","selector"=>"Bound."),
+						"defender"=>array("path"=>"defender.svg","selector"=>"Defender."),
+						"fear"=>array("path"=>"fear.svg","selector"=>"Fear."),
+						"indestructible"=>array("path"=>"indestructible.svg","selector"=>"Indestructible."),
+						"lethal"=>array("path"=>"lethal.svg","selector"=>"Lethal."),
+						"persistent"=>array("path"=>"persistent.svg","selector"=>"Persistent."),
+						"quick"=>array("path"=>"quick.svg","selector"=>"Quick."),
+						"untargettable"=>array("path"=>"untargettable.svg","selector"=>"Untargettable.")
+					);
+					$addedExtraSymbols = 0;
+					foreach ($propertySymbols as $key => $p_symbol) {
+						$checkSelector = $p_symbol["selector"];
+						echo "x";
+						if(strpos($checkCardText, $checkSelector) !== false){
+							$extraSymbolPath = $mainPath.'/resources/img/card_parts/properties/'.$p_symbol["path"];
+							$extraSymbol = $manager->make($extraSymbolPath)->resize(50,50);
+							$extraSymbolRowOffset = $extraSymbol->height() + 20;
+							$extraSymbol->opacity(80);
+							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $addedExtraSymbols;
+							$card->insert($extraSymbol, 'top-right' , $extraSymbolsOffsetX, $extraSymbolOffsetY);
+							$addedExtraSymbols++;
+						}
+					}
 
 					//servant/champion values
 
