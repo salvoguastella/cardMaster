@@ -1,4 +1,22 @@
 		<?php
+
+			function roundedRectangle($_x1, $_y1, $_x2, $_y2, $_r, $color, $ctx){
+				$lines = [
+					["x1" => $_x1 - $_r, "y1" => $_y1, "x2" => $_x2 + $_r, "y2" => $_y1 ],
+					["x1" => $_x2, "y1" => $_y1 + $_r, "x2" => $_x2, "y2" => $_y2 - $_r ],
+					["x1" => $_x1 - $_r, "y1" => $_y2, "x2" => $_x2 + $_r, "y2" => $_y2 ],
+					["x1" => $_x1, "y1" => $_y1 + $_r, "x2" => $_x1, "y2" => $_y2 - $_r ]
+				];
+
+				foreach ($lines as $key => $line) {
+				$ctx->line($line["x1"], $line["y1"], $line["x2"], $line["y2"], function ($draw) use ($color){
+					    $draw->color($color);
+					    $draw->width(2);
+					});
+				}
+
+			}
+
 			$mainPath = dirname(__DIR__, 2);
 			// include composer autoload
 			require $mainPath . '\vendor\autoload.php';
@@ -269,8 +287,10 @@
 						$checkCardText = $cardText[0];
 					}
 
-					$extraSymbolsOffsetX = 90;
-					$baseExtraSymbolsOffsetY = 170;
+					$baseExtraSymbolsOffsetX = 94;
+					$baseExtraSymbolsOffsetY = 187;
+					$extraSymbolSize = 45;
+					$extraSymbolSpacing = 15;
 
 					$triggerSymbols=array(
 						"active"=>array("path"=>"active.svg","selector"=>"Active:"),
@@ -282,17 +302,26 @@
 						"start"=>array("path"=>"start.svg","selector"=>"Duel start:"),
 						"summon"=>array("path"=>"summon.svg","selector"=>"Summon:")
 					);
-					$addedExtraSymbols = 0;
+					$extraSymbolsRow = 0;
+					$extraSymbolsColumn = 0;
+					$addedTriggers = 0;
 					foreach ($triggerSymbols as $key => $t_symbol) {
 						$checkSelector = $t_symbol["selector"];
 						if(strpos($checkCardText, $checkSelector) !== false){
 							$extraSymbolPath = $mainPath.'/resources/img/card_parts/triggers/'.$t_symbol["path"];
-							$extraSymbol = $manager->make($extraSymbolPath)->resize(50,50);
-							$extraSymbolRowOffset = $extraSymbol->height() + 20;
+							$extraSymbol = $manager->make($extraSymbolPath)->resize($extraSymbolSize,$extraSymbolSize);
+							$extraSymbolRowOffset = $extraSymbol->height() + $extraSymbolSpacing;
+							$extraSymbolColumnOffset = $extraSymbol->width() + $extraSymbolSpacing;
 							$extraSymbol->opacity(80);
-							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $addedExtraSymbols;
-							$card->insert($extraSymbol, 'top-left' , $extraSymbolsOffsetX, $extraSymbolOffsetY);
-							$addedExtraSymbols++;
+							$extraSymbolOffsetX = $baseExtraSymbolsOffsetX + $extraSymbolColumnOffset * $extraSymbolsColumn;
+							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $extraSymbolsRow;
+							$card->insert($extraSymbol, 'top-left' , $extraSymbolOffsetX, $extraSymbolOffsetY);
+							$extraSymbolsRow++;
+							if($extraSymbolsRow >= 2){
+								$extraSymbolsRow = 0;
+								$extraSymbolsColumn++;
+							}
+							$addedTriggers++;
 						}
 					}
 					//add proprieties
@@ -306,19 +335,75 @@
 						"quick"=>array("path"=>"quick.svg","selector"=>"Quick."),
 						"untargettable"=>array("path"=>"untargettable.svg","selector"=>"Untargettable.")
 					);
-					$addedExtraSymbols = 0;
+					$extraSymbolsRow = 0;
+					$extraSymbolsColumn = 0;
+					$addedProperties = 0;;
 					foreach ($propertySymbols as $key => $p_symbol) {
 						$checkSelector = $p_symbol["selector"];
-						echo "x";
 						if(strpos($checkCardText, $checkSelector) !== false){
 							$extraSymbolPath = $mainPath.'/resources/img/card_parts/properties/'.$p_symbol["path"];
-							$extraSymbol = $manager->make($extraSymbolPath)->resize(50,50);
-							$extraSymbolRowOffset = $extraSymbol->height() + 20;
+							$extraSymbol = $manager->make($extraSymbolPath)->resize($extraSymbolSize,$extraSymbolSize);
+							$extraSymbolRowOffset = $extraSymbol->height() + $extraSymbolSpacing;
+							$extraSymbolColumnOffset = $extraSymbol->width() + $extraSymbolSpacing;
 							$extraSymbol->opacity(80);
-							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $addedExtraSymbols;
-							$card->insert($extraSymbol, 'top-right' , $extraSymbolsOffsetX, $extraSymbolOffsetY);
-							$addedExtraSymbols++;
+							$extraSymbolOffsetX = $baseExtraSymbolsOffsetX + $extraSymbolColumnOffset * $extraSymbolsColumn;
+							//echo $extraSymbolOffsetX ;
+							$extraSymbolOffsetY = $baseExtraSymbolsOffsetY + $extraSymbolRowOffset * $extraSymbolsRow;
+							$card->insert($extraSymbol, 'top-right' , $extraSymbolOffsetX, $extraSymbolOffsetY);
+							$extraSymbolsRow++;
+							if($extraSymbolsRow >= 2){
+								$extraSymbolsRow = 0;
+								$extraSymbolsColumn++;
+							}
+							$addedProperties++;
 						}
+					}
+
+					$sideIconsWrapper = [];
+
+					$sideIconsWrapper["padding"] = 10;
+					$sideIconsWrapper["x1"] = $baseExtraSymbolsOffsetX - $sideIconsWrapper["padding"];
+					$sideIconsWrapper["y1"] = $baseExtraSymbolsOffsetY - $sideIconsWrapper["padding"];
+					$sideIconsWrapper["x2"] = $baseExtraSymbolsOffsetX + $extraSymbolSize*2 + $extraSymbolSpacing + $sideIconsWrapper["padding"];
+					$sideIconsWrapper["y2"] = $baseExtraSymbolsOffsetY + $extraSymbolSize*2 + $extraSymbolSpacing + $sideIconsWrapper["padding"];
+					$sideIconsWrapper["textX"] = ($sideIconsWrapper["x1"] + $sideIconsWrapper["x2"]) / 2;
+					$sideIconsWrapper["textY"] = $sideIconsWrapper["y1"] - $sideIconsWrapper["padding"];
+					$sideIconsWrapper["textSize"] = 18 * $rate;
+					print_r($sideIconsWrapper);
+
+					//triggers/proprieties areas borders
+					if($addedTriggers > 0){
+						$card->text("TRIGGERS", $sideIconsWrapper["textX"], $sideIconsWrapper["textY"], function($font) use($mainPath,$sideIconsWrapper,$mainColor) {
+						    //$font->file($mainPath.'/resources/fonts/FiraSans-Regular.otf');
+						    $font->file($mainPath.'/resources/fonts/FrizQuadrata.ttf');
+						    $font->size($sideIconsWrapper["textSize"]);
+						    $font->color($mainColor);
+						    $font->align('center');
+						    $font->valign('bottom');
+						});
+						/*
+						$card->rectangle($sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], function ($draw) use ($mainColor){
+						    $draw->border(2, $mainColor);
+						});
+						*/
+						roundedRectangle($sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card);
+					}
+
+					if($addedProperties > 0){
+						$card->text("ATTRIBUTES", $cardW - $sideIconsWrapper["textX"], $sideIconsWrapper["textY"], function($font) use($mainPath,$sideIconsWrapper,$mainColor) {
+						    //$font->file($mainPath.'/resources/fonts/FiraSans-Regular.otf');
+						    $font->file($mainPath.'/resources/fonts/FrizQuadrata.ttf');
+						    $font->size($sideIconsWrapper["textSize"]);
+						    $font->color($mainColor);
+						    $font->align('center');
+						    $font->valign('bottom');
+						});
+						/*
+						$card->rectangle($cardW - $sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $cardW - $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], function ($draw) use ($mainColor){
+						    $draw->border(2, $mainColor);
+						});
+						*/
+						roundedRectangle($cardW - $sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $cardW - $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card);
 					}
 
 					//servant/champion values
