@@ -80,6 +80,33 @@ function _imageLoader(){
 	this.page = 0;
 }
 
+function _comboFilter(){
+	this.active="1";
+	this.lemma="";
+	this.orderBy="";
+	this.class = "";
+	this.showArchive = function(){
+		this.active="0";
+	}
+	this.reset = function(){
+		this.lemma="";
+		this.orderBy="";
+		this.class = "";
+	}
+	this.toQueryString = function(){
+		var str = [];
+		for(var p in this){
+			if (cardMaster.comboFilter.hasOwnProperty(p)) {
+				//add exception for flags
+				if(typeof cardMaster.comboFilter[p] !== "function"){
+					str.push(encodeURIComponent(p) + "=" + encodeURIComponent(cardMaster.comboFilter[p]));
+				}
+			}
+		}
+		return str.join("&");
+	}
+}
+
 function _combo(options){
 	this.id = options.id || 0;
 	this.name = options.name || "no name";
@@ -790,13 +817,13 @@ cardMaster.collection.removeCardPreview = function(){
 
 cardMaster.combos.loadComboList = function(callback){
 
-	//var filters = cardMaster.cardFilter.toQueryString();
-	//console.log(filters);
+	var filters = cardMaster.comboFilter.toQueryString();
+	console.log(filters);
 
 	$.ajax({
 		url: "resources/php_scripts/getComboList.php",
 		type: "GET",
-		//data: filters,
+		data: filters,
 		dataType: 'json'
 	})
 	.done(function(data) {
@@ -1167,8 +1194,41 @@ cardMaster.combos.editControls = function(){
 	});
 }
 
+cardMaster.combos.addFilters = function(){
+	var selector = $("#filterTrigger");
+	var textSearch = $("#textSearch");
+	var classSearch = $(".filter_panel .card_class");
+	//deselect
+	classSearch.val(0);
+
+	submit = $("#submitFilter");
+	reset = $("#resetFilter");
+	selector.on("click", function(){
+		$(this).parent().toggleClass('active');
+	});
+	textSearch.on("change", function(){
+		cardMaster.comboFilter.lemma = $(this).val();
+	});
+	classSearch.on("change", function(){
+		cardMaster.comboFilter.class = $(this).val();
+	});
+	submit.on("click", function(){
+		cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
+	});
+	reset.on("click", function(){
+		cardMaster.comboFilter.reset();
+		textSearch.val("");
+		//classSearch.val(1);
+		//archetypeSearch.val(1);
+		//typeSearch.val(1);
+		classSearch.val(0);
+		cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
+	});
+}
+
 cardMaster.init = function(){
 	cardMaster.cardFilter = new _cardFilter();
+	cardMaster.comboFilter = new _comboFilter();
 	cardMaster.imageLoader = new _imageLoader();
 	cardMaster.collection.syncArchetypes();
 	cardMaster.collection.generateFlags();
@@ -1185,7 +1245,7 @@ cardMaster.init = function(){
 	}
 	if(cardMaster.getPage() == "collection" || cardMaster.getPage() == "archive"){
 		cardMaster.loadLiteralElements(function(){
-			cardMaster.collection.loadCards(cardMaster.collection.renderCardList);
+			cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
 		});
 		cardMaster.collection.orderList();
 		cardMaster.collection.addFilters();
@@ -1199,6 +1259,7 @@ cardMaster.init = function(){
 		cardMaster.loadLiteralElements(function(){
 			cardMaster.combos.loadComboList(cardMaster.combos.renderComboList);
 		});
+		cardMaster.combos.addFilters();
 		cardMaster.combos.toggleNewComboForm();
 		cardMaster.combos.resetNewComboForm();
 		cardMaster.combos.addNewComboCard();
