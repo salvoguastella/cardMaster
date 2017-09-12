@@ -38,8 +38,6 @@
 					["x1" => $_x1, "y1" => $_y1 + $_r, "x2" => $_x1, "y2" => $_y2 - $_r ]
 				];
 
-				print_r($lines);
-
 				foreach ($lines as $key => $line) {
 				$linesLayer->line($line["x1"], $line["y1"], $line["x2"], $line["y2"], function ($draw) use ($color){
 					    $draw->color($color);
