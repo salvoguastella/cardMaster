@@ -1,19 +1,53 @@
 		<?php
 
-			function roundedRectangle($_x1, $_y1, $_x2, $_y2, $_r, $color, $ctx){
+			function roundedRectangle($_x1, $_y1, $_x2, $_y2, $_r, $color, $ctx, $manager, $rate){
+				$linesLayer = $manager->canvas($ctx->width()*$rate, $ctx->height()*$rate);
+				$maskLayer = $manager->canvas($ctx->width()*$rate, $ctx->height()*$rate);
+				$maskLayer->fill("#ffffff");
+
+				$circles = [
+					["x" => $_x1 + $_r, "y" => $_y1 + $_r],
+					["x" => $_x2 - $_r, "y" => $_y1 + $_r],
+					["x" => $_x2 - $_r, "y" => $_y2 - $_r],
+					["x" => $_x1 + $_r, "y" => $_y2 - $_r]
+				];
+
+				foreach ($circles as $key => $circle) {
+				$linesLayer->circle($_r*2,$circle["x"], $circle["y"], function ($draw) use ($color){
+					    $draw->border(2, $color);
+					});
+				}
+
+				$masks = [
+					["x1" => $_x1, "y1" => $_y1 + $_r, "x2" => $_x2, "y2" => $_y2 - $_r],
+					["x1" => $_x1 + $_r, "y1" => $_y1, "x2" => $_x2 - $_r, "y2" => $_y2]
+				];
+
+				foreach ($masks as $key => $mask) {
+				$maskLayer->rectangle($mask["x1"], $mask["y1"], $mask["x2"], $mask["y2"], function ($draw) {
+					    $draw->background('rgba(0, 0, 0, 1)');
+					});
+				}
+
+				$linesLayer->mask($maskLayer);
+
 				$lines = [
-					["x1" => $_x1 - $_r, "y1" => $_y1, "x2" => $_x2 + $_r, "y2" => $_y1 ],
+					["x1" => $_x1 + $_r, "y1" => $_y1, "x2" => $_x2 - $_r, "y2" => $_y1 ],
 					["x1" => $_x2, "y1" => $_y1 + $_r, "x2" => $_x2, "y2" => $_y2 - $_r ],
-					["x1" => $_x1 - $_r, "y1" => $_y2, "x2" => $_x2 + $_r, "y2" => $_y2 ],
+					["x1" => $_x1 + $_r, "y1" => $_y2, "x2" => $_x2 - $_r, "y2" => $_y2 ],
 					["x1" => $_x1, "y1" => $_y1 + $_r, "x2" => $_x1, "y2" => $_y2 - $_r ]
 				];
 
+				print_r($lines);
+
 				foreach ($lines as $key => $line) {
-				$ctx->line($line["x1"], $line["y1"], $line["x2"], $line["y2"], function ($draw) use ($color){
+				$linesLayer->line($line["x1"], $line["y1"], $line["x2"], $line["y2"], function ($draw) use ($color){
 					    $draw->color($color);
 					    $draw->width(2);
 					});
 				}
+
+				$ctx->insert($linesLayer, 'top-left', 0, 0);
 
 			}
 
@@ -386,7 +420,7 @@
 						    $draw->border(2, $mainColor);
 						});
 						*/
-						roundedRectangle($sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card);
+						roundedRectangle($sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card , $manager, $rate);
 					}
 
 					if($addedProperties > 0){
@@ -403,7 +437,7 @@
 						    $draw->border(2, $mainColor);
 						});
 						*/
-						roundedRectangle($cardW - $sideIconsWrapper["x1"], $sideIconsWrapper["y1"], $cardW - $sideIconsWrapper["x2"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card);
+						roundedRectangle($cardW - $sideIconsWrapper["x2"], $sideIconsWrapper["y1"], $cardW - $sideIconsWrapper["x1"], $sideIconsWrapper["y2"], 15*$rate, $mainColor, $card , $manager, $rate);
 					}
 
 					//servant/champion values
