@@ -104,6 +104,12 @@
                             include("resources/php_scripts/generate_dropdown.php");
                         ?>
                     </div>
+                    <div class="row">
+                        <label for="">Card</label>
+                        <?php
+                            require("resources/php_scripts/getCardNames.php");
+                        ?>
+                    </div>
 
                     <div id="submitFilter" class="btn">Search</div>
                     <div id="resetFilter" class="btn">Reset filters</div>
