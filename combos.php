@@ -8,8 +8,8 @@
         <div class="combo-list panel">
             <div class="row header">
                 <span class="sortable" data-sort="name">Name <i class="fa fa-sort"></i></span>
-                <span>Cards</span>
-                <span data-sort="class">Class <i class="fa fa-sort"></i></span>
+                <span class="sortable" data-sort="cards">Cards <i class="fa fa-sort"></i></span>
+                <span class="sortable" data-sort="class">Class <i class="fa fa-sort"></i></span>
                 <span class="commands"></span>
             </div>
             <div class="new-combo">

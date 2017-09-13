@@ -1188,6 +1188,23 @@ cardMaster.combos.editControls = function(){
 	});
 }
 
+cardMaster.combos.orderList = function(){
+	var selector = $(".header > .sortable");
+	selector.on("click", function(){
+		if($(this).hasClass("sorted")){
+			$(this).removeClass("sorted");
+			cardMaster.comboFilter.orderBy = "";
+			cardMaster.combos.loadList(cardMaster.combos.renderList);
+		}
+		else{
+			selector.removeClass('sorted');
+			$(this).addClass("sorted");
+			cardMaster.comboFilter.orderBy = $(this).data("sort");
+			cardMaster.combos.loadList(cardMaster.combos.renderList);
+		}
+	});
+}
+
 cardMaster.combos.addFilters = function(){
 	var selector = $("#filterTrigger");
 	var textSearch = $("#textSearch");
@@ -1256,6 +1273,7 @@ cardMaster.init = function(){
 		cardMaster.loadLiteralElements(function(){
 			cardMaster.combos.loadList(cardMaster.combos.renderList);
 		});
+		cardMaster.combos.orderList();
 		cardMaster.combos.addFilters();
 		cardMaster.combos.toggleNewComboForm();
 		cardMaster.combos.resetNewComboForm();
