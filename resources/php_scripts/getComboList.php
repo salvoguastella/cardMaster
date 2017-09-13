@@ -30,7 +30,7 @@
 
 	if($tail != "") $SQL.= " AND ".$tail;
 
-	if($orderBy != ""){
+	if($orderBy != "" AND $orderBy != "cards"){
 		$SQL .= " ORDER BY ".$orderBy;
 	}
 
