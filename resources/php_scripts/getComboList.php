@@ -7,9 +7,8 @@
 	$active=isset($_REQUEST['active']) ? $_REQUEST['active'] : "1";
 	$lemma=isset($_REQUEST['lemma']) ? $_REQUEST['lemma'] : "";
 	$class=isset($_REQUEST['class']) ? $_REQUEST['class'] : "";
+	$checkCard=isset($_REQUEST['card']) ? $_REQUEST['card'] : "";
 
-	$type=isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
-	$flags=isset($_REQUEST['flags']) ? $_REQUEST['flags'] : "";
 	$orderBy=isset($_REQUEST['orderBy']) ? $_REQUEST['orderBy'] : "";
 
 	$SQL = "SELECT id,name,class,cards,notes FROM combos WHERE active='$active'";
@@ -35,9 +34,6 @@
 		$SQL .= " ORDER BY ".$orderBy;
 	}
 
-	//change this to specific card filter;
-	$flagsArray = explode("|",$flags);
-
 	try{
 
 		$stm=$conn->prepare($SQL);
@@ -45,11 +41,14 @@
 		$listJSON = "[";
 		while($row=$stm->fetchObject()){
 			//CARD FILTERING IS DONE ON RESULTS
-			if($flags != "" AND count($flagsArray) > 0 ){
-				$showRow = true;
-				$flagsJSON = json_decode($row->flags, true);
-				foreach ($flagsArray as $i => $filterFlag) {
-					if($flagsJSON[$filterFlag-1]["value"] != "1") $showRow = false;
+			if($checkCard != "" ){
+				$showRow = false;
+				$comboCards = explode("|", $row->cards);
+				foreach ($comboCards as $i => $comboCard) {
+					if($comboCard == $checkCard){
+						$showRow = true;
+						break;
+					}
 				}
 				if($showRow) $listJSON = $listJSON.json_encode($row).",";
 			}

@@ -85,6 +85,7 @@ function _comboFilter(){
 	this.lemma="";
 	this.orderBy="";
 	this.class = "";
+	this.card = "";
 	this.showArchive = function(){
 		this.active="0";
 	}
@@ -92,6 +93,7 @@ function _comboFilter(){
 		this.lemma="";
 		this.orderBy="";
 		this.class = "";
+		this.card = "";
 	}
 	this.toQueryString = function(){
 		var str = [];
@@ -856,6 +858,8 @@ cardMaster.combos.loadList = function(callback){
 cardMaster.combos.renderList= function(){
 	console.log("will render combo list");
 	var selector = $("#comboList");
+	//move edit box before wiping list
+	$("#editComboBox").insertAfter(selector);
 	//wipe cardList before render
 	selector.html("");
 	var tabFields = [
@@ -1198,8 +1202,10 @@ cardMaster.combos.addFilters = function(){
 	var selector = $("#filterTrigger");
 	var textSearch = $("#textSearch");
 	var classSearch = $(".filter_panel .card_class");
+	var cardSearch = $(".filter_panel [name='checkCard']");
 	//deselect
 	classSearch.val(0);
+	cardSearch.val(0);
 
 	submit = $("#submitFilter");
 	reset = $("#resetFilter");
@@ -1212,16 +1218,17 @@ cardMaster.combos.addFilters = function(){
 	classSearch.on("change", function(){
 		cardMaster.comboFilter.class = $(this).val();
 	});
+	cardSearch.on("change", function(){
+		cardMaster.comboFilter.card = $(this).val();
+	});
 	submit.on("click", function(){
 		cardMaster.combos.loadList(cardMaster.combos.renderList);
 	});
 	reset.on("click", function(){
 		cardMaster.comboFilter.reset();
 		textSearch.val("");
-		//classSearch.val(1);
-		//archetypeSearch.val(1);
-		//typeSearch.val(1);
 		classSearch.val(0);
+		cardSearch.val(0);
 		cardMaster.combos.loadList(cardMaster.combos.renderList);
 	});
 }

@@ -4,7 +4,7 @@
 
 	$conn=Core::getInstance()->dbh;
 
-	//get id-name list in dropdown format
+	$card_list_mode=isset($card_list_mode) ? $card_list_mode : "new";
 
 	$SQL = "SELECT card_data.id,card_it.name FROM card_data JOIN card_it ON ref = card_data.id ORDER BY card_it.name";
 
@@ -12,7 +12,9 @@
 
 		$stm=$conn->prepare($SQL);
 		$stm->execute();
-		$cardDropdown = "<select name='newComboCard' class='new_combo_card'>";
+		$listClass="newComboCard";
+		if($card_list_mode != "new") $listClass = $card_list_mode;
+		$cardDropdown = "<select name='".$listClass."' class='new_combo_card'>";
 		while($row=$stm->fetchObject()){
 			$cardDropdown = $cardDropdown."<option value='".$row->id."'>".$row->name."</option>";
 		}

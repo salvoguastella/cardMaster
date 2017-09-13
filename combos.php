@@ -107,6 +107,7 @@
                     <div class="row">
                         <label for="">Card</label>
                         <?php
+                            $card_list_mode = "checkCard";
                             require("resources/php_scripts/getCardNames.php");
                         ?>
                     </div>
