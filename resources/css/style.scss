@@ -511,6 +511,14 @@ h1,h2,h3,h4,h5,h6{
 				}
 			}
 		}
+		&:hover{
+			background-color: rgba(255,255,255,0.6);
+			.visual-flags{
+				li{
+					background: rgba(255,255,255,0.6);
+				}
+			}
+		}
 	}
 }
 
@@ -875,8 +883,10 @@ h1,h2,h3,h4,h5,h6{
 			width:100%;
 			overflow:hidden;
 			max-height: $cardListRowHeight;
-			@include transition(0.3s all ease-in-out);
-
+			@include transition(0.3s max-height ease-in-out);
+			&:hover{
+				background-color: rgba(255,255,255,0.6);
+			}
 			span{
 				width:100px;
 				display: block;

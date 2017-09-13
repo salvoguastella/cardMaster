@@ -165,12 +165,10 @@ cardMaster.cardZoom = function(){
 	$(document).on("mouseenter", selector, function(){
 		var source = $(this).attr("src");
 		if(source=="") source = $(this).find("img").attr("src");
-		//console.log(source);
 		targetImg.attr("src",source);
 		$("body").append(target);
 	})
 	$(document).on("mouseleave", selector, function(){
-		//console.log("out");
 		target.remove();
 	})
 	$( document ).on( "mousemove", function( event ) {
@@ -226,7 +224,7 @@ cardMaster.collection.generateFlags = function(){
 cardMaster.collection.createCard = function(){
 	var selector=$("#newCardForm");
 	selector.on("submit", function(e){
-		console.log(selector.serialize());
+		//console.log(selector.serialize());
 		e.preventDefault();
 		$.ajax({
 			url: selector.attr("action"),
@@ -467,7 +465,7 @@ cardMaster.collection.updateCount = function(){
 cardMaster.collection.loadList = function(callback){
 
 	var filters = cardMaster.cardFilter.toQueryString();
-	console.log(filters);
+	//console.log(filters);
 
 	$.ajax({
 		url: "resources/php_scripts/getCardList.php",
@@ -498,7 +496,7 @@ cardMaster.collection.loadList = function(callback){
 			var card = new _card(single_card);
 			cardMaster.cardList.push(card);
 		});
-		console.dir(cardMaster.cardList);
+		//console.dir(cardMaster.cardList);
 		cardMaster.collection.updateCount();
 		if(typeof callback === "function") callback();
 	})
@@ -527,7 +525,6 @@ cardMaster.collection.hideIconBox = function(){
 }
 
 cardMaster.collection.renderList = function(){
-	console.log("render");
 	var selector = $("#cardList");
 	//wipe cardList before render
 	selector.html("");
@@ -684,7 +681,6 @@ cardMaster.collection.addFilters = function(){
 			if($(_flag).is(":checked")) flagValues.push($(_flag).data("flag"));
 		});
 		cardMaster.cardFilter.flags = flagValues.join("|");
-		console.log(cardMaster.cardFilter.flags);
 	});
 	submit.on("click", function(){
 		cardMaster.collection.loadList(cardMaster.collection.renderList);
@@ -718,7 +714,7 @@ cardMaster.collection.iconBox = function(){
 		else{
 			cardMaster.imageLoader.page++;
 		}
-		console.log("retrieving page "+cardMaster.imageLoader.page);
+		//console.log("retrieving page "+cardMaster.imageLoader.page);
 		$.ajax({
 			url: "resources/php_scripts/getImageList.php",
 			type: "GET",
@@ -820,7 +816,7 @@ cardMaster.collection.removeCardPreview = function(){
 cardMaster.combos.loadList = function(callback){
 
 	var filters = cardMaster.comboFilter.toQueryString();
-	console.log(filters);
+	//console.log(filters);
 
 	$.ajax({
 		url: "resources/php_scripts/getComboList.php",
@@ -829,7 +825,6 @@ cardMaster.combos.loadList = function(callback){
 		dataType: 'json'
 	})
 	.done(function(data) {
-		//console.log("success " + data);
 		cardMaster.showMessage("Combo list loaded", "confirm");
 		cardMaster.comboList = [];
 		$.each(data, function(i,_single_combo){
@@ -842,10 +837,9 @@ cardMaster.combos.loadList = function(callback){
 			single_combo.cards = _single_combo.cards.split("|");
 
 			var combo = new _combo(single_combo);
-			console.log(combo.getCardImages());
 			cardMaster.comboList.push(combo);
 		});
-		console.dir(cardMaster.comboList);
+		//console.dir(cardMaster.comboList);
 		cardMaster.combos.updateCount();
 		if(typeof callback === "function") callback();
 	})
@@ -856,7 +850,6 @@ cardMaster.combos.loadList = function(callback){
 }
 
 cardMaster.combos.renderList= function(){
-	console.log("will render combo list");
 	var selector = $("#comboList");
 	//move edit box before wiping list
 	$("#editComboBox").insertAfter(selector);
@@ -936,7 +929,6 @@ cardMaster.combos.renderList= function(){
 					});
 
 					show.on("click", function(){
-						console.log("collapse panel");
 						cardMaster.combos.startEdit($(this));
 					});
 
@@ -1033,7 +1025,6 @@ cardMaster.combos.addNewComboCard = function(){
 	trigger.on("click", function(){
 		var newCardForm = $(this).closest(".new-card-to-combo");
 		var cardValue = newCardForm.find("select").val();
-		console.log("value "+cardValue);
 		var container = newCardForm.parent();
 		var addedCard = $("<div>", {
 						class: "added-card",
@@ -1052,7 +1043,6 @@ cardMaster.combos.addNewComboCard = function(){
 		container.prepend(addedCard);
 		var formCardsField = container.parent().find("input[name='cards']");
 		var formCards = formCardsField.val();
-		console.log("contain "+formCards);
 		if(formCards != ""){
 			formCards = formCardsField.val().split("|");
 			formCards.push(cardValue);
@@ -1131,7 +1121,7 @@ cardMaster.combos.startEdit = function(selRow){
 	editBox.appendTo(rowBottom);
 	row_selector.removeClass('active');
 	base.addClass("active");
-	console.log(rowID);
+	//console.log(rowID);
 
 	var selectedCombo = cardMaster.getComboDataById(rowID);
 	cardMaster.combos.resetComboFormStatus("#editComboBox");

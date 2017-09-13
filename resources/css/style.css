@@ -408,6 +408,10 @@ h1, h2, h3, h4, h5, h6 {
     background-color: white; }
     .card-list .card.active .visual-flags li {
       background: white; }
+  .card-list .card:hover {
+    background-color: rgba(255, 255, 255, 0.6); }
+    .card-list .card:hover .visual-flags li {
+      background: rgba(255, 255, 255, 0.6); }
 
 .mode-tabs {
   list-style: none;
@@ -699,15 +703,17 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     overflow: hidden;
     max-height: 28px;
-    -webkit-transition: 0.3s all ease-in-out;
-    -moz-transition: 0.3s all ease-in-out;
-    -ms-transition: 0.3s all ease-in-out;
-    -o-transition: 0.3s all ease-in-out;
-    transition: 0.3s all ease-in-out; }
+    -webkit-transition: 0.3s max-height ease-in-out;
+    -moz-transition: 0.3s max-height ease-in-out;
+    -ms-transition: 0.3s max-height ease-in-out;
+    -o-transition: 0.3s max-height ease-in-out;
+    transition: 0.3s max-height ease-in-out; }
     .combo-list .combo .top:after {
       content: "";
       display: table;
       clear: both; }
+    .combo-list .combo .top:hover {
+      background-color: rgba(255, 255, 255, 0.6); }
     .combo-list .combo .top span {
       width: 100px;
       display: block;
