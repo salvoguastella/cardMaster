@@ -4,6 +4,12 @@
 
 	$conn=Core::getInstance()->dbh;
 
+	function rowSort($a, $b){
+		if($a["n"] == $b["n"]) return 0;
+		if($a["n"] < $b["n"]) return -1;
+		else return 1;
+	}
+
 	$active=isset($_REQUEST['active']) ? $_REQUEST['active'] : "1";
 	$lemma=isset($_REQUEST['lemma']) ? $_REQUEST['lemma'] : "";
 	$class=isset($_REQUEST['class']) ? $_REQUEST['class'] : "";
@@ -38,23 +44,34 @@
 
 		$stm=$conn->prepare($SQL);
 		$stm->execute();
-		$listJSON = "[";
+		$listArray = [];
 		while($row=$stm->fetchObject()){
 			//CARD FILTERING IS DONE ON RESULTS
+			$comboCards = explode("|", $row->cards);
+			$comboCardsNumber = count($comboCards);
+
 			if($checkCard != "" ){
 				$showRow = false;
-				$comboCards = explode("|", $row->cards);
 				foreach ($comboCards as $i => $comboCard) {
 					if($comboCard == $checkCard){
 						$showRow = true;
 						break;
 					}
 				}
-				if($showRow) $listJSON = $listJSON.json_encode($row).",";
+				if($showRow) array_push($listArray, ["n" => $comboCardsNumber, "row" => $row]);
 			}
 			else{
-				$listJSON = $listJSON.json_encode($row).",";
+				array_push($listArray, ["n" => $comboCardsNumber, "row" => $row]);
 			}
+		}
+
+		if($orderBy == "cards"){
+			usort($listArray, "rowSort");
+		}
+
+		$listJSON = "[";
+		foreach ($listArray as $i => $listRow) {
+			$listJSON = $listJSON.json_encode($listRow["row"]).",";
 		}
 		$listJSON = rtrim($listJSON, ",")."]";
 		echo $listJSON;
@@ -62,4 +79,6 @@
 	catch(PDOException $e) {
 		echo "Error: " . $e->getMessage() . " " .$SQL;
 	}
+
+
 ?>
