@@ -653,6 +653,7 @@ cardMaster.collection.addFilters = function(){
 	var archetypeSearch = $(".filter_panel .card_archetype");
 	var typeSearch = $(".filter_panel .card_type");
 	var flagElement = $(".filter_panel .single_flag");
+	var sortHeaders = $(".header > .sortable");
 	//deselect
 	classSearch.val(0);
 	archetypeSearch.val(0);
@@ -697,6 +698,7 @@ cardMaster.collection.addFilters = function(){
 		flagElement.each(function(i,flag){
 			$(flag).prop("checked", false);
 		});
+		sortHeaders.removeClass("sorted");
 		cardMaster.collection.loadList(cardMaster.collection.renderList);
 	});
 }
@@ -1210,6 +1212,7 @@ cardMaster.combos.addFilters = function(){
 	var textSearch = $("#textSearch");
 	var classSearch = $(".filter_panel .card_class");
 	var cardSearch = $(".filter_panel [name='checkCard']");
+	var sortHeaders = $(".header > .sortable");
 	//deselect
 	classSearch.val(0);
 	cardSearch.val(0);
@@ -1236,6 +1239,7 @@ cardMaster.combos.addFilters = function(){
 		textSearch.val("");
 		classSearch.val(0);
 		cardSearch.val(0);
+		sortHeaders.removeClass("sorted");
 		cardMaster.combos.loadList(cardMaster.combos.renderList);
 	});
 }
