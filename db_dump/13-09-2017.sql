@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2017 at 01:53 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 7.1.7
+-- Creato il: Set 14, 2017 alle 01:11
+-- Versione del server: 10.1.25-MariaDB
+-- Versione PHP: 7.1.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `archetypes`
+-- Struttura della tabella `archetypes`
 --
 
 CREATE TABLE `archetypes` (
@@ -36,7 +36,7 @@ CREATE TABLE `archetypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `archetypes`
+-- Dump dei dati per la tabella `archetypes`
 --
 
 INSERT INTO `archetypes` (`id`, `class`, `ita`, `eng`) VALUES
@@ -57,7 +57,7 @@ INSERT INTO `archetypes` (`id`, `class`, `ita`, `eng`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `card_data`
+-- Struttura della tabella `card_data`
 --
 
 CREATE TABLE `card_data` (
@@ -73,7 +73,7 @@ CREATE TABLE `card_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `card_data`
+-- Dump dei dati per la tabella `card_data`
 --
 
 INSERT INTO `card_data` (`id`, `class`, `type`, `flags`, `image`, `archetype`, `attack`, `health`, `active`) VALUES
@@ -142,30 +142,12 @@ INSERT INTO `card_data` (`id`, `class`, `type`, `flags`, `image`, `archetype`, `
 (67, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":1},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":1},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '1815', 8, 2, 2, 1),
 (68, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":1},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '1519', 9, 1, 4, 1),
 (69, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":1},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '1853', 10, 1, 3, 1),
-(70, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '256', 8, 2, 2, 1),
-(71, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(72, 4, 1, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":1},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 0, 0, 1),
-(73, 4, 1, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":1},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(74, 4, 2, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(75, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(76, 4, 5, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":1},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
-(77, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":1},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
-(78, 4, 3, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
-(79, 4, 3, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 0, 0, 1),
-(80, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(81, 4, 2, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":1},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 0, 0, 1),
-(82, 4, 2, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":1},{\"index\":4,\"value\":1},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 0, 0, 1),
-(83, 4, 2, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":1},{\"index\":4,\"value\":0},{\"index\":5,\"value\":1},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
-(84, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(85, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":1},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 1, 3, 1),
-(86, 4, 2, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '462', 9, 0, 0, 1),
-(87, 4, 3, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":1},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
-(88, 4, 1, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":1},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1);
+(70, 4, 4, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '256', 8, 2, 2, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `card_it`
+-- Struttura della tabella `card_it`
 --
 
 CREATE TABLE `card_it` (
@@ -176,7 +158,7 @@ CREATE TABLE `card_it` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `card_it`
+-- Dump dei dati per la tabella `card_it`
 --
 
 INSERT INTO `card_it` (`id`, `ref`, `name`, `description`) VALUES
@@ -245,30 +227,12 @@ INSERT INTO `card_it` (`id`, `ref`, `name`, `description`) VALUES
 (67, 67, 'Arraffatore', 'Duel end: aggiungi uno degli Oggetti giocati da un Nemico durante il Duello corrente alla tua pila degli Scarti'),
 (68, 68, 'Rapitore', 'Scegli un Servant avversario e mettilo sotto questa carta. \r\nQuando questo Servant viene scartato, il Servant avversario torna alla posizione originale'),
 (69, 69, 'Ricettatore', 'Preparation: Quando peschi le tue carte, puoi scartarne una e pescarne un\\\'altra.'),
-(70, 70, 'Scagnozzo', 'Preparation: prima che entrambi i Giocatori peschino le proprie carte, puoi guardare la prima carta del tuo Mazzo o di quello di un Avversario e decidere di metterla in fondo al rispettivo Mazzo.'),
-(71, 71, 'Attacco rapido', 'Infliggi 1 Danno. Se giochi questa Azione come prima carta durante un Duello, infliggi invece 2 Danni'),
-(72, 72, 'Gioco sporco', 'La prossima carta Avversaria conta come Nulla'),
-(73, 73, 'Affondo', 'Rivela la prima carta dal tuo Mazzo. Se Ã¨ un\\\'Azione, giocala gratuitamente, altrimenti scartala'),
-(74, 74, 'Ordigno', 'Assegna questo Oggetto ad un tuo Servant. \r\nDestruction: infliggi 3 Danni'),
-(75, 75, 'Ferita sanguinante', 'Se hai gia inflitto almeno 3 Danni durante questo Duello, infliggi 2 Danni, altrimenti infliggi 1 Danno'),
-(76, 76, 'Ombra notturna', 'Quando il Campione attacca un Servant non subisce Danni'),
-(77, 77, 'Azzoppare', 'Infliggi 1 Danno e tappa il Servant o il Campione bersaglio'),
-(78, 78, 'Guanti del farabutto', 'Il tuo Campione ignora la regola Difensore quando attacca fisicamente'),
-(79, 79, 'Fionda', 'Scarta un qualunque numero di oggetti dalla tua mano. Infliggi 2 Danni al Campione avversario per ognuno di essi'),
-(80, 80, 'Zac!', 'Puoi giocare questa carta gratuitamente insieme ad una tua altra Azione. Infliggi 2 Danni al Campione avversario'),
-(81, 81, 'Veleno paralizzante', 'Assegna questo Oggetto ad un tuo Equip. Quando il tuo Campione attacca un Servant, lo tappa'),
-(82, 82, 'Veleno neurotossico', 'Assegna questo Oggetto ad un tuo Equip. \r\nQuando il tuo Campione attacca un Servant gia Danneggiato, lo distrugge'),
-(83, 83, 'Veleno corrosivo', 'Assegna questo Oggetto ad un Servant nemico. Scarta tutti gli Oggetti ad esso assegnati. Non puÃ² ricevere altri Oggetti.'),
-(84, 84, 'Assalto della vipera', 'Infliggi tanti Danni al Campione avversario pari a tutte le carte in gioco che contengono la parola â€œVelenoâ€ nel proprio nome'),
-(85, 85, 'Profeta del Veleno', 'Summon: scegli un Oggetto che contenga â€œVelenoâ€ nel proprio nome dal tuo Tomo ed aggiungilo alla tua pila degli Scarti'),
-(86, 86, 'Veleno infettivo', 'Assegna questo Oggetto ad un Servant avversario. \r\nDuel end: quel Servant subisce 1 Danno. Se viene distrutto, assegna questo Oggetto ad un altro Servant avversario, se c\\\'Ã¨'),
-(87, 87, 'Occhio del cacciatore', 'Una volta per turno, puoi pescare una carta e quindi mettere una delle tue carte in mano in cima al tuo mazzo'),
-(88, 88, 'Danza delle ombre', 'Durante questo Duello, ogni volta che giochi un\\\'Azione, il tuo Campione puÃ² effettuare un attacco fisico gratuito');
+(70, 70, 'Scagnozzo', 'Preparation: prima che entrambi i Giocatori peschino le proprie carte, puoi guardare la prima carta del tuo Mazzo o di quello di un Avversario e decidere di metterla in fondo al rispettivo Mazzo.');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `classes`
+-- Struttura della tabella `classes`
 --
 
 CREATE TABLE `classes` (
@@ -279,7 +243,7 @@ CREATE TABLE `classes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `classes`
+-- Dump dei dati per la tabella `classes`
 --
 
 INSERT INTO `classes` (`id`, `ita`, `eng`, `icon`) VALUES
@@ -292,7 +256,7 @@ INSERT INTO `classes` (`id`, `ita`, `eng`, `icon`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `combos`
+-- Struttura della tabella `combos`
 --
 
 CREATE TABLE `combos` (
@@ -305,20 +269,17 @@ CREATE TABLE `combos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `combos`
+-- Dump dei dati per la tabella `combos`
 --
 
 INSERT INTO `combos` (`id`, `name`, `class`, `cards`, `notes`, `active`) VALUES
-(1, 'test', 3, '5|33|30', 'asgsfgasfgasg', 1),
-(2, 'Combo n2', 2, '9|6|33|39', 'Something', 1),
-(3, 'Just 1', 2, '5', '', 1),
-(4, 'Double fun', 1, '39|26', '', 1),
-(5, 'Copy of Double fun', 1, '39|26', '', 0);
+(1, 'Combo n.1', 2, '5|9|8', 'C\'hai sonno?', 1),
+(2, 'Test 2', 2, '16|34', '', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `flags`
+-- Struttura della tabella `flags`
 --
 
 CREATE TABLE `flags` (
@@ -327,7 +288,7 @@ CREATE TABLE `flags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `flags`
+-- Dump dei dati per la tabella `flags`
 --
 
 INSERT INTO `flags` (`id`, `name`) VALUES
@@ -347,7 +308,7 @@ INSERT INTO `flags` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `icons`
+-- Struttura della tabella `icons`
 --
 
 CREATE TABLE `icons` (
@@ -357,7 +318,7 @@ CREATE TABLE `icons` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `icons`
+-- Dump dei dati per la tabella `icons`
 --
 
 INSERT INTO `icons` (`id`, `name`, `path`) VALUES
@@ -3312,7 +3273,7 @@ INSERT INTO `icons` (`id`, `name`, `path`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `key_words`
+-- Struttura della tabella `key_words`
 --
 
 CREATE TABLE `key_words` (
@@ -3324,7 +3285,7 @@ CREATE TABLE `key_words` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `types`
+-- Struttura della tabella `types`
 --
 
 CREATE TABLE `types` (
@@ -3335,7 +3296,7 @@ CREATE TABLE `types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `types`
+-- Dump dei dati per la tabella `types`
 --
 
 INSERT INTO `types` (`id`, `ita`, `eng`, `icon`) VALUES
@@ -3347,110 +3308,110 @@ INSERT INTO `types` (`id`, `ita`, `eng`, `icon`) VALUES
 (6, 'Campione', 'Campione', '');
 
 --
--- Indexes for dumped tables
+-- Indici per le tabelle scaricate
 --
 
 --
--- Indexes for table `archetypes`
+-- Indici per le tabelle `archetypes`
 --
 ALTER TABLE `archetypes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `card_data`
+-- Indici per le tabelle `card_data`
 --
 ALTER TABLE `card_data`
   ADD PRIMARY KEY (`id`),
   ADD KEY `Key` (`id`) USING BTREE;
 
 --
--- Indexes for table `card_it`
+-- Indici per le tabelle `card_it`
 --
 ALTER TABLE `card_it`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `classes`
+-- Indici per le tabelle `classes`
 --
 ALTER TABLE `classes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `combos`
+-- Indici per le tabelle `combos`
 --
 ALTER TABLE `combos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `flags`
+-- Indici per le tabelle `flags`
 --
 ALTER TABLE `flags`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `icons`
+-- Indici per le tabelle `icons`
 --
 ALTER TABLE `icons`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `key_words`
+-- Indici per le tabelle `key_words`
 --
 ALTER TABLE `key_words`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `types`
+-- Indici per le tabelle `types`
 --
 ALTER TABLE `types`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT for table `archetypes`
+-- AUTO_INCREMENT per la tabella `archetypes`
 --
 ALTER TABLE `archetypes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
--- AUTO_INCREMENT for table `card_data`
+-- AUTO_INCREMENT per la tabella `card_data`
 --
 ALTER TABLE `card_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 --
--- AUTO_INCREMENT for table `card_it`
+-- AUTO_INCREMENT per la tabella `card_it`
 --
 ALTER TABLE `card_it`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 --
--- AUTO_INCREMENT for table `classes`
+-- AUTO_INCREMENT per la tabella `classes`
 --
 ALTER TABLE `classes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `combos`
+-- AUTO_INCREMENT per la tabella `combos`
 --
 ALTER TABLE `combos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT for table `flags`
+-- AUTO_INCREMENT per la tabella `flags`
 --
 ALTER TABLE `flags`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
--- AUTO_INCREMENT for table `icons`
+-- AUTO_INCREMENT per la tabella `icons`
 --
 ALTER TABLE `icons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2945;
 --
--- AUTO_INCREMENT for table `key_words`
+-- AUTO_INCREMENT per la tabella `key_words`
 --
 ALTER TABLE `key_words`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `types`
+-- AUTO_INCREMENT per la tabella `types`
 --
 ALTER TABLE `types`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;COMMIT;
