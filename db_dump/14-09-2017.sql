@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2017 at 01:53 PM
+-- Generation Time: Sep 14, 2017 at 05:51 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -149,7 +149,7 @@ INSERT INTO `card_data` (`id`, `class`, `type`, `flags`, `image`, `archetype`, `
 (74, 4, 2, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
 (75, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
 (76, 4, 5, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":1},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
-(77, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":1},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
+(77, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":1},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '127', 9, 0, 0, 1),
 (78, 4, 3, '[{\"index\":1,\"value\":0},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":1},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 9, 0, 0, 1),
 (79, 4, 3, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 8, 0, 0, 1),
 (80, 4, 1, '[{\"index\":1,\"value\":1},{\"index\":2,\"value\":0},{\"index\":3,\"value\":0},{\"index\":4,\"value\":0},{\"index\":5,\"value\":0},{\"index\":6,\"value\":0},{\"index\":7,\"value\":0},{\"index\":8,\"value\":0},{\"index\":9,\"value\":0},{\"index\":10,\"value\":0},{\"index\":11,\"value\":0},{\"index\":12,\"value\":0}]', '587', 10, 0, 0, 1),
@@ -275,19 +275,19 @@ CREATE TABLE `classes` (
   `id` int(11) NOT NULL,
   `ita` varchar(24) NOT NULL,
   `eng` varchar(24) NOT NULL,
-  `icon` varchar(128) NOT NULL
+  `color` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `classes`
 --
 
-INSERT INTO `classes` (`id`, `ita`, `eng`, `icon`) VALUES
-(1, 'Neutrale', 'Neutral', ''),
-(2, 'Guerriero', 'Warrior', ''),
-(3, 'Mago', 'Mage', ''),
-(4, 'Ladro', 'Rogue', ''),
-(5, 'Sacerdote', 'Priest', '');
+INSERT INTO `classes` (`id`, `ita`, `eng`, `color`) VALUES
+(1, 'Neutrale', 'Neutral', '#6b6b6b'),
+(2, 'Guerriero', 'Warrior', '#b03436'),
+(3, 'Mago', 'Mage', '#3b62b0'),
+(4, 'Ladro', 'Rogue', '#379c39'),
+(5, 'Sacerdote', 'Priest', '#ada242');
 
 -- --------------------------------------------------------
 
@@ -3312,6 +3312,83 @@ INSERT INTO `icons` (`id`, `name`, `path`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `icon_attributes`
+--
+
+CREATE TABLE `icon_attributes` (
+  `id` int(11) NOT NULL,
+  `name` varchar(16) NOT NULL,
+  `path` varchar(128) NOT NULL,
+  `selector` varchar(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `icon_attributes`
+--
+
+INSERT INTO `icon_attributes` (`id`, `name`, `path`, `selector`) VALUES
+(1, 'bound', 'bound.svg', 'Bound.'),
+(2, 'defender', 'defender.svg', 'Defender.'),
+(3, 'fear', 'fear.svg', 'Fear.'),
+(4, 'indestructible', 'indestructible.svg', 'Indestructible.'),
+(5, 'lethal', 'lethal.svg', 'Lethal.'),
+(6, 'persistent', 'persistent.svg', 'Persistent.'),
+(7, 'quick', 'quick.svg', 'Quick.'),
+(8, 'untargettable', 'untargettable.svg', 'Untargettable.');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `icon_categories`
+--
+
+CREATE TABLE `icon_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(16) NOT NULL,
+  `path` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `icon_categories`
+--
+
+INSERT INTO `icon_categories` (`id`, `name`, `path`) VALUES
+(1, 'beast', 'beast.svg'),
+(2, 'construct', 'construct.svg'),
+(3, 'human', 'human.svg'),
+(4, 'magic', 'magic.svg'),
+(5, 'undead', 'undead.svg\r\n');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `icon_triggers`
+--
+
+CREATE TABLE `icon_triggers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(16) NOT NULL,
+  `path` varchar(128) NOT NULL,
+  `selector` varchar(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `icon_triggers`
+--
+
+INSERT INTO `icon_triggers` (`id`, `name`, `path`, `selector`) VALUES
+(1, 'active', 'active.svg', 'Active:'),
+(2, 'destruction', 'destruction.svg', 'Destruction:'),
+(3, 'end', 'end.svg', 'Duel end:'),
+(4, 'passive', 'passive.svg', 'Passive:'),
+(5, 'preparation', 'preparation.svg', 'Preparation:'),
+(6, 'reaction', 'reaction.svg', 'Reaction:'),
+(7, 'start', 'start.svg', 'Start:'),
+(8, 'summon', 'summon.svg', 'Summon:');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `key_words`
 --
 
@@ -3394,6 +3471,24 @@ ALTER TABLE `icons`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `icon_attributes`
+--
+ALTER TABLE `icon_attributes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `icon_categories`
+--
+ALTER TABLE `icon_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `icon_triggers`
+--
+ALTER TABLE `icon_triggers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `key_words`
 --
 ALTER TABLE `key_words`
@@ -3444,6 +3539,21 @@ ALTER TABLE `flags`
 --
 ALTER TABLE `icons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2945;
+--
+-- AUTO_INCREMENT for table `icon_attributes`
+--
+ALTER TABLE `icon_attributes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `icon_categories`
+--
+ALTER TABLE `icon_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `icon_triggers`
+--
+ALTER TABLE `icon_triggers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `key_words`
 --
