@@ -935,11 +935,11 @@ cardMaster.combos.renderList= function(){
 					});
 
 					duplicate.on("click", function(){
-						console.log("duplicate combo");
+						cardMaster.combos.duplicateCombo($(this));
 					});
 
 					remove.on("click", function(){
-						console.log("remove combo");
+						cardMaster.combos.deleteCombo($(this));
 					});
 
 					comboField.append(show);
@@ -1188,6 +1188,56 @@ cardMaster.combos.editControls = function(){
 	cancelSelector.on("click", function(){
 		cardMaster.combos.cancelEdit();
 	});
+}
+
+cardMaster.combos.duplicateCombo = function(selRow){
+	var base = selRow.closest(".row.combo");
+	var rowID = base.data("id");
+	$.ajax({
+		url: "resources/php_scripts/duplicate_combo.php",
+		type: "POST",
+		dataType: 'text',
+		data: "id="+rowID
+	})
+	.done(function(res) {
+		if(res == "data_error"){
+			cardMaster.showMessage("Error updating DB", "error");
+		}
+		else{
+			cardMaster.combos.resetComboFormStatus();
+			$("#editComboBox").insertAfter("#comboList");
+			cardMaster.combos.loadList(cardMaster.combos.renderList);
+			cardMaster.showMessage(res, "confirm");
+		}
+	})
+	.fail(function() {
+		cardMaster.showMessage("Connection error", "error");
+	})
+}
+
+cardMaster.combos.deleteCombo = function(selRow){
+	var base = selRow.closest(".row.combo");
+	var rowID = base.data("id");
+	$.ajax({
+		url: "resources/php_scripts/modify_combo.php",
+		type: "POST",
+		dataType: 'text',
+		data: {id: rowID, mode: "delete" },
+	})
+	.done(function(res) {
+		if(res == "data_error"){
+			cardMaster.showMessage("Error updating DB", "error");
+		}
+		else{
+			cardMaster.combos.resetComboFormStatus();
+			$("#editComboBox").insertAfter("#comboList");
+			cardMaster.combos.loadList(cardMaster.combos.renderList);
+			cardMaster.showMessage(res, "confirm");
+		}
+	})
+	.fail(function() {
+		cardMaster.showMessage("Connection error", "error");
+	})
 }
 
 cardMaster.combos.orderList = function(){
