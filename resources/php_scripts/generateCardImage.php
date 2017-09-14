@@ -74,13 +74,8 @@
 					// create an image manager instance with favored driver
 					$manager = new ImageManager(array('driver' => 'imagick'));
 
-					$classColor= array(
-						"warrior"=>"#b03436",
-						"mage"=>"#3b62b0",
-						"rogue"=>"#379c39",
-						"priest"=>"#ada242",
-						"neutral"=>"#6b6b6b"
-					);
+					include_once("graphic/class_colors.php");
+
 					$mainColor=$classColor[strtolower($row->class)];
 
 					$cardType = strtolower($row->type);
@@ -256,13 +251,7 @@
 					$cardImage = $manager->make($cardImagePath)->resize($cardImageW, $cardImageH);
 					$imageLayer->insert($cardImage, 'top-center', 0, $cardImageOffest);
 
-					$categorySymbols=array(
-						"beast"=>array("path"=>"beast.svg"),
-						"construct"=>array("path"=>"construct.svg"),
-						"human"=>array("path"=>"human.svg"),
-						"magic"=>array("path"=>"magic.svg"),
-						"undead"=>array("path"=>"undead.svg")
-					);
+					include_once("graphic/category_symbols.php");
 
 					//add card category here, if available
 					if(isset($categoryText)){
@@ -323,17 +312,9 @@
 					$baseExtraSymbolsOffsetY = 187;
 					$extraSymbolSize = 45;
 					$extraSymbolSpacing = 15;
+					//add triggers
+					include_once("graphic/trigger_symbols.php");
 
-					$triggerSymbols=array(
-						"active"=>array("path"=>"active.svg","selector"=>"Active:"),
-						"destruction"=>array("path"=>"destruction.svg","selector"=>"Destruction:"),
-						"end"=>array("path"=>"end.svg","selector"=>"Duel end:"),
-						"passive"=>array("path"=>"passive.svg","selector"=>"Passive:"),
-						"preparation"=>array("path"=>"preparation.svg","selector"=>"Preparation:"),
-						"reaction"=>array("path"=>"reaction.svg","selector"=>"Reaction:"),
-						"start"=>array("path"=>"start.svg","selector"=>"Duel start:"),
-						"summon"=>array("path"=>"summon.svg","selector"=>"Summon:")
-					);
 					$extraSymbolsRow = 0;
 					$extraSymbolsColumn = 0;
 					$addedTriggers = 0;
@@ -357,23 +338,15 @@
 						}
 					}
 					//add proprieties
-					$propertySymbols=array(
-						"bound"=>array("path"=>"bound.svg","selector"=>"Bound."),
-						"defender"=>array("path"=>"defender.svg","selector"=>"Defender."),
-						"fear"=>array("path"=>"fear.svg","selector"=>"Fear."),
-						"indestructible"=>array("path"=>"indestructible.svg","selector"=>"Indestructible."),
-						"lethal"=>array("path"=>"lethal.svg","selector"=>"Lethal."),
-						"persistent"=>array("path"=>"persistent.svg","selector"=>"Persistent."),
-						"quick"=>array("path"=>"quick.svg","selector"=>"Quick."),
-						"untargettable"=>array("path"=>"untargettable.svg","selector"=>"Untargettable.")
-					);
+					include_once("graphic/attribute_symbols.php");
+
 					$extraSymbolsRow = 0;
 					$extraSymbolsColumn = 0;
 					$addedProperties = 0;;
-					foreach ($propertySymbols as $key => $p_symbol) {
-						$checkSelector = $p_symbol["selector"];
+					foreach ($attributeSymbols as $key => $a_symbol) {
+						$checkSelector = $a_symbol["selector"];
 						if(strpos($checkCardText, $checkSelector) !== false){
-							$extraSymbolPath = $mainPath.'/resources/img/card_parts/properties/'.$p_symbol["path"];
+							$extraSymbolPath = $mainPath.'/resources/img/card_parts/attributes/'.$a_symbol["path"];
 							$extraSymbol = $manager->make($extraSymbolPath)->resize($extraSymbolSize,$extraSymbolSize);
 							$extraSymbolRowOffset = $extraSymbol->height() + $extraSymbolSpacing;
 							$extraSymbolColumnOffset = $extraSymbol->width() + $extraSymbolSpacing;
@@ -401,7 +374,6 @@
 					$sideIconsWrapper["textX"] = ($sideIconsWrapper["x1"] + $sideIconsWrapper["x2"]) / 2;
 					$sideIconsWrapper["textY"] = $sideIconsWrapper["y1"] - $sideIconsWrapper["padding"];
 					$sideIconsWrapper["textSize"] = 18 * $rate;
-					print_r($sideIconsWrapper);
 
 					//triggers/proprieties areas borders
 					if($addedTriggers > 0){
