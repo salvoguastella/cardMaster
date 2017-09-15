@@ -57,7 +57,7 @@ function _card(options){
 	this.type = options.type || 1;
 	this.attack = options.attack || 0;
 	this.health = options.health || 0;
-	this.flags = options.flags || [];
+	this.flags = options.flags || "";
 	this.image = options.image || null;
 	this.getName = function(lang){
 		lang = lang || "eng";
@@ -69,10 +69,39 @@ function _card(options){
 		if(lang == "ita") return this.description_ita;
 		else return this.description_eng;
 	}
-	this.has_flags = function(){
+	this.has_flag = function(flag){
 		//check all card flags with filter flags
-		console.dir(cardMaster.cardFilter);
-		return true;
+		if(this.flags != ""){
+			var jFlags = JSON.parse(this.flags);
+			var found = false;
+			jFlags.forEach(function(jFlag){
+				if(jFlag["index"] == flag && jFlag["value"] == 1) found = true;
+			});
+			return found;
+		}
+		else return false;
+	}
+	this.is = function(category){
+		category = category.toLowerCase();
+		var testText = this.getDescription().split("|");
+		if(testText.length > 1){
+			testText = testText[0].toLowerCase();
+			if(testText.indexOf(category) > -1) return true;
+			else return false;
+		}
+		else return false;
+	}
+	this.has = function(selector){
+		selector = selector.toLowerCase();
+		var testText = this.getDescription().split("|");
+		if(testText.length > 1){
+			testText = testText[1].toLowerCase();
+		}
+		else{
+			testText = testText[0].toLowerCase();
+		}
+		if(testText.indexOf(selector) > -1) return true;
+		else return false;
 	}
 }
 
