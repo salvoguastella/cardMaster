@@ -2,10 +2,14 @@ window.cardMaster = window.cardMaster || {};
 
 cardMaster.cardList = [];
 cardMaster.comboList = [];
+cardMaster.summary = [];
 cardMaster.classes = [];
 cardMaster.archetypes = [];
 cardMaster.types = [];
 cardMaster.flags = [];
+cardMaster.categories = [];
+cardMaster.triggers = [];
+cardMaster.attributes = [];
 cardMaster.editMode = false;
 cardMaster.comboList = [];
 
@@ -176,6 +180,21 @@ function _combo(options){
 	}
 	this.cardsIdToString = function(){
 		return this.cards.join("|");
+	}
+}
+
+function _block(){
+	this.types = {};
+	this.flags = {};
+	this.categories = {};
+	this.triggers = {};
+	this.attributes = {};
+	this.getTotal = function(){
+		var total = 0;
+		for(t in this.types){
+			total+=parseInt(this.types[t]);
+		}
+		return total;
 	}
 }
 
@@ -424,6 +443,7 @@ cardMaster.collection.resetCardForm = function(){
 cardMaster.showMessage = function(msg,type){
 	type = type || "confirm";
 	var selector = $(".message-bar");
+	selector.removeClass('error').removeClass('confirm');
 	selector.addClass(type);
 	selector.find("span").text(msg+" - "+cardMaster.getTimeStamp());
 	console.log(msg+" - "+cardMaster.getTimeStamp());
@@ -1323,6 +1343,224 @@ cardMaster.combos.addFilters = function(){
 	});
 }
 
+cardMaster.summary.structureArray = function(callback){
+	//base structure
+	cardMaster.summary["general"] = {"content": new _block};
+	cardMaster.summary["classes"] = {};
+
+	for (var c_key in cardMaster.classes) {
+		var archetypeNode = {};
+		for (var a_key in cardMaster.archetypes) {
+			var classRef = cardMaster.archetypes[a_key];
+			if(classRef["class"] == c_key){
+				archetypeNode[a_key] = {"name": classRef["name"], "content":new _block};
+			}
+		}
+		if(c_key == 1){
+			cardMaster.summary["classes"][c_key] = {"name": cardMaster.classes[c_key]["name"], "content":new _block};
+		}
+		else{
+			cardMaster.summary["classes"][c_key] = {"name": cardMaster.classes[c_key]["name"], "content":new _block, "archetypes":archetypeNode};
+		}
+	}
+	if(typeof callback === "function"){
+		callback();
+	}
+}
+
+cardMaster.summary.populateArray = function(callback){
+	var node = cardMaster.summary["general"];
+	var classNodes = cardMaster.summary["classes"];
+	cardMaster.cardList.forEach(function(card){
+		var ctx = node["content"];
+		cardMaster.summary.getNodeCounts(ctx, card);
+		var class_node = classNodes[card.class];
+		var class_ctx = class_node["content"];
+		cardMaster.summary.getNodeCounts(class_ctx, card);
+		if(card.class != 1){
+			//Neutral cards have no archetype
+			var arch_node = class_node.archetypes[card.archetype];
+			if(arch_node){
+				var archetype_ctx = arch_node["content"];
+				cardMaster.summary.getNodeCounts(archetype_ctx, card);
+			}
+		}
+	});
+	if(typeof callback === "function"){
+		callback();
+	}
+}
+
+cardMaster.summary.renderBoxes = function(){
+	console.log("render page");
+	function getRow(){
+		var obj = $("<div>", {
+			class: "row",
+		});
+		return obj;
+	}
+	function getMainBox(options){
+		var self = this;
+		self.class = options.class || "general";
+		self.archetype = options.archetype || false;
+		self.total = options.total || 0;
+		self.types = options.types || [];
+		var obj = $("<div>", {
+			class: "main_box " + self.class,
+		});
+		obj.title = $("<div>", {
+			class: "main_title",
+			text: self.class
+		});
+		obj.append(obj.title);
+		obj.total = $("<div>", {
+			class: "main_total",
+			text: self.total
+		});
+		obj.append(obj.total);
+		obj.total_label = $("<div>", {
+			class: "main_total_label",
+			text: "total"
+		});
+		obj.append(obj.total_label);
+		if(self.class != "general"){
+			var cornerName = self.class.toLowerCase();
+			obj.corner = {};
+			if(self.archetype){
+				cornerName=cornerName+"_"+self.archetype;
+			}
+			else cornerName=cornerName+"_neutral";
+			for(var i = 0; i < 4; i++){
+				obj.corner[i] = $("<img>", {
+					class: "corner corner_"+i,
+					src: "resources/img/card_parts/borders/"+cornerName+".png"
+				});
+				obj.append(obj.corner[i]);
+			}
+		}
+		for(type in self.types){
+			var options = {};
+			options.icon = false;
+			options.name = cardMaster.types[type].name;
+			options.count = self.types[type];
+			var detailElement = getDetailElem(options);
+			obj.append(detailElement);
+		}
+		return obj;
+	}
+
+	function getDetailElem(options){
+		var self = this;
+		self.icon = options.icon || false;
+		self.name = options.name || "";
+		self.count = options.count || 0;
+		var obj = $("<div>", {
+			class: "detail_box " + self.name.toLowerCase(),
+		});
+		if(self.icon){
+			obj.icon = $("<img>", {
+				class: "detail_icon",
+				src: self.icon,
+				title: self.name
+			});
+			obj.append(obj.icon);
+			obj.total = $("<div>", {
+				class: "detail_total",
+				text: self.count
+			});
+			obj.append(obj.total);
+		}
+		else{
+			obj.total = $("<div>", {
+				class: "detail_total",
+				text: self.count
+			});
+			obj.append(obj.total);
+
+			obj.title = $("<div>", {
+				class: "detail_title",
+				text: self.name
+			});
+			obj.append(obj.title);
+		}
+		return obj;
+	}
+
+	var selector = $(".summary");
+	var node = cardMaster.summary.general.content;
+	var classNodes = cardMaster.summary.classes;
+	var options = {};
+	options.class = "general";
+	options.archetype = false;
+	options.total = node.getTotal();
+	options.types = node.types;
+	var row = getRow();
+	var generalElement = getMainBox(options);
+	row.append(generalElement);
+	selector.append(row);
+	for(cn in classNodes){
+		console.log(cn);
+		var nodeContent = classNodes[cn].content;
+		var options = {};
+		options.class = classNodes[cn].name;
+		options.archetype = false;
+		options.total = nodeContent.getTotal();
+		options.types = nodeContent.types;
+		var row = getRow();
+		var generalElement = getMainBox(options);
+		row.append(generalElement);
+		selector.append(row);
+	}
+}
+
+cardMaster.summary.getNodeCounts = function(ctx, card){
+			//card type
+		if(ctx.types[card.type] || ctx.types[card.type] > 0){
+			ctx.types[card.type]++;
+		}
+		else ctx.types[card.type] = 1;
+		//categories
+		for( var category in cardMaster.categories){
+			var cat = cardMaster.categories[category];
+			if(card.is(cat.name)){
+				if(ctx.categories[category] || ctx.categories[category] > 0){
+					ctx.categories[category]++;
+				}
+				else ctx.categories[category] = 1;
+			}
+		}
+		//triggers
+		for( var trigger in cardMaster.triggers){
+			var trig = cardMaster.triggers[trigger];
+			if(card.has(trig.name)){
+				if(ctx.triggers[trigger] || ctx.triggers[trigger] > 0){
+					ctx.triggers[trigger]++;
+				}
+				else ctx.triggers[trigger]= 1;
+			}
+		}
+		//attributes
+		for( var attribute in cardMaster.attributes){
+			var attr = cardMaster.attributes[attribute];
+			if(card.has(attr.name)){
+				if(ctx.attributes[attribute] || ctx.attributes[attribute] > 0){
+					ctx.attributes[attribute]++;
+				}
+				else ctx.attributes[attribute]= 1;
+			}
+		}
+		//flags
+		for( var flag in cardMaster.flags){
+			var fl = flag;
+			if(card.has_flag(fl)){
+				if(ctx.flags[flag] || ctx.flags[flag] > 0){
+					ctx.flags[flag]++;
+				}
+				else ctx.flags[flag]= 1;
+			}
+		}
+}
+
 cardMaster.init = function(){
 	cardMaster.cardFilter = new _cardFilter();
 	cardMaster.comboFilter = new _comboFilter();
@@ -1364,6 +1602,15 @@ cardMaster.init = function(){
 		cardMaster.combos.createCombo();
 		cardMaster.combos.editControls();
 		cardMaster.combos.removeComboCard();
+	}
+	if(cardMaster.getPage() == "summary"){
+		cardMaster.loadLiteralElements(function(){
+			cardMaster.collection.loadList(function(){
+				cardMaster.summary.structureArray(function(){
+					cardMaster.summary.populateArray(cardMaster.summary.renderBoxes);
+				});
+			});
+		});
 	}
 };
 

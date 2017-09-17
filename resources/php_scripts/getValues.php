@@ -18,6 +18,15 @@
 				case 'flag':
 					$this->SQL="SELECT `id`,`name` FROM `flags`";
 					break;
+				case 'category':
+					$this->SQL="SELECT `id`,`name`,`path` FROM `icon_categories`";
+					break;
+				case 'trigger':
+					$this->SQL="SELECT `id`,`name`,`path`,`selector` FROM `icon_triggers`";
+					break;
+				case 'attribute':
+					$this->SQL="SELECT `id`,`name`,`path`,`selector` FROM `icon_attributes`";
+					break;
 				default:
 					//otherwise class
 					$this->SQL="SELECT `id`,`ita`,`eng` FROM `classes`";
@@ -33,16 +42,28 @@
 			while($row=$stm->fetchObject()){
 				$this->valuesJSON = $this->valuesJSON.json_encode($row).",";
 				if($mode == "archetype"){
-					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."' data-class='".$row->class."'>".ucwords($row->ita)."</option>";
-					$this->valuesArray[$row->id] = array("class"=>$row->class, "name"=>$row->ita);
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."' data-class='".$row->class."'>".ucwords($row->eng)."</option>";
+					$this->valuesArray[$row->id] = array("class"=>$row->class, "name"=>$row->eng);
 				}
-				else if($mode == "flag"){ 
+				else if($mode == "flag"){
 					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->name)."</option>";
 					$this->valuesArray[$row->id] = array("name"=>$row->name);
 				}
+				else if($mode == "category"){
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->name)."</option>";
+					$this->valuesArray[$row->id] = array("name"=>$row->name, "path"=>$row->path);
+				}
+				else if($mode == "trigger"){
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->name)."</option>";
+					$this->valuesArray[$row->id] = array("name"=>$row->name, "path"=>$row->path, "selector"=>$row->selector);
+				}
+				else if($mode == "attribute"){
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->name)."</option>";
+					$this->valuesArray[$row->id] = array("name"=>$row->name, "path"=>$row->path, "selector"=>$row->selector);
+				}
 				else {
-					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->ita)."</option>";
-					$this->valuesArray[$row->id] = array("name"=>$row->ita);
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->eng)."</option>";
+					$this->valuesArray[$row->id] = array("name"=>$row->eng);
 				}
 			}
 			$this->valuesJSON = rtrim($this->valuesJSON, ",")."]";

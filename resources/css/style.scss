@@ -93,7 +93,7 @@ h1,h2,h3,h4,h5,h6{
 
 .panel{
 	padding:30px;
-	background-color:rgba(255,255,255,0.8);
+	background-color: $transparentWhite;
 	border-radius:2px;
 }
 
@@ -937,6 +937,89 @@ h1,h2,h3,h4,h5,h6{
 			.combo__content{
 				max-height: 1500px;
 			}
+		}
+	}
+}
+
+.summary{
+	.row{
+		@include clearfix;
+		margin-bottom:20px;
+	}
+	.main_box{
+		background-color: $transparentWhite;
+		padding: 40px 20px 20px;
+		@include clearfix;
+		text-align: center;
+		border-radius:5px;
+		width: 230px;
+		position:relative;
+		.main_title{
+			position:absolute;
+			width:100%;
+			top:5px;
+			left:0;
+			font-size: 14px;
+			text-transform: capitalize;
+			font-weight: 700;
+		}
+		.main_total{
+			font-size:48px;
+			line-height: 40px;
+			font-weight: 700;
+			float: left;
+			width:100%;
+		}
+		.main_total_label{
+			float: left;
+			font-size: 16px;
+			text-transform: capitalize;
+			width:100%;
+			margin-bottom:20px;
+		}
+		.corner{
+			width:60px;
+			position:absolute;
+			&.corner_0{
+				top:5px;
+				left:5px;
+				@include rotate(90);
+			}
+			&.corner_1{
+				top:5px;
+				right:5px;
+				@include rotate(180);
+			}
+			&.corner_2{
+				bottom:5px;
+				right:5px;
+				@include rotate(-90);
+			}
+			&.corner_3{
+				bottom:5px;
+				left:5px;
+			}
+		}
+	}
+	.detail_box{
+		border-radius:3px;
+		border-width:1px;
+		border-style:solid;
+		//change this to class color with JS
+		border-color:black;
+		float:left;
+		margin:2px;
+		width:calc((100% / 3) - 4px);
+		padding:5px;
+		.detail_icon{
+
+		}
+		.detail_total{
+			font-size:24px;
+			font-weight: 700;
+		}
+		.detail_title{
+			font-size: 10px;
 		}
 	}
 }

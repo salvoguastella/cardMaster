@@ -752,4 +752,86 @@ h1, h2, h3, h4, h5, h6 {
   .combo-list .combo.active .combo__content {
     max-height: 1500px; }
 
+.summary .row {
+  margin-bottom: 20px; }
+  .summary .row:after {
+    content: "";
+    display: table;
+    clear: both; }
+.summary .main_box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px 20px 20px;
+  text-align: center;
+  border-radius: 5px;
+  width: 230px;
+  position: relative; }
+  .summary .main_box:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .summary .main_box .main_title {
+    position: absolute;
+    width: 100%;
+    top: 5px;
+    left: 0;
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 700; }
+  .summary .main_box .main_total {
+    font-size: 48px;
+    line-height: 40px;
+    font-weight: 700;
+    float: left;
+    width: 100%; }
+  .summary .main_box .main_total_label {
+    float: left;
+    font-size: 16px;
+    text-transform: capitalize;
+    width: 100%;
+    margin-bottom: 20px; }
+  .summary .main_box .corner {
+    width: 60px;
+    position: absolute; }
+    .summary .main_box .corner.corner_0 {
+      top: 5px;
+      left: 5px;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      -o-transform: rotate(90deg);
+      transform: rotate(90deg); }
+    .summary .main_box .corner.corner_1 {
+      top: 5px;
+      right: 5px;
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      transform: rotate(180deg); }
+    .summary .main_box .corner.corner_2 {
+      bottom: 5px;
+      right: 5px;
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      transform: rotate(-90deg); }
+    .summary .main_box .corner.corner_3 {
+      bottom: 5px;
+      left: 5px; }
+.summary .detail_box {
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  float: left;
+  margin: 2px;
+  width: calc((100% / 3) - 4px);
+  padding: 5px; }
+  .summary .detail_box .detail_total {
+    font-size: 24px;
+    font-weight: 700; }
+  .summary .detail_box .detail_title {
+    font-size: 10px; }
+
 /*# sourceMappingURL=style.css.map */

@@ -19,7 +19,7 @@
 	$filters = array();
 
 	if($lemma != ""){
-		$string = "(name LIKE '%".$lemma."%' OR description LIKE '%".$lemma."%')";
+		$string = "(card_it.name LIKE '%".$lemma."%' OR card_it.description LIKE '%".$lemma."%')";
 		array_push($filters,$string);
 	}
 	if($class != ""){
