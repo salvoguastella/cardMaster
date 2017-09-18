@@ -1393,24 +1393,29 @@ cardMaster.summary.populateArray = function(callback){
 
 cardMaster.summary.renderBoxes = function(){
 	console.log("render page");
-	function getRow(){
+	function getRow(_class,_archetype){
+		var rowType = _class.toLowerCase();
+		if(_archetype) rowType += " sub"
 		var obj = $("<div>", {
-			class: "row",
+			class: "row "+rowType,
+			"data-class" : _class.toLowerCase()
 		});
 		return obj;
 	}
 	function getMainBox(options){
 		var self = this;
-		self.class = options.class || "general";
+		self.class = options.class.toLowerCase() || "general";
 		self.archetype = options.archetype || false;
 		self.total = options.total || 0;
 		self.types = options.types || [];
 		var obj = $("<div>", {
 			class: "main_box " + self.class,
 		});
+		var boxTitle = self.class;
+		if(self.archetype) boxTitle = self.archetype;
 		obj.title = $("<div>", {
 			class: "main_title",
-			text: self.class
+			text: boxTitle
 		});
 		obj.append(obj.title);
 		obj.total = $("<div>", {
@@ -1446,19 +1451,29 @@ cardMaster.summary.renderBoxes = function(){
 			var detailElement = getDetailElem(options);
 			obj.append(detailElement);
 		}
-		if(self.class != "general" || self.class != "neutral"){
+		if(self.class != "general" && self.class != "neutral" && !self.archetype){
 			obj.details = $("<div>", {
-				class: "show_more "+self.class,
+				class: "show_more "+self.class.toLowerCase(),
 				html: "<i class='fa fa-eye'></i>"
 			});
 			obj.append(obj.details);
+			obj.details.on("click",function(){
+				var target = $(this).closest(".row").data("class");
+				$(".row."+target+".sub").toggleClass("hidden");
+				$(".row."+target+".sub").each(function(){
+					//animation collapse???
+					var newH = 0;
+					if(!$(this).hasClass("hidden")){
+						newH = $(this).data("height");
+					}
+					$(this).css({"maxHeight" : newH});
+				});
+			})
 		}
 		return obj;
 	}
-		// HERE
 	function getElemBox(options){
 		var self = this;
-		console.log(options);
 		self.type = options.type || false;
 		self.class = options.class || "general";
 		self.archetype = options.archetype || false;
@@ -1489,9 +1504,11 @@ cardMaster.summary.renderBoxes = function(){
 
 		for(block in self.blocks){
 			var options = {};
-			options.icon = true;
 			if(self.type){
-				var blockName = cardMaster[self.type].name;
+				if(self.type != "flags"){
+					options.icon = self.type+"/"+cardMaster[self.type][block].path;
+				}
+				var blockName = cardMaster[self.type][block].name;
 				if(blockName){
 					options.name = blockName;
 					options.count = self.blocks[block];
@@ -1514,7 +1531,7 @@ cardMaster.summary.renderBoxes = function(){
 		if(self.icon){
 			obj.icon = $("<img>", {
 				class: "detail_icon",
-				src: self.icon,
+				src: "resources/img/card_parts/"+self.icon,
 				title: self.name
 			});
 			obj.append(obj.icon);
@@ -1540,42 +1557,52 @@ cardMaster.summary.renderBoxes = function(){
 		return obj;
 	}
 
+	function generateRow(_class,_archetype,node){
+		var row = getRow(_class,_archetype);
+		var options = {};
+		options.class = _class;
+		options.archetype = _archetype;
+		options.total = node.getTotal();
+		options.types = node.types;
+		var generalElement = getMainBox(options);
+		row.append(generalElement);
+		//detail blocks
+		var detailsTypes = ["categories", "triggers", "attributes", "flags"];
+		for(dT in detailsTypes){
+			var options = {};
+			options.type = detailsTypes[dT];
+			options.class = _class;
+			options.archetype = _archetype;
+			options.blocks = node[options.type];
+			var detailElement = getElemBox(options);
+			row.append(detailElement);
+		}
+		selector.append(row);
+		//set row height
+		var maxH = 0;
+		row.children(".main_box, .main_detail_box").each(function(){
+			var h = $(this).outerHeight();
+			if(h>maxH) maxH = h;
+		});
+		row.children(".main_box, .main_detail_box").css({height:maxH+"px"});
+		row.attr("data-height", maxH);
+		if(row.hasClass('sub')) row.addClass('hidden');
+	}
+
 	var selector = $(".summary");
 	var node = cardMaster.summary.general.content;
 	var classNodes = cardMaster.summary.classes;
-	var row = getRow();
 	//main block
-	var options = {};
-	options.class = "general";
-	options.archetype = false;
-	options.total = node.getTotal();
-	options.types = node.types;
-	var generalElement = getMainBox(options);
-	row.append(generalElement);
-	//detail blocks
-	var detailsTypes = ["categories", "triggers", "attributes", "flags"];
-	for(dT in detailsTypes){
-		var options = {};
-		options.type = detailsTypes[dT];
-		options.class = "general";
-		options.archetype = false;
-		options.blocks = node[options.type];
-		var detailElement = getElemBox(options);
-		row.append(detailElement);
-	}
-	
-	selector.append(row);
+	generateRow("general",false,node);
+
 	for(cn in classNodes){
 		var nodeContent = classNodes[cn].content;
-		var options = {};
-		options.class = classNodes[cn].name;
-		options.archetype = false;
-		options.total = nodeContent.getTotal();
-		options.types = nodeContent.types;
-		var row = getRow();
-		var generalElement = getMainBox(options);
-		row.append(generalElement);
-		selector.append(row);
+		generateRow(classNodes[cn].name,false,nodeContent);
+		var archetypeNodes = classNodes[cn].archetypes;
+		for(an in archetypeNodes){
+			var nodeContent = archetypeNodes[an].content;
+			generateRow(classNodes[cn].name,archetypeNodes[an].name,nodeContent);
+		}
 	}
 }
 

@@ -945,17 +945,27 @@ h1,h2,h3,h4,h5,h6{
 	.row{
 		@include clearfix;
 		margin-bottom:20px;
+		@include transition(0.3s all linear);
+		&.sub{
+			overflow: hidden;
+			//margin-left:10px;
+			margin-bottom:20px;
+			height:auto;
+			&.hidden{
+				margin-bottom:0;
+			}
+		}
 	}
 	.main_box, .main_detail_box{
 		background-color: $transparentWhite;
-		padding: 40px 30px 30px;
+		padding: 40px 35px 35px;
 		@include clearfix;
 		text-align: center;
 		border-radius:5px;
 		width: 250px;
 		position:relative;
 		float:left;
-		margin-left:20px;
+		margin-right:10px;
 		.main_title{
 			position:absolute;
 			width:100%;
@@ -1013,23 +1023,29 @@ h1,h2,h3,h4,h5,h6{
 	}
 	.detail_box{
 		border-radius:3px;
-		border-width:1px;
-		border-style:solid;
+		//border-width:1px;
+		//border-style:solid;
 		//change this to class color with JS
-		border-color:black;
+		//border-color:black;
 		float:left;
 		margin:2px;
 		width:calc((100% / 3) - 4px);
 		padding:5px;
 		.detail_icon{
-
+			width: 30px;
+			margin:0 auto;
+			display: block;
 		}
 		.detail_total{
 			font-size:24px;
 			font-weight: 700;
 		}
+		.detail_icon+.detail_total{
+			font-size:20px;
+		}
 		.detail_title{
 			font-size: 10px;
+			text-transform: capitalize;
 		}
 	}
 }
