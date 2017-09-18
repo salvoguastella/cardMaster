@@ -1446,6 +1446,60 @@ cardMaster.summary.renderBoxes = function(){
 			var detailElement = getDetailElem(options);
 			obj.append(detailElement);
 		}
+		if(self.class != "general" || self.class != "neutral"){
+			obj.details = $("<div>", {
+				class: "show_more "+self.class,
+				html: "<i class='fa fa-eye'></i>"
+			});
+			obj.append(obj.details);
+		}
+		return obj;
+	}
+		// HERE
+	function getElemBox(options){
+		var self = this;
+		console.log(options);
+		self.type = options.type || false;
+		self.class = options.class || "general";
+		self.archetype = options.archetype || false;
+		self.blocks = options.blocks || [];
+		var obj = $("<div>", {
+			class: "main_detail_box " + self.class,
+		});
+		obj.title = $("<div>", {
+			class: "main_title",
+			text: self.type
+		});
+		obj.append(obj.title);
+		if(self.class != "general"){
+			var cornerName = self.class.toLowerCase();
+			obj.corner = {};
+			if(self.archetype){
+				cornerName=cornerName+"_"+self.archetype;
+			}
+			else cornerName=cornerName+"_neutral";
+			for(var i = 0; i < 4; i++){
+				obj.corner[i] = $("<img>", {
+					class: "corner corner_"+i,
+					src: "resources/img/card_parts/borders/"+cornerName+".png"
+				});
+				obj.append(obj.corner[i]);
+			}
+		}
+
+		for(block in self.blocks){
+			var options = {};
+			options.icon = true;
+			if(self.type){
+				var blockName = cardMaster[self.type].name;
+				if(blockName){
+					options.name = blockName;
+					options.count = self.blocks[block];
+				}
+			}
+			var detailElement = getDetailElem(options);
+			obj.append(detailElement);
+		}
 		return obj;
 	}
 
@@ -1489,17 +1543,29 @@ cardMaster.summary.renderBoxes = function(){
 	var selector = $(".summary");
 	var node = cardMaster.summary.general.content;
 	var classNodes = cardMaster.summary.classes;
+	var row = getRow();
+	//main block
 	var options = {};
 	options.class = "general";
 	options.archetype = false;
 	options.total = node.getTotal();
 	options.types = node.types;
-	var row = getRow();
 	var generalElement = getMainBox(options);
 	row.append(generalElement);
+	//detail blocks
+	var detailsTypes = ["categories", "triggers", "attributes", "flags"];
+	for(dT in detailsTypes){
+		var options = {};
+		options.type = detailsTypes[dT];
+		options.class = "general";
+		options.archetype = false;
+		options.blocks = node[options.type];
+		var detailElement = getElemBox(options);
+		row.append(detailElement);
+	}
+	
 	selector.append(row);
 	for(cn in classNodes){
-		console.log(cn);
 		var nodeContent = classNodes[cn].content;
 		var options = {};
 		options.class = classNodes[cn].name;

@@ -758,18 +758,20 @@ h1, h2, h3, h4, h5, h6 {
     content: "";
     display: table;
     clear: both; }
-.summary .main_box {
+.summary .main_box, .summary .main_detail_box {
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 40px 20px 20px;
+  padding: 40px 30px 30px;
   text-align: center;
   border-radius: 5px;
-  width: 230px;
-  position: relative; }
-  .summary .main_box:after {
+  width: 250px;
+  position: relative;
+  float: left;
+  margin-left: 20px; }
+  .summary .main_box:after, .summary .main_detail_box:after {
     content: "";
     display: table;
     clear: both; }
-  .summary .main_box .main_title {
+  .summary .main_box .main_title, .summary .main_detail_box .main_title {
     position: absolute;
     width: 100%;
     top: 5px;
@@ -777,22 +779,22 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 700; }
-  .summary .main_box .main_total {
+  .summary .main_box .main_total, .summary .main_detail_box .main_total {
     font-size: 48px;
     line-height: 40px;
     font-weight: 700;
     float: left;
     width: 100%; }
-  .summary .main_box .main_total_label {
+  .summary .main_box .main_total_label, .summary .main_detail_box .main_total_label {
     float: left;
     font-size: 16px;
     text-transform: capitalize;
     width: 100%;
     margin-bottom: 20px; }
-  .summary .main_box .corner {
+  .summary .main_box .corner, .summary .main_detail_box .corner {
     width: 60px;
     position: absolute; }
-    .summary .main_box .corner.corner_0 {
+    .summary .main_box .corner.corner_0, .summary .main_detail_box .corner.corner_0 {
       top: 5px;
       left: 5px;
       -webkit-transform: rotate(90deg);
@@ -800,7 +802,7 @@ h1, h2, h3, h4, h5, h6 {
       -ms-transform: rotate(90deg);
       -o-transform: rotate(90deg);
       transform: rotate(90deg); }
-    .summary .main_box .corner.corner_1 {
+    .summary .main_box .corner.corner_1, .summary .main_detail_box .corner.corner_1 {
       top: 5px;
       right: 5px;
       -webkit-transform: rotate(180deg);
@@ -808,7 +810,7 @@ h1, h2, h3, h4, h5, h6 {
       -ms-transform: rotate(180deg);
       -o-transform: rotate(180deg);
       transform: rotate(180deg); }
-    .summary .main_box .corner.corner_2 {
+    .summary .main_box .corner.corner_2, .summary .main_detail_box .corner.corner_2 {
       bottom: 5px;
       right: 5px;
       -webkit-transform: rotate(-90deg);
@@ -816,9 +818,20 @@ h1, h2, h3, h4, h5, h6 {
       -ms-transform: rotate(-90deg);
       -o-transform: rotate(-90deg);
       transform: rotate(-90deg); }
-    .summary .main_box .corner.corner_3 {
+    .summary .main_box .corner.corner_3, .summary .main_detail_box .corner.corner_3 {
       bottom: 5px;
       left: 5px; }
+  .summary .main_box .show_more, .summary .main_detail_box .show_more {
+    position: absolute;
+    cursor: pointer;
+    bottom: 4px;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -ms-transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+    font-size: 18px; }
 .summary .detail_box {
   border-radius: 3px;
   border-width: 1px;

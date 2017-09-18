@@ -946,14 +946,16 @@ h1,h2,h3,h4,h5,h6{
 		@include clearfix;
 		margin-bottom:20px;
 	}
-	.main_box{
+	.main_box, .main_detail_box{
 		background-color: $transparentWhite;
-		padding: 40px 20px 20px;
+		padding: 40px 30px 30px;
 		@include clearfix;
 		text-align: center;
 		border-radius:5px;
-		width: 230px;
+		width: 250px;
 		position:relative;
+		float:left;
+		margin-left:20px;
 		.main_title{
 			position:absolute;
 			width:100%;
@@ -999,6 +1001,14 @@ h1,h2,h3,h4,h5,h6{
 				bottom:5px;
 				left:5px;
 			}
+		}
+		.show_more{
+			position:absolute;
+			cursor:pointer;
+			bottom:4px;
+			left:50%;
+			@include translate(-50%, 0);
+			font-size:18px;
 		}
 	}
 	.detail_box{
