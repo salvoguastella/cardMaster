@@ -1459,15 +1459,18 @@ cardMaster.summary.renderBoxes = function(){
 			obj.append(obj.details);
 			obj.details.on("click",function(){
 				var target = $(this).closest(".row").data("class");
-				$(".row."+target+".sub").toggleClass("hidden");
+				$(".row."+target+".sub").toggleClass("collapsed");
+				
 				$(".row."+target+".sub").each(function(){
 					//animation collapse???
-					var newH = 0;
-					if(!$(this).hasClass("hidden")){
+					var newH = "1px";
+					if(!$(this).hasClass("collapsed")){
 						newH = $(this).data("height");
 					}
-					$(this).css({"maxHeight" : newH});
+					$(this).css({"max-height" : newH});
+					//$(this).animate({"max-height" : newH},1000);
 				});
+				
 			})
 		}
 		return obj;
@@ -1586,7 +1589,7 @@ cardMaster.summary.renderBoxes = function(){
 		});
 		row.children(".main_box, .main_detail_box").css({height:maxH+"px"});
 		row.attr("data-height", maxH);
-		if(row.hasClass('sub')) row.addClass('hidden');
+		if(row.hasClass('sub')) row.addClass('collapsed');
 	}
 
 	var selector = $(".summary");

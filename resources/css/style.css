@@ -767,8 +767,9 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
     margin-bottom: 20px;
     height: auto; }
-    .summary .row.sub.hidden {
-      margin-bottom: 0; }
+    .summary .row.sub.collapsed {
+      margin-bottom: 0;
+      max-height: 0; }
 .summary .main_box, .summary .main_detail_box {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 40px 35px 35px;
