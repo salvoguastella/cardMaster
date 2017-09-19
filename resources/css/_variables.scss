@@ -8,3 +8,21 @@ $toastRed:#ffb3b3;
 $transparentWhite: rgba(255,255,255,0.8);
 
 $cardListRowHeight:28px;
+
+@font-face {
+    font-family: 'candleBright';
+    src: url("../fonts/candlebright.ttf") format('truetype');;
+}
+
+@font-face {
+    font-family: 'friz';
+    src: url("../fonts/frizQuadrata.ttf") format('truetype');;
+}
+
+@font-face {
+    font-family: 'fira';
+    src: url("../FiraSans-Regular.otf") format('truetype');;
+}
+
+$baseFont : 'friz', sans-serif;
+$specialFont : 'candleBright', serif;

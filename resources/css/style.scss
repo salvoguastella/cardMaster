@@ -30,8 +30,8 @@
 
 
 body{
-	font-family: 'Roboto', sans-serif;	
-	font-size:14px;
+	font-family: $baseFont;
+	font-size:13px;
 	margin:0;
 	padding:0;
 	background-image:url("../img/bg.png");
@@ -959,8 +959,10 @@ h1,h2,h3,h4,h5,h6{
 		}
 	}
 	.main_box, .main_detail_box{
-		background-color: $transparentWhite;
-		padding: 40px 35px 35px;
+		//background-color: $transparentWhite;
+		background-image: url("../img/card_parts/seemless-parchment.png");
+		border: 10px solid $darkGrey;
+		padding: 50px 25px 40px;
 		@include clearfix;
 		text-align: center;
 		border-radius:5px;
@@ -973,7 +975,7 @@ h1,h2,h3,h4,h5,h6{
 			width:100%;
 			top:5px;
 			left:0;
-			font-size: 14px;
+			font-size: 13px;
 			text-transform: capitalize;
 			font-weight: 700;
 		}
@@ -983,6 +985,9 @@ h1,h2,h3,h4,h5,h6{
 			font-weight: 700;
 			float: left;
 			width:100%;
+			font-family: $specialFont;
+			color:black;
+			margin-bottom:5px;
 		}
 		.main_total_label{
 			float: left;
@@ -992,7 +997,7 @@ h1,h2,h3,h4,h5,h6{
 			margin-bottom:20px;
 		}
 		.corner{
-			width:60px;
+			width:65px;
 			position:absolute;
 			&.corner_0{
 				top:5px;
@@ -1025,10 +1030,6 @@ h1,h2,h3,h4,h5,h6{
 	}
 	.detail_box{
 		border-radius:3px;
-		//border-width:1px;
-		//border-style:solid;
-		//change this to class color with JS
-		//border-color:black;
 		float:left;
 		margin:2px;
 		width:calc((100% / 3) - 4px);
@@ -1050,4 +1051,10 @@ h1,h2,h3,h4,h5,h6{
 			text-transform: capitalize;
 		}
 	}
+	.row.sub{
+		.main_box, .main_detail_box{
+			border-color:lighten($darkGrey,20);
+		}
+	}
+
 }

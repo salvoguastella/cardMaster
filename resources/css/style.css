@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'candleBright';
+  src: url("../fonts/candlebright.ttf") format("truetype"); }
+@font-face {
+  font-family: 'friz';
+  src: url("../fonts/frizQuadrata.ttf") format("truetype"); }
+@font-face {
+  font-family: 'fira';
+  src: url("../FiraSans-Regular.otf") format("truetype"); }
 * {
   box-sizing: border-box; }
 
@@ -25,8 +34,8 @@
   background: white; }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-family: "friz", sans-serif;
+  font-size: 13px;
   margin: 0;
   padding: 0;
   background-image: url("../img/bg.png");
@@ -771,8 +780,9 @@ h1, h2, h3, h4, h5, h6 {
       margin-bottom: 0;
       max-height: 0; }
 .summary .main_box, .summary .main_detail_box {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 40px 35px 35px;
+  background-image: url("../img/card_parts/seemless-parchment.png");
+  border: 10px solid #494949;
+  padding: 50px 25px 40px;
   text-align: center;
   border-radius: 5px;
   width: 250px;
@@ -788,7 +798,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     top: 5px;
     left: 0;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: capitalize;
     font-weight: 700; }
   .summary .main_box .main_total, .summary .main_detail_box .main_total {
@@ -796,7 +806,10 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 40px;
     font-weight: 700;
     float: left;
-    width: 100%; }
+    width: 100%;
+    font-family: "candleBright", serif;
+    color: black;
+    margin-bottom: 5px; }
   .summary .main_box .main_total_label, .summary .main_detail_box .main_total_label {
     float: left;
     font-size: 16px;
@@ -804,7 +817,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     margin-bottom: 20px; }
   .summary .main_box .corner, .summary .main_detail_box .corner {
-    width: 60px;
+    width: 65px;
     position: absolute; }
     .summary .main_box .corner.corner_0, .summary .main_detail_box .corner.corner_0 {
       top: 5px;
@@ -862,5 +875,7 @@ h1, h2, h3, h4, h5, h6 {
   .summary .detail_box .detail_title {
     font-size: 10px;
     text-transform: capitalize; }
+.summary .row.sub .main_box, .summary .row.sub .main_detail_box {
+  border-color: #7c7c7c; }
 
 /*# sourceMappingURL=style.css.map */
