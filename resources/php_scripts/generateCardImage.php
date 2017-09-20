@@ -286,6 +286,7 @@
 							$index=strtolower(trim($c));
 							if(isset($categorySymbols[$index])){
 								$symbolPath = $mainPath.'/resources/img/card_parts/categories/'.$categorySymbols[$index]["path"];
+								//echo $symbolPath;
 								$symbol = $manager->make($symbolPath)->resize(50,50);
 								$symbolOffsetX = $middleX+$categoryOffsetsX[$k] - ($symbol->width()/2);
 								$imageLayer->insert($symbol, 'top-left' , $symbolOffsetX, $categoryOffsetY);

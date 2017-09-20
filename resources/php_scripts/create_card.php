@@ -20,7 +20,7 @@
 
 	try{
 		$lang_table = "card_".$lang;
-		$SQL="SELECT name FROM ".$lang_table." WHERE name='".$name."'";
+		$SQL="SELECT name FROM ".$lang_table." WHERE name='".addslashes($name)."'";
 		$check_exist=$conn->query($SQL);
 		if($check_exist->fetchObject()){
 			echo 0;
