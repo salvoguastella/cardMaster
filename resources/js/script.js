@@ -1460,17 +1460,14 @@ cardMaster.summary.renderBoxes = function(){
 			obj.details.on("click",function(){
 				var target = $(this).closest(".row").data("class");
 				$(".row."+target+".sub").toggleClass("collapsed");
-				
 				$(".row."+target+".sub").each(function(){
 					//animation collapse???
-					var newH = "1px";
+					var newH = "0";
 					if(!$(this).hasClass("collapsed")){
 						newH = $(this).data("height");
 					}
 					$(this).css({"max-height" : newH});
-					//$(this).animate({"max-height" : newH},1000);
 				});
-				
 			})
 		}
 		return obj;
@@ -1628,7 +1625,7 @@ cardMaster.summary.getNodeCounts = function(ctx, card){
 		//triggers
 		for( var trigger in cardMaster.triggers){
 			var trig = cardMaster.triggers[trigger];
-			if(card.has(trig.name)){
+			if(card.has(trig.selector)){
 				if(ctx.triggers[trigger] || ctx.triggers[trigger] > 0){
 					ctx.triggers[trigger]++;
 				}
@@ -1638,7 +1635,7 @@ cardMaster.summary.getNodeCounts = function(ctx, card){
 		//attributes
 		for( var attribute in cardMaster.attributes){
 			var attr = cardMaster.attributes[attribute];
-			if(card.has(attr.name)){
+			if(card.has(attr.selector)){
 				if(ctx.attributes[attribute] || ctx.attributes[attribute] > 0){
 					ctx.attributes[attribute]++;
 				}
