@@ -1,8 +1,17 @@
 window.cardMaster = window.cardMaster || {};
 
+//namespaces
+cardMaster.collection = {};
+cardMaster.combos = {};
+cardMaster.sidedeck = {};
+
+//element lists
 cardMaster.cardList = [];
 cardMaster.comboList = [];
 cardMaster.summary = [];
+cardMaster.sidedeck.cards = [];
+
+//literal elements
 cardMaster.classes = [];
 cardMaster.archetypes = [];
 cardMaster.types = [];
@@ -11,11 +20,7 @@ cardMaster.categories = [];
 cardMaster.triggers = [];
 cardMaster.attributes = [];
 cardMaster.editMode = false;
-cardMaster.comboList = [];
 
-//namespaces
-cardMaster.collection = {};
-cardMaster.combos = {};
 
 function _cardFilter(){
 	this.active="1";
@@ -965,6 +970,11 @@ cardMaster.combos.renderList= function(){
 						title: "Show"
 					});
 
+					var toSideDeck = $("<i>", {
+						class: "fa fa-external-link control sidedeck",
+						title: "Add to SideDeck"
+					});
+
 					var duplicate = $("<i>", {
 						class: "fa fa-files-o control duplicate",
 						title: "Duplicate"
@@ -983,6 +993,11 @@ cardMaster.combos.renderList= function(){
 						cardMaster.combos.startEdit($(this));
 					});
 
+					toSideDeck.on("click", function(){
+						//cycle all cards and add them to side deck
+						//cardMaster.combos.startEdit($(this));
+					});
+
 					duplicate.on("click", function(){
 						cardMaster.combos.duplicateCombo($(this));
 					});
@@ -992,6 +1007,7 @@ cardMaster.combos.renderList= function(){
 					});
 
 					comboField.append(show);
+					comboField.append(toSideDeck);
 					comboField.append(duplicate);
 					comboField.append(remove);
 					topComboRow.append(comboField);
@@ -1472,6 +1488,7 @@ cardMaster.summary.renderBoxes = function(){
 		}
 		return obj;
 	}
+
 	function getElemBox(options){
 		var self = this;
 		self.type = options.type || false;
@@ -1654,6 +1671,57 @@ cardMaster.summary.getNodeCounts = function(ctx, card){
 		}
 }
 
+cardMaster.sidedeck.syncLocalStorage = function(){
+	var status = localStorage.sidedeck;
+	if(status !== undefined){
+		cardMaster.sidedeck.cards = JSON.parse(status);
+	}
+	console.log(cardMaster.sidedeck.cards);
+}
+
+cardMaster.sidedeck.updateLocalStorage = function(){
+	var status = JSON.stringify(cardMaster.sidedeck.cards);
+	localStorage.sidedeck = status;
+	console.log(localStorage.sidedeck);
+}
+
+cardMaster.sidedeck.addCard = function(cardID){
+	var deck = cardMaster.sidedeck.cards;
+	var cardName = cardMaster.getCardDataById(cardID);
+	if(typeof cardName === "object") cardName = cardName.getName();
+	var index = deck.indexOf(cardID);
+	if(index > -1){
+		console.log("Card '"+cardName+"' is already in SideDeck");
+	}
+	else{
+		deck.push(cardID);
+		console.log("Card '"+cardName+"' has been added to SideDeck!");
+		cardMaster.sidedeck.updateLocalStorage();
+	}
+}
+
+cardMaster.sidedeck.removeCard = function(cardID){
+	var deck = cardMaster.sidedeck.cards;
+	var cardName = cardMaster.getCardDataById(cardID);
+	if(typeof cardName === "object") cardName = cardName.getName();
+	var index = deck.indexOf(cardID);
+	if(index > -1){
+		var index = deck.indexOf(cardID);
+		if (index > -1) {
+		    deck.splice(index, 1);
+			console.log("Card '"+cardName+"' has been removed from SideDeck!");
+			cardMaster.sidedeck.updateLocalStorage();
+		}
+	}
+	else{
+		console.log("Card '"+cardName+"' is not in SideDeck");
+	}
+}
+
+cardMaster.sidedeck.renderCardList = function(ctx){
+
+}
+
 cardMaster.init = function(){
 	cardMaster.cardFilter = new _cardFilter();
 	cardMaster.comboFilter = new _comboFilter();
@@ -1664,6 +1732,7 @@ cardMaster.init = function(){
 	cardMaster.collection.createCard();
 	cardMaster.cardZoom();
 	cardMaster.stickyPanel();
+	cardMaster.sidedeck.syncLocalStorage();
 
 	//page scripts
 	console.log(cardMaster.getPage());

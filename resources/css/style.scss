@@ -451,7 +451,7 @@ h1,h2,h3,h4,h5,h6{
 			width:calc(26% - 40px);
 		}
 		&:nth-child(3){
-			width:10%;
+			width:8%;
 		}
 		&:nth-child(4){
 			width:11%;
@@ -466,13 +466,17 @@ h1,h2,h3,h4,h5,h6{
 			width:3%;
 		}
 		&:nth-child(8){
-			width:39%;
+			width:calc(41% - 40px);
 		}
 
 	}
 	.card{
+		[class^="card__"]:not(.card__name){
+			font-size:11px;
+		}
 		&__name{
 			cursor:pointer;
+			font-size: 13px;
 		}
 		&__image{
 			position:relative;
@@ -897,9 +901,11 @@ h1,h2,h3,h4,h5,h6{
 				}
 				&:nth-child(2){
 					width:15%;
+					font-size: 11px;
 				}
 				&:nth-child(3){
 					width:15%;
+					font-size: 11px;
 				}
 				&:nth-child(4){
 					width:50%;

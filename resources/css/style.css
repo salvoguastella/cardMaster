@@ -375,7 +375,7 @@ h1, h2, h3, h4, h5, h6 {
     .card-list span:nth-child(2) {
       width: calc(26% - 40px); }
     .card-list span:nth-child(3) {
-      width: 10%; }
+      width: 8%; }
     .card-list span:nth-child(4) {
       width: 11%; }
     .card-list span:nth-child(5) {
@@ -385,9 +385,12 @@ h1, h2, h3, h4, h5, h6 {
     .card-list span:nth-child(7) {
       width: 3%; }
     .card-list span:nth-child(8) {
-      width: 39%; }
+      width: calc(41% - 40px); }
+  .card-list .card [class^="card__"]:not(.card__name) {
+    font-size: 11px; }
   .card-list .card__name {
-    cursor: pointer; }
+    cursor: pointer;
+    font-size: 13px; }
   .card-list .card__image {
     position: relative;
     cursor: pointer; }
@@ -729,9 +732,11 @@ h1, h2, h3, h4, h5, h6 {
         width: 20%;
         cursor: pointer; }
       .combo-list .combo .top span:nth-child(2) {
-        width: 15%; }
+        width: 15%;
+        font-size: 11px; }
       .combo-list .combo .top span:nth-child(3) {
-        width: 15%; }
+        width: 15%;
+        font-size: 11px; }
       .combo-list .combo .top span:nth-child(4) {
         width: 50%; }
       .combo-list .combo .top span:empty {
