@@ -677,7 +677,8 @@ cardMaster.collection.renderList = function(){
 							class: "card__"+el
 						});
 						var toSidedeck= $("<i>", {
-							class: "fa fa-external-link"
+							class: "fa fa-external-link",
+							title: "Add to SideDeck"
 						});
 						toSidedeck.bind("click", function(){
 							//adds card to sidedeck
