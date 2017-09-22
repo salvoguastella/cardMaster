@@ -590,7 +590,8 @@ cardMaster.collection.renderList = function(){
 		"type",
 		"attack",
 		"health",
-		"flags"
+		"flags",
+		"to_sidedeck"
 	];
 	$.each(cardMaster.cardList, function(i,row){
 
@@ -670,6 +671,20 @@ cardMaster.collection.renderList = function(){
 						class: "card__"+el,
 						html: visualFlags
 					});
+					break;
+				case "to_sidedeck":
+						var cardField= $("<span>", {
+							class: "card__"+el
+						});
+						var toSidedeck= $("<i>", {
+							class: "fa fa-external-link"
+						});
+						toSidedeck.bind("click", function(){
+							//adds card to sidedeck
+							var cardID = $(this).closest(".row").data("id");
+							cardMaster.sidedeck.addCard(cardID);
+						});
+						cardField.append(toSidedeck);
 					break;
 				default:
 					var cardField= $("<span>", {
@@ -994,8 +1009,7 @@ cardMaster.combos.renderList= function(){
 					});
 
 					toSideDeck.on("click", function(){
-						//cycle all cards and add them to side deck
-						//cardMaster.combos.startEdit($(this));
+						cardMaster.combos.cardsToSidedeck($(this));
 					});
 
 					duplicate.on("click", function(){
@@ -1253,6 +1267,15 @@ cardMaster.combos.editControls = function(){
 	cancelSelector.on("click", function(){
 		cardMaster.combos.cancelEdit();
 	});
+}
+
+cardMaster.combos.cardsToSidedeck = function(selRow){
+	var base = selRow.closest(".row.combo");
+	var rowID = base.data("id");
+	var cards = cardMaster.getComboDataById(rowID).cards;
+	for(var cardID in cards){
+		cardMaster.sidedeck.addCard(cards[cardID]);
+	}
 }
 
 cardMaster.combos.duplicateCombo = function(selRow){
@@ -1686,6 +1709,7 @@ cardMaster.sidedeck.updateLocalStorage = function(){
 }
 
 cardMaster.sidedeck.addCard = function(cardID){
+	var cardID = parseInt(cardID);
 	var deck = cardMaster.sidedeck.cards;
 	var cardName = cardMaster.getCardDataById(cardID);
 	if(typeof cardName === "object") cardName = cardName.getName();
@@ -1701,6 +1725,7 @@ cardMaster.sidedeck.addCard = function(cardID){
 }
 
 cardMaster.sidedeck.removeCard = function(cardID){
+	var cardID = parseInt(cardID);
 	var deck = cardMaster.sidedeck.cards;
 	var cardName = cardMaster.getCardDataById(cardID);
 	if(typeof cardName === "object") cardName = cardName.getName();
@@ -1716,6 +1741,11 @@ cardMaster.sidedeck.removeCard = function(cardID){
 	else{
 		console.log("Card '"+cardName+"' is not in SideDeck");
 	}
+}
+
+cardMaster.sidedeck.empty = function(){
+	cardMaster.sidedeck.cards = [];
+	cardMaster.sidedeck.updateLocalStorage();
 }
 
 cardMaster.sidedeck.renderCardList = function(ctx){
@@ -1754,6 +1784,7 @@ cardMaster.init = function(){
 	}
 	if(cardMaster.getPage() == "combos"){
 		cardMaster.loadLiteralElements(function(){
+			cardMaster.collection.loadList(cardMaster.collection.renderList);
 			cardMaster.combos.loadList(cardMaster.combos.renderList);
 		});
 		cardMaster.combos.orderList();

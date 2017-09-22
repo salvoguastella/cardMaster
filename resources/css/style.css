@@ -386,6 +386,11 @@ h1, h2, h3, h4, h5, h6 {
       width: 3%; }
     .card-list span:nth-child(8) {
       width: calc(41% - 40px); }
+    .card-list span:nth-child(9) {
+      width: 40px;
+      text-align: center; }
+    .card-list span:empty {
+      height: 14px; }
   .card-list .card [class^="card__"]:not(.card__name) {
     font-size: 11px; }
   .card-list .card__name {
@@ -397,6 +402,9 @@ h1, h2, h3, h4, h5, h6 {
     .card-list .card__image img {
       width: 24px;
       height: 24px; }
+  .card-list .card__to_sidedeck i {
+    cursor: pointer;
+    font-size: 15px; }
   .card-list .card .ita {
     display: none; }
   .card-list .card .visual-flags {

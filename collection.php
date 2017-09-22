@@ -15,6 +15,7 @@
                 <span><i class="ra ra-sword"></i></span>
                 <span><i class="ra ra-shield"></i></span>
                 <span>Flags</span>
+                <span></span>
             </div>
             <div id="cardList">
 

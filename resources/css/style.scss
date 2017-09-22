@@ -468,6 +468,13 @@ h1,h2,h3,h4,h5,h6{
 		&:nth-child(8){
 			width:calc(41% - 40px);
 		}
+		&:nth-child(9){
+			width:40px;
+			text-align:center;
+		}
+		&:empty{
+			height:14px;
+		}
 
 	}
 	.card{
@@ -484,6 +491,12 @@ h1,h2,h3,h4,h5,h6{
 			img{
 				width:24px;
 				height:24px;
+			}
+		}
+		&__to_sidedeck{
+			i{
+				cursor: pointer;
+				font-size:15px;
 			}
 		}
 		.ita{
