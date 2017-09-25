@@ -1,5 +1,6 @@
 @import "mixin";
 @import "variables";
+@import "animations";
 
 *{
 	box-sizing:border-box;
@@ -1076,4 +1077,54 @@ h1,h2,h3,h4,h5,h6{
 		}
 	}
 
+}
+
+#sideDeck{
+	position: absolute;
+	top: 25px;
+	right:-300px;
+	@include clearfix;
+	@include transition(0.3s all linear);
+	.sidedeck-trigger{
+		float:left;
+		height:35px;
+		width: 35px;
+		position:relative;
+		font-size: 16px;
+		cursor:pointer;
+		overflow: hidden;
+		.fa-hand-o-down{
+			right:7px;
+			top:-16px;
+			position: absolute;
+		}
+		.fa-list-ul{
+			right:7px;
+			top:9px;
+			position: absolute;
+		}
+	}
+	.sidedeck-body{
+		float:left;
+		width:300px;
+		background:rgba(255,255,255,0.9);
+		box-shadow: 0 0 0 rgba(0,0,0,0.5);
+		padding:30px;
+	}
+	&.active{
+		right:0;
+		.sidedeck-body{
+			box-shadow: -2px 0 2px rgba(0,0,0,0.5);
+		}
+	}
+	&.anim-add{
+		.fa-hand-o-down{
+			animation-name: bounceSidedeckFinger;
+    		animation-duration: 1s;
+		}
+		.fa-list-ul{
+			animation-name: bounceSidedeckIcon;
+    		animation-duration: 1s;
+		}
+	}
 }

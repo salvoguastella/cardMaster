@@ -4,6 +4,7 @@ window.cardMaster = window.cardMaster || {};
 cardMaster.collection = {};
 cardMaster.combos = {};
 cardMaster.sidedeck = {};
+cardMaster.animation = {};
 
 //element lists
 cardMaster.cardList = [];
@@ -1722,6 +1723,7 @@ cardMaster.sidedeck.addCard = function(cardID){
 		deck.push(cardID);
 		console.log("Card '"+cardName+"' has been added to SideDeck!");
 		cardMaster.sidedeck.updateLocalStorage();
+		cardMaster.animation.cardToSidedeck();
 	}
 }
 
@@ -1753,6 +1755,34 @@ cardMaster.sidedeck.renderCardList = function(ctx){
 
 }
 
+cardMaster.sidedeck.init = function(){
+	var sideDeck = $("<div>", {
+		id: "sideDeck"
+	});
+	sideDeck.trigger = $("<div>", {
+		class: "sidedeck-trigger",
+		html: "<i class='fa fa-hand-o-down'></i><i class='fa fa-list-ul'></i>"
+	});
+	sideDeck.body = $("<div>", {
+		class: "sidedeck-body"
+	});
+	sideDeck.append(sideDeck.trigger);
+	sideDeck.append(sideDeck.body);
+	$("body").append(sideDeck);
+	sideDeck.trigger.on("click", function(){
+		sideDeck.toggleClass('active');
+	});
+}
+
+//animations
+
+cardMaster.animation.cardToSidedeck = function(){
+	$("#sideDeck").addClass("anim-add");
+	setTimeout(function(){
+		$("#sideDeck").removeClass("anim-add");
+	},1200);
+}
+
 cardMaster.init = function(){
 	cardMaster.cardFilter = new _cardFilter();
 	cardMaster.comboFilter = new _comboFilter();
@@ -1764,6 +1794,7 @@ cardMaster.init = function(){
 	cardMaster.cardZoom();
 	cardMaster.stickyPanel();
 	cardMaster.sidedeck.syncLocalStorage();
+	cardMaster.sidedeck.init();
 
 	//page scripts
 	console.log(cardMaster.getPage());
