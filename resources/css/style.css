@@ -410,7 +410,8 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 11px; }
   .card-list .card__name {
     cursor: pointer;
-    font-size: 13px; }
+    font-size: 13px;
+    line-height: 12px; }
   .card-list .card__image {
     position: relative;
     cursor: pointer; }
@@ -511,6 +512,23 @@ h1, h2, h3, h4, h5, h6 {
         padding: 2px;
         width: 12.5%;
         cursor: pointer; }
+    #imageList .list-wrapper .commands {
+      text-align: center;
+      margin-top: 20px; }
+      #imageList .list-wrapper .commands .page {
+        display: inline-block;
+        margin: 0 2px;
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+        background-color: #494949;
+        border-radius: 50%;
+        color: white;
+        text-align: center;
+        line-height: 24px;
+        cursor: pointer; }
+        #imageList .list-wrapper .commands .page .fa {
+          line-height: 24px; }
     #imageList .list-wrapper .btn {
       margin-top: 18px; }
 
@@ -969,7 +987,20 @@ h1, h2, h3, h4, h5, h6 {
         float: left;
         height: 100%;
         line-height: 28px;
-        font-size: 12px; }
+        font-size: 12px;
+        margin-right: 5px;
+        width: calc(100% - (28px*3) - 15px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden; }
+      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-show {
+        float: left;
+        height: 100%;
+        width: 28px;
+        text-align: center;
+        cursor: zoom-in; }
+        #sideDeck .sidedeck-body .sidedeck-card .sidedeck-show i {
+          line-height: 28px; }
       #sideDeck .sidedeck-body .sidedeck-card:hover {
         -webkit-transform: translate(-5px, 0);
         -moz-transform: translate(-5px, 0);

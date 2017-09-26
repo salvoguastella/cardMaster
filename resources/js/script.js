@@ -216,9 +216,12 @@ cardMaster.cardZoom = function(){
 	var targetImg = $("<img>");
 	target.append(targetImg);
 
+	//add exception if too close to edge
+
 	$(document).on("mouseenter", selector, function(){
 		var source = $(this).attr("src");
-		if(source=="") source = $(this).find("img").attr("src");
+		if(source=="" || source === undefined) source = $(this).find("img").attr("src");
+		if(source=="" || source === undefined) source = $(this).data("img");
 		targetImg.attr("src",source);
 		$("body").append(target);
 	})
@@ -776,18 +779,10 @@ cardMaster.collection.addFilters = function(){
 
 cardMaster.collection.iconBox = function(){
 	var selector = $("#imageList");
-	trigger = selector.find(".paging");
 	close = selector.find(".close");
-	//check if reference brokes after appending this element to a different node
-	$(trigger).on("click", function(){
-		if($(this).hasClass("prev")){
-			if(cardMaster.imageLoader.page > 1) cardMaster.imageLoader.page--;
-			else  cardMaster.imageLoader.page = 1;
-		}
-		else{
-			cardMaster.imageLoader.page++;
-		}
-		//console.log("retrieving page "+cardMaster.imageLoader.page);
+
+	function changePage(newPage){
+		cardMaster.imageLoader.page = newPage;
 		$.ajax({
 			url: "resources/php_scripts/getImageList.php",
 			type: "GET",
@@ -796,22 +791,29 @@ cardMaster.collection.iconBox = function(){
 		})
 		.done(function(data) {
 			cardMaster.showMessage("Icon page loaded", "confirm");
+			var pageData = JSON.parse(data);
 			var imgList = selector.find(".images");
+			var commands = selector.find(".commands");
 			//use data.image here
-			imgList.html(data);
-			//assign new controls here, data.controls
+			imgList.html(pageData.list);
+			commands.html(pageData.commands);
 			selector.find(".iconImage").on("click", function(){
 				cardMaster.collection.setImageToCard(imgList.data("row"), $(this).data("id"), $(this).prop("src"));
+			});
+			selector.find(".page:not(.current)").on("click", function(){
+				var newPage = $(this).data("index");
+				changePage(newPage);
 			});
 		})
 		.fail(function() {
 			cardMaster.showMessage("Error retrieving icon page", "error");
 		})
-	});
+	}
+
 	close.on("click", function(){
 		cardMaster.collection.hideIconBox();
 	});
-	$(trigger[0]).trigger("click");
+	changePage(1);
 }
 
 cardMaster.collection.selectTab = function(){
@@ -1780,10 +1782,16 @@ cardMaster.sidedeck.renderCardList = function(ctx){
 			class: "sidedeck-name",
 			text: c.getName().replace(/\\'/g, "'")
 		});
+		row.show = $("<div>",{
+			class: "sidedeck-show cardZoom",
+			html: "<i class='fa fa-eye'></i>",
+			"data-img": "./resources/img/cardRenders/"+c.id+".png"
+		});
 
 		row.append(row.class);
 		row.append(row.icon);
 		row.append(row.name);
+		row.append(row.show);
 		$(ctx).append(row);
 		console.log(c);
 	}

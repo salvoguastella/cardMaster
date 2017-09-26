@@ -113,12 +113,11 @@
         <div class="list-wrapper">
             <div class="close"><i class="fa fa-close"></i></div>
             <div class="images" data-row="">
-                <?php
-                    //include_once("resources/php_scripts/getImageList.php");
-                ?>
+
             </div>
-            <div class="btn paging prev">Prev</div>
-            <div class="btn paging next">Next</div>
+            <div class="commands">
+
+            </div>
         </div>
     </div>
 

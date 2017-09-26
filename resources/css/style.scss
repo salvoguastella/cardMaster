@@ -486,6 +486,7 @@ h1,h2,h3,h4,h5,h6{
 		&__name{
 			cursor:pointer;
 			font-size: 13px;
+			line-height: 12px;
 		}
 		&__image{
 			position:relative;
@@ -613,6 +614,26 @@ h1,h2,h3,h4,h5,h6{
 				padding:2px;
 				width: (100% / 8);
 				cursor: pointer;
+			}
+		}
+		.commands{
+			text-align: center;
+			margin-top: 20px;
+			.page{
+				display: inline-block;
+				margin: 0 2px;
+				width:24px;
+				height:24px;
+				font-size:10px;
+				background-color: $darkGrey;
+				border-radius: 50%;
+				color:white;
+				text-align: center;
+				line-height: 24px;
+				cursor: pointer;
+				.fa{
+					line-height: 24px;
+				}
 			}
 		}
 		.btn{
@@ -1133,6 +1154,21 @@ h1,h2,h3,h4,h5,h6{
 				height:100%;
 				line-height:$cardListRowHeight;
 				font-size:12px;
+				margin-right: 5px;
+				width: calc(100% - (#{$cardListRowHeight}*3) - 15px);
+				text-overflow: ellipsis;
+				white-space: nowrap;
+    			overflow: hidden;
+			}
+			.sidedeck-show{
+				float: left;
+				height:100%;
+				width:$cardListRowHeight;
+				text-align: center;
+				cursor: zoom-in;
+				i{
+					line-height:$cardListRowHeight;
+				}
 			}
 			&:hover{
 				@include translate(-5px,0);
