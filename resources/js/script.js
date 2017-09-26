@@ -1724,6 +1724,7 @@ cardMaster.sidedeck.addCard = function(cardID){
 		console.log("Card '"+cardName+"' has been added to SideDeck!");
 		cardMaster.sidedeck.updateLocalStorage();
 		cardMaster.animation.cardToSidedeck();
+		cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
 	}
 }
 
@@ -1739,6 +1740,7 @@ cardMaster.sidedeck.removeCard = function(cardID){
 		    deck.splice(index, 1);
 			console.log("Card '"+cardName+"' has been removed from SideDeck!");
 			cardMaster.sidedeck.updateLocalStorage();
+			cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
 		}
 	}
 	else{
@@ -1752,7 +1754,11 @@ cardMaster.sidedeck.empty = function(){
 }
 
 cardMaster.sidedeck.renderCardList = function(ctx){
-
+	var cards = cardMaster.sidedeck.cards;
+	for(var c_i in cards){
+		var c = cardMaster.getCardDataById(cards[c_i]);
+		console.log(c);
+	}
 }
 
 cardMaster.sidedeck.init = function(){
@@ -1772,6 +1778,8 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
 	});
+
+	cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
 }
 
 //animations

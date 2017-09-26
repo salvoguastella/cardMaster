@@ -29,7 +29,7 @@
 					break;
 				default:
 					//otherwise class
-					$this->SQL="SELECT `id`,`ita`,`eng` FROM `classes`";
+					$this->SQL="SELECT `id`,`ita`,`eng`,`color` FROM `classes`";
 					break;
 			}
 
@@ -44,6 +44,10 @@
 				if($mode == "archetype"){
 					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."' data-class='".$row->class."'>".ucwords($row->eng)."</option>";
 					$this->valuesArray[$row->id] = array("class"=>$row->class, "name"=>$row->eng);
+				}
+				else if($mode == "type"){
+					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->eng)."</option>";
+					$this->valuesArray[$row->id] = array("name"=>$row->eng);
 				}
 				else if($mode == "flag"){
 					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->name)."</option>";
@@ -63,7 +67,7 @@
 				}
 				else {
 					$this->valuesSelect = $this->valuesSelect."<option value='".$row->id."'>".ucwords($row->eng)."</option>";
-					$this->valuesArray[$row->id] = array("name"=>$row->eng);
+					$this->valuesArray[$row->id] = array("name"=>$row->eng, "color"=>$row->color);
 				}
 			}
 			$this->valuesJSON = rtrim($this->valuesJSON, ",")."]";

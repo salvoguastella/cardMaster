@@ -55,7 +55,8 @@ body {
   background-image: url("../img/bg.png");
   background-size: cover;
   background-position: center center;
-  background-attachment: fixed; }
+  background-attachment: fixed;
+  overflow-x: hidden; }
 
 a, a:hover, a:focus, a:active {
   font-size: inherit;
