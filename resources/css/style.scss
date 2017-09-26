@@ -631,6 +631,15 @@ h1,h2,h3,h4,h5,h6{
 				text-align: center;
 				line-height: 24px;
 				cursor: pointer;
+				&::selection{
+					background: transparent;
+				}
+				&::-moz-selection{
+					background: transparent;
+				}
+				&.current{
+					cursor: default;
+				}
 				.fa{
 					line-height: 24px;
 				}

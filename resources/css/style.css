@@ -527,6 +527,12 @@ h1, h2, h3, h4, h5, h6 {
         text-align: center;
         line-height: 24px;
         cursor: pointer; }
+        #imageList .list-wrapper .commands .page::selection {
+          background: transparent; }
+        #imageList .list-wrapper .commands .page::-moz-selection {
+          background: transparent; }
+        #imageList .list-wrapper .commands .page.current {
+          cursor: default; }
         #imageList .list-wrapper .commands .page .fa {
           line-height: 24px; }
     #imageList .list-wrapper .btn {
