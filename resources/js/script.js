@@ -797,7 +797,9 @@ cardMaster.collection.iconBox = function(){
 		.done(function(data) {
 			cardMaster.showMessage("Icon page loaded", "confirm");
 			var imgList = selector.find(".images");
+			//use data.image here
 			imgList.html(data);
+			//assign new controls here, data.controls
 			selector.find(".iconImage").on("click", function(){
 				cardMaster.collection.setImageToCard(imgList.data("row"), $(this).data("id"), $(this).prop("src"));
 			});
@@ -1696,10 +1698,13 @@ cardMaster.summary.getNodeCounts = function(ctx, card){
 		}
 }
 
-cardMaster.sidedeck.syncLocalStorage = function(){
+cardMaster.sidedeck.syncLocalStorage = function(callback){
 	var status = localStorage.sidedeck;
 	if(status !== undefined){
 		cardMaster.sidedeck.cards = JSON.parse(status);
+		if(typeof callback === "function"){
+			callback();
+		}
 	}
 	console.log(cardMaster.sidedeck.cards);
 }
@@ -1755,8 +1760,31 @@ cardMaster.sidedeck.empty = function(){
 
 cardMaster.sidedeck.renderCardList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
+	$(ctx).html("");
 	for(var c_i in cards){
 		var c = cardMaster.getCardDataById(cards[c_i]);
+		var row = $("<div>",{
+			class: "sidedeck-card"
+		});
+		row.class = $("<div>",{
+			class: "sidedeck-class"
+		}).css({
+			background: cardMaster.classes[c.class].color
+		});
+		row.icon = $("<img>",{
+			class: "sidedeck-icon",
+			src: c.image,
+			alt: c.getName()
+		});
+		row.name = $("<div>",{
+			class: "sidedeck-name",
+			text: c.getName().replace(/\\'/g, "'")
+		});
+
+		row.append(row.class);
+		row.append(row.icon);
+		row.append(row.name);
+		$(ctx).append(row);
 		console.log(c);
 	}
 }
@@ -1778,8 +1806,6 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
 	});
-
-	cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
 }
 
 //animations
@@ -1801,8 +1827,8 @@ cardMaster.init = function(){
 	cardMaster.collection.createCard();
 	cardMaster.cardZoom();
 	cardMaster.stickyPanel();
-	cardMaster.sidedeck.syncLocalStorage();
 	cardMaster.sidedeck.init();
+
 
 	//page scripts
 	console.log(cardMaster.getPage());
@@ -1812,7 +1838,13 @@ cardMaster.init = function(){
 	}
 	if(cardMaster.getPage() == "collection" || cardMaster.getPage() == "archive"){
 		cardMaster.loadLiteralElements(function(){
-			cardMaster.collection.loadList(cardMaster.collection.renderList);
+			cardMaster.collection.loadList(function(){
+				cardMaster.collection.renderList();
+				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.syncLocalStorage(function(){
+					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+				});
+			});
 		});
 		cardMaster.collection.orderList();
 		cardMaster.collection.addFilters();
@@ -1824,8 +1856,15 @@ cardMaster.init = function(){
 	}
 	if(cardMaster.getPage() == "combos"){
 		cardMaster.loadLiteralElements(function(){
-			cardMaster.collection.loadList(cardMaster.collection.renderList);
+			cardMaster.collection.loadList(function(){
+				cardMaster.collection.renderList();
+				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.syncLocalStorage(function(){
+					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+				});
+			});
 			cardMaster.combos.loadList(cardMaster.combos.renderList);
+
 		});
 		cardMaster.combos.orderList();
 		cardMaster.combos.addFilters();
@@ -1841,6 +1880,10 @@ cardMaster.init = function(){
 			cardMaster.collection.loadList(function(){
 				cardMaster.summary.structureArray(function(){
 					cardMaster.summary.populateArray(cardMaster.summary.renderBoxes);
+				});
+				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.syncLocalStorage(function(){
+					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
 				});
 			});
 		});

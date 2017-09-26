@@ -938,7 +938,44 @@ h1, h2, h3, h4, h5, h6 {
     width: 300px;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
-    padding: 30px; }
+    padding: 30px 30px 25px; }
+    #sideDeck .sidedeck-body .sidedeck-card {
+      height: 28px;
+      margin-bottom: 5px;
+      -webkit-transition: 0.15s all linear;
+      -moz-transition: 0.15s all linear;
+      -ms-transition: 0.15s all linear;
+      -o-transition: 0.15s all linear;
+      transition: 0.15s all linear;
+      -webkit-transform: translate(0, 0);
+      -moz-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+      -o-transform: translate(0, 0);
+      transform: translate(0, 0); }
+      #sideDeck .sidedeck-body .sidedeck-card:after {
+        content: "";
+        display: table;
+        clear: both; }
+      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-class {
+        float: left;
+        width: 5px;
+        height: 100%; }
+      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-icon {
+        float: left;
+        width: 28px;
+        height: 100%;
+        margin-right: 5px; }
+      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-name {
+        float: left;
+        height: 100%;
+        line-height: 28px;
+        font-size: 12px; }
+      #sideDeck .sidedeck-body .sidedeck-card:hover {
+        -webkit-transform: translate(-5px, 0);
+        -moz-transform: translate(-5px, 0);
+        -ms-transform: translate(-5px, 0);
+        -o-transform: translate(-5px, 0);
+        transform: translate(-5px, 0); }
   #sideDeck.active {
     right: 0; }
     #sideDeck.active .sidedeck-body {
