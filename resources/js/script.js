@@ -218,22 +218,33 @@ cardMaster.cardZoom = function(){
 
 	//add exception if too close to edge
 
-	$(document).on("mouseenter", selector, function(){
+	$(document).on("mouseenter", selector, function(event){
 		var source = $(this).attr("src");
 		if(source=="" || source === undefined) source = $(this).find("img").attr("src");
 		if(source=="" || source === undefined) source = $(this).data("img");
 		targetImg.attr("src",source);
 		$("body").append(target);
+		if(event.pageX > ($(window).width() / 2)) target.addClass("right");
+		else target.removeClass("right");
+		console.log(event);
 	})
 	$(document).on("mouseleave", selector, function(){
 		target.remove();
 	})
 	$( document ).on( "mousemove", function( event ) {
 		if(target){
-			target.css({
-				top:event.pageY-50,
-				left:event.pageX+20
-			});
+			if(target.hasClass("right")){
+				target.css({
+					top:event.pageY-50,
+					left :event.pageX-270
+				});
+			}
+			else{
+				target.css({
+					top:event.pageY-50,
+					left:event.pageX+20
+				});
+			}
 		}
 	});
 };
