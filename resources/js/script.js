@@ -1742,7 +1742,7 @@ cardMaster.sidedeck.addCard = function(cardID){
 		console.log("Card '"+cardName+"' has been added to SideDeck!");
 		cardMaster.sidedeck.updateLocalStorage();
 		cardMaster.animation.cardToSidedeck();
-		cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+		cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 	}
 }
 
@@ -1758,7 +1758,7 @@ cardMaster.sidedeck.removeCard = function(cardID){
 		    deck.splice(index, 1);
 			console.log("Card '"+cardName+"' has been removed from SideDeck!");
 			cardMaster.sidedeck.updateLocalStorage();
-			cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+			cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 		}
 	}
 	else{
@@ -1771,13 +1771,14 @@ cardMaster.sidedeck.empty = function(){
 	cardMaster.sidedeck.updateLocalStorage();
 }
 
-cardMaster.sidedeck.renderCardList = function(ctx){
+cardMaster.sidedeck.renderList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
 	$(ctx).html("");
 	for(var c_i in cards){
 		var c = cardMaster.getCardDataById(cards[c_i]);
 		var row = $("<div>",{
-			class: "sidedeck-card"
+			class: "sidedeck-card",
+			"data-id": cards[c_i]
 		});
 		row.class = $("<div>",{
 			class: "sidedeck-class"
@@ -1794,17 +1795,28 @@ cardMaster.sidedeck.renderCardList = function(ctx){
 			text: c.getName().replace(/\\'/g, "'")
 		});
 		row.show = $("<div>",{
-			class: "sidedeck-show cardZoom",
+			class: "sidedeck-show sidedeck-command cardZoom",
 			html: "<i class='fa fa-eye'></i>",
 			"data-img": "./resources/img/cardRenders/"+c.id+".png"
+		});
+		row.remove = $("<div>",{
+			class: "sidedeck-remove sidedeck-command",
+			html: "<i class='fa fa-remove'></i>"
 		});
 
 		row.append(row.class);
 		row.append(row.icon);
 		row.append(row.name);
 		row.append(row.show);
+		row.append(row.remove);
 		$(ctx).append(row);
-		console.log(c);
+
+		row.remove.on("click", function(){
+			var rowID = $(this).closest(".sidedeck-card").data("id");
+			console.log(rowID);
+			cardMaster.sidedeck.removeCard(rowID);
+		})
+		//console.log(c);
 	}
 }
 
@@ -1816,11 +1828,27 @@ cardMaster.sidedeck.init = function(){
 		class: "sidedeck-trigger",
 		html: "<i class='fa fa-hand-o-down'></i><i class='fa fa-list-ul'></i>"
 	});
+	sideDeck.wrapper = $("<div>", {
+		class: "sidedeck-wrapper"
+	});
+	sideDeck.header = $("<div>", {
+		class: "sidedeck-header",
+		html: "<span class='title'>SideDeck</span>"
+	});
+	sideDeck.commonElements = $("<div>", {
+		class: "sidedeck-commons",
+		html: "COMMONS HERE"
+	});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
 	sideDeck.append(sideDeck.trigger);
-	sideDeck.append(sideDeck.body);
+	sideDeck.wrapper.append(sideDeck.header);
+	if(cardMaster.getPage() == "sandbox"){
+		sideDeck.wrapper.append(sideDeck.commonElements);
+	}
+	sideDeck.wrapper.append(sideDeck.body);
+	sideDeck.append(sideDeck.wrapper);
 	$("body").append(sideDeck);
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
@@ -1848,7 +1876,6 @@ cardMaster.init = function(){
 	cardMaster.stickyPanel();
 	cardMaster.sidedeck.init();
 
-
 	//page scripts
 	console.log(cardMaster.getPage());
 	if(cardMaster.getPage() == "archive"){
@@ -1861,7 +1888,7 @@ cardMaster.init = function(){
 				cardMaster.collection.renderList();
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
-					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
 			});
 		});
@@ -1879,7 +1906,7 @@ cardMaster.init = function(){
 				cardMaster.collection.renderList();
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
-					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
 			});
 			cardMaster.combos.loadList(cardMaster.combos.renderList);
@@ -1902,7 +1929,17 @@ cardMaster.init = function(){
 				});
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
-					cardMaster.sidedeck.renderCardList("#sideDeck .sidedeck-body");
+					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
+				});
+			});
+		});
+	}
+	if(cardMaster.getPage() == "sandbox"){
+		cardMaster.loadLiteralElements(function(){
+			cardMaster.collection.loadList(function(){
+				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.syncLocalStorage(function(){
+					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
 			});
 		});

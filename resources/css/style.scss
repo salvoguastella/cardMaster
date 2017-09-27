@@ -145,7 +145,7 @@ h1,h2,h3,h4,h5,h6{
 				display: inline-block;
 				margin-right: 20px;
 				padding:10px 0;
-				&:hover{
+				&.active, &:hover{
 					color:$selectRed;
 				}
 				&:last-of-type{
@@ -1140,58 +1140,82 @@ h1,h2,h3,h4,h5,h6{
 			position: absolute;
 		}
 	}
-	.sidedeck-body{
+	.sidedeck-wrapper{
 		float:left;
 		width:300px;
 		background:rgba(255,255,255,0.9);
 		box-shadow: 0 0 0 rgba(0,0,0,0.5);
-		padding:30px 30px 25px;
-		.sidedeck-card{
-			height: $cardListRowHeight;
-			margin-bottom:5px;
+		padding:20px 30px 25px;
+		.sidedeck-header{
 			@include clearfix;
-			@include transition(0.15s all linear);
-			@include translate(0,0);
-			.sidedeck-class{
-				float:left;
-				width:5px;
-				height:100%;
+			padding-bottom: 10px;
+			border-bottom:1px solid black;
+			margin-bottom:15px;
+			.title{
+				font-size:16px;
+				font-weight: 700;
+				line-height: 16px;
 			}
-			.sidedeck-icon{
-				float:left;
-				width:$cardListRowHeight;
-				height:100%;
-				margin-right:5px;
-			}
-			.sidedeck-name{
-				float:left;
-				height:100%;
-				line-height:$cardListRowHeight;
-				font-size:12px;
-				margin-right: 5px;
-				width: calc(100% - (#{$cardListRowHeight}*3) - 15px);
-				text-overflow: ellipsis;
-				white-space: nowrap;
-    			overflow: hidden;
-			}
-			.sidedeck-show{
-				float: left;
-				height:100%;
-				width:$cardListRowHeight;
-				text-align: center;
-				cursor: zoom-in;
-				i{
-					line-height:$cardListRowHeight;
+		}
+		.sidedeck-commons{
+			@include clearfix;
+			padding-bottom: 15px;
+			border-bottom:1px solid black;
+			margin-bottom:15px;
+		}
+		.sidedeck-body{
+			.sidedeck-card{
+				height: $cardListRowHeight;
+				margin-bottom:5px;
+				@include clearfix;
+				@include transition(0.15s all linear);
+				@include translate(0,0);
+				.sidedeck-class{
+					float:left;
+					width:5px;
+					height:100%;
 				}
-			}
-			&:hover{
-				@include translate(-5px,0);
+				.sidedeck-icon{
+					float:left;
+					width:$cardListRowHeight;
+					height:100%;
+					margin-right:5px;
+				}
+				.sidedeck-name{
+					float:left;
+					height:100%;
+					line-height:$cardListRowHeight;
+					font-size:12px;
+					margin-right: 5px;
+					width: calc(100% - (#{$cardListRowHeight}*3) - 15px);
+					text-overflow: ellipsis;
+					white-space: nowrap;
+	    			overflow: hidden;
+				}
+				.sidedeck-command{
+					float: left;
+					height:100%;
+					width:$cardListRowHeight;
+					text-align: center;
+					i{
+						line-height:$cardListRowHeight;
+					}
+					&.sidedeck-show{
+						cursor: zoom-in;
+					}
+					&.sidedeck-remove{
+						cursor: pointer;
+					}
+				}
+				&:hover{
+					@include translate(-5px,0);
+				}
 			}
 		}
 	}
 	&.active{
 		right:0;
-		.sidedeck-body{
+		.sidedeck-wrapper{
 			box-shadow: -2px 0 2px rgba(0,0,0,0.5);
 		}
 	}

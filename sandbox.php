@@ -1,14 +1,13 @@
 <?php
 	//include headers, logo and round menu
-	$page_name = "index";
+    $page_name = "sandbox";
 	include("header.php");
 ?>
 
-    <div class='main'>
-		Welcome<br>
+    <div class='main sandbox'>
+
     </div>
 
 <?php
 	include("footer.php");
 ?>
-

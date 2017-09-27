@@ -142,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
       display: inline-block;
       margin-right: 20px;
       padding: 10px 0; }
-      .header_wrapper .desk-navigation ul li:hover {
+      .header_wrapper .desk-navigation ul li.active, .header_wrapper .desk-navigation ul li:hover {
         color: #CB1E24; }
       .header_wrapper .desk-navigation ul li:last-of-type {
         margin-right: 0; }
@@ -960,13 +960,33 @@ h1, h2, h3, h4, h5, h6 {
       right: 7px;
       top: 9px;
       position: absolute; }
-  #sideDeck .sidedeck-body {
+  #sideDeck .sidedeck-wrapper {
     float: left;
     width: 300px;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
-    padding: 30px 30px 25px; }
-    #sideDeck .sidedeck-body .sidedeck-card {
+    padding: 20px 30px 25px; }
+    #sideDeck .sidedeck-wrapper .sidedeck-header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid black;
+      margin-bottom: 15px; }
+      #sideDeck .sidedeck-wrapper .sidedeck-header:after {
+        content: "";
+        display: table;
+        clear: both; }
+      #sideDeck .sidedeck-wrapper .sidedeck-header .title {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 16px; }
+    #sideDeck .sidedeck-wrapper .sidedeck-commons {
+      padding-bottom: 15px;
+      border-bottom: 1px solid black;
+      margin-bottom: 15px; }
+      #sideDeck .sidedeck-wrapper .sidedeck-commons:after {
+        content: "";
+        display: table;
+        clear: both; }
+    #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card {
       height: 28px;
       margin-bottom: 5px;
       -webkit-transition: 0.15s all linear;
@@ -979,20 +999,20 @@ h1, h2, h3, h4, h5, h6 {
       -ms-transform: translate(0, 0);
       -o-transform: translate(0, 0);
       transform: translate(0, 0); }
-      #sideDeck .sidedeck-body .sidedeck-card:after {
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card:after {
         content: "";
         display: table;
         clear: both; }
-      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-class {
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-class {
         float: left;
         width: 5px;
         height: 100%; }
-      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-icon {
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-icon {
         float: left;
         width: 28px;
         height: 100%;
         margin-right: 5px; }
-      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-name {
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-name {
         float: left;
         height: 100%;
         line-height: 28px;
@@ -1002,15 +1022,18 @@ h1, h2, h3, h4, h5, h6 {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden; }
-      #sideDeck .sidedeck-body .sidedeck-card .sidedeck-show {
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-command {
         float: left;
         height: 100%;
         width: 28px;
-        text-align: center;
-        cursor: zoom-in; }
-        #sideDeck .sidedeck-body .sidedeck-card .sidedeck-show i {
+        text-align: center; }
+        #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-command i {
           line-height: 28px; }
-      #sideDeck .sidedeck-body .sidedeck-card:hover {
+        #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-command.sidedeck-show {
+          cursor: zoom-in; }
+        #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-command.sidedeck-remove {
+          cursor: pointer; }
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card:hover {
         -webkit-transform: translate(-5px, 0);
         -moz-transform: translate(-5px, 0);
         -ms-transform: translate(-5px, 0);
@@ -1018,7 +1041,7 @@ h1, h2, h3, h4, h5, h6 {
         transform: translate(-5px, 0); }
   #sideDeck.active {
     right: 0; }
-    #sideDeck.active .sidedeck-body {
+    #sideDeck.active .sidedeck-wrapper {
       box-shadow: -2px 0 2px rgba(0, 0, 0, 0.5); }
   #sideDeck.anim-add .fa-hand-o-down {
     animation-name: bounceSidedeckFinger;

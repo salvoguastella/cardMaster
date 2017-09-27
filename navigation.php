@@ -13,6 +13,11 @@
 		public function getElement(){
 			return "<a href='".$this->url."' class='".$this->class."'><h3>".$this->text."</h3></a>";
 		}
+		public function isActive($check){
+			$bit = explode(".php",$this->url);
+			if($bit[0] == $check) return true;
+			else return false;
+		}
 	}
 
 	$links = [];
@@ -35,7 +40,13 @@
 		<ul>
 			<?php
 			for($i=0;$i<count($links);$i++){
-				echo "<li>";
+				$elem_class="";
+				if(isset($page_name)){
+					if($links[$i]->isActive($page_name)){
+						$elem_class="active";
+					}
+				}
+				echo "<li class='".$elem_class."'>";
 				echo $links[$i]->getELement();
 				echo "</li>";
 			}

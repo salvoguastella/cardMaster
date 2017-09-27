@@ -1,6 +1,6 @@
 <?php
 	//include headers, logo and round menu
-	$page_name = "creation";
+	$page_name = "create_card";
 	include("header.php");
 ?>
 
