@@ -4,6 +4,7 @@ window.cardMaster = window.cardMaster || {};
 cardMaster.collection = {};
 cardMaster.combos = {};
 cardMaster.sidedeck = {};
+cardMaster.sandbox = {};
 cardMaster.animation = {};
 
 //element lists
@@ -1855,6 +1856,29 @@ cardMaster.sidedeck.init = function(){
 	});
 }
 
+cardMaster.sandbox.init = function(){
+	cardMaster.sandbox.spawnPoint = {};
+	var spawn = cardMaster.sandbox.spawnPoint;
+	var sandbox = $("#sandbox");
+	spawn.x = sandbox.width()/2;
+	spawn.y = sandbox.height()/2;
+
+	var visualPoint = $("<div>", {
+		class:"debug-point"
+	}).css({
+		position: "absolute",
+		left: spawn.x,
+		top: spawn.y,
+		background: "red",
+		width: "10px",
+		height: "10px",
+		"border-radius": "50%",
+		transform: "translate(-50%, -50%)"
+	});
+
+	sandbox.append(visualPoint);
+}
+
 //animations
 
 cardMaster.animation.cardToSidedeck = function(){
@@ -1865,16 +1889,18 @@ cardMaster.animation.cardToSidedeck = function(){
 }
 
 cardMaster.init = function(){
-	cardMaster.cardFilter = new _cardFilter();
-	cardMaster.comboFilter = new _comboFilter();
-	cardMaster.imageLoader = new _imageLoader();
-	cardMaster.collection.syncArchetypes();
-	cardMaster.collection.generateFlags();
-	cardMaster.collection.showServantFields();
-	cardMaster.collection.createCard();
-	cardMaster.cardZoom();
-	cardMaster.stickyPanel();
-	cardMaster.sidedeck.init();
+	if(cardMaster.getPage() != "index"){
+		cardMaster.cardFilter = new _cardFilter();
+		cardMaster.comboFilter = new _comboFilter();
+		cardMaster.imageLoader = new _imageLoader();
+		cardMaster.collection.syncArchetypes();
+		cardMaster.collection.generateFlags();
+		cardMaster.collection.showServantFields();
+		cardMaster.collection.createCard();
+		cardMaster.cardZoom();
+		cardMaster.stickyPanel();
+		cardMaster.sidedeck.init();
+	}
 
 	//page scripts
 	console.log(cardMaster.getPage());
@@ -1940,6 +1966,7 @@ cardMaster.init = function(){
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
+					cardMaster.sandbox.init();
 				});
 			});
 		});

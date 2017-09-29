@@ -5,7 +5,9 @@
 ?>
 
     <div class='main sandbox'>
-
+		<div id="sandbox" class="panel">
+			
+		</div>
     </div>
 
 <?php

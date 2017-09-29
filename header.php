@@ -12,11 +12,11 @@
 <meta name="author" content="Salvatore Guastella">
 <?php
 	if (isset($page_name)){
-		echo "<title>".$page_name."</title>";
 	}
 	else{
-		echo "<title>Home</title>";
+		$page_name = "Home";
 	}
+	echo "<title>".$page_name."</title>";
 ?>
 <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -26,7 +26,12 @@
 <link rel="stylesheet" href="resources/rpgawesome/css/rpg-awesome.min.css">
 <link rel="stylesheet" type="text/css" media="screen" href="resources/css/style.css?<?php echo time(); ?>" />
 <script type="text/javascript" src="resources/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="resources/js/js.cookie.js"></script>
+<?php
+	if ($page_name == "sandbox"){
+		echo '<link rel="stylesheet" href="resources/css/jquery-ui.min.css">';
+		echo '<script type="text/javascript" src="resources/js/jquery-ui.min.js"></script>';
+	}
+?>
 <script type="text/javascript" src="resources/js/script.js?<?php echo time(); ?>"></script>
 
 </head>

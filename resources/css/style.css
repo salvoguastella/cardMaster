@@ -1050,4 +1050,8 @@ h1, h2, h3, h4, h5, h6 {
     animation-name: bounceSidedeckIcon;
     animation-duration: 1s; }
 
+#sandbox {
+  position: relative;
+  height: calc(100vh - 90px); }
+
 /*# sourceMappingURL=style.css.map */
