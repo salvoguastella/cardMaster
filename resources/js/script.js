@@ -12,6 +12,7 @@ cardMaster.cardList = [];
 cardMaster.comboList = [];
 cardMaster.summary = [];
 cardMaster.sidedeck.cards = [];
+cardMaster.sandbox.elements = [];
 
 //literal elements
 cardMaster.classes = [];
@@ -205,6 +206,15 @@ function _block(){
 	}
 }
 
+function _sandboxItem(options){
+	this.id = options.id || "none";
+	this.type = options.type || undefined;
+	this.x = options.x || 0;
+	this.y = options.y || 0;
+	this.value = options.value || "No value";
+	this.z = options.z || 1;
+}
+
 cardMaster.getPage = function(){
 	return document.title;
 }
@@ -227,25 +237,28 @@ cardMaster.cardZoom = function(){
 		$("body").append(target);
 		if(event.pageX > ($(window).width() / 2)) target.addClass("right");
 		else target.removeClass("right");
-		console.log(event);
+		if(event.pageY > ($(window).height() / 2)) target.addClass("bottom");
+		else target.removeClass("bottom");
+		//console.log(event);
 	})
 	$(document).on("mouseleave", selector, function(){
 		target.remove();
 	})
 	$( document ).on( "mousemove", function( event ) {
+		var xOffset = event.pageX+20;
+		var yOffset = event.pageY-40;
 		if(target){
 			if(target.hasClass("right")){
-				target.css({
-					top:event.pageY-50,
-					left :event.pageX-270
-				});
+				xOffset = event.pageX-270
 			}
-			else{
-				target.css({
-					top:event.pageY-50,
-					left:event.pageX+20
-				});
+			if(target.hasClass("bottom")){
+				yOffset = event.pageY-310
 			}
+
+			target.css({
+				top:yOffset,
+				left:xOffset
+			});
 		}
 	});
 };
@@ -804,9 +817,11 @@ cardMaster.collection.iconBox = function(){
 		.done(function(data) {
 			cardMaster.showMessage("Icon page loaded", "confirm");
 			var pageData = JSON.parse(data);
+			var header = selector.find(".header");
 			var imgList = selector.find(".images");
 			var commands = selector.find(".commands");
 			//use data.image here
+			header.html(pageData.header);
 			imgList.html(pageData.list);
 			commands.html(pageData.commands);
 			selector.find(".iconImage").on("click", function(){
@@ -1817,6 +1832,40 @@ cardMaster.sidedeck.renderList = function(ctx){
 			console.log(rowID);
 			cardMaster.sidedeck.removeCard(rowID);
 		})
+
+		function addElement(el){
+			var elementID = cardMaster.sandbox.generateID(el);
+			var typeOffset = {};
+				typeOffset.x = 75;
+				typeOffset.y = 50;
+			var randomDisplace = 20;
+			var randomOffset = {};
+				randomOffset.x = Math.floor((Math.random() * randomDisplace) + 1);
+				randomOffset.y = Math.floor((Math.random() * randomDisplace) + 1);
+			var options = {};
+				options.id = elementID;
+				options.type = "card";
+				options.value = el.id;
+				options.x = cardMaster.sandbox.spawnPoint.x - typeOffset.x + randomOffset.x;
+				options.y = cardMaster.sandbox.spawnPoint.y - typeOffset.y + randomOffset.y;
+				options.z = cardMaster.sandbox.getTopZ() + 1;
+			cardMaster.sandbox.addElement(options);
+		}
+
+		if(cardMaster.getPage() == "sandbox"){
+			row.icon.on("click", function(){
+				var id = $(this).closest(".sidedeck-card").data("id");
+				var c = cardMaster.getCardDataById(id);
+				addElement(c);
+			});
+			row.name.on("click", function(){
+				var id = $(this).closest(".sidedeck-card").data("id");
+				var c = cardMaster.getCardDataById(id);
+				addElement(c);
+			});
+			row.icon.addClass('clickable');
+			row.name.addClass('clickable');
+		};
 		//console.log(c);
 	}
 }
@@ -1856,12 +1905,18 @@ cardMaster.sidedeck.init = function(){
 	});
 }
 
-cardMaster.sandbox.init = function(){
+cardMaster.sandbox.generateID = function(el){
+	var count = cardMaster.sandbox.elements.length+1;
+	var id = el.constructor.name +"_"+ count;
+	return id;
+}
+
+cardMaster.sandbox.init = function(callback){
 	cardMaster.sandbox.spawnPoint = {};
 	var spawn = cardMaster.sandbox.spawnPoint;
 	var sandbox = $("#sandbox");
-	spawn.x = sandbox.width()/2;
-	spawn.y = sandbox.height()/2;
+	spawn.x = sandbox.outerWidth()/2;
+	spawn.y = sandbox.outerHeight()/2;
 
 	var visualPoint = $("<div>", {
 		class:"debug-point"
@@ -1877,6 +1932,135 @@ cardMaster.sandbox.init = function(){
 	});
 
 	sandbox.append(visualPoint);
+	if (typeof callback === "function"){
+		callback();
+	}
+}
+
+cardMaster.sandbox.syncLocalStorage = function(callback){
+	var status = localStorage.sandbox;
+	if(status !== undefined){
+		cardMaster.sandbox.elements = JSON.parse(status);
+		if(typeof callback === "function"){
+			callback();
+		}
+	}
+	console.log(cardMaster.sandbox.elements);
+}
+
+cardMaster.sandbox.updateLocalStorage = function(){
+	var status = JSON.stringify(cardMaster.sandbox.elements);
+	localStorage.sandbox = status;
+	console.log(localStorage.sandbox);
+}
+
+cardMaster.sandbox.empty = function(){
+	cardMaster.sandbox.elements = [];
+	cardMaster.sandbox.updateLocalStorage();
+}
+
+cardMaster.sandbox.addElement = function(options){
+	var element = new _sandboxItem(options);
+	cardMaster.sandbox.elements.push(element);
+	cardMaster.sandbox.updateLocalStorage();
+	cardMaster.sandbox.renderElement(element);
+	console.log(element);
+}
+
+cardMaster.sandbox.removeElement = function(elementID){
+	var list = cardMaster.sandbox.elements;
+	var removeIndex = false;
+	for(var i in cardMaster.sandbox.elements){
+		if(cardMaster.sandbox.elements[i].id == elementID){
+			var removeIndex = i;
+			break;
+		}
+	}
+	if(removeIndex && removeIndex > -1){
+		var elName = cardMaster.sandbox.elements[removeIndex];
+	    list.splice(removeIndex, 1);
+		console.log("Element '"+elName+"' has been removed from Sandbox!");
+		cardMaster.sandbox.updateLocalStorage();
+	}
+}
+
+cardMaster.sandbox.getTopZ = function(){
+	var maxZ = 0;
+	for( var i in cardMaster.sandbox.elements){
+		var z = parseInt(cardMaster.sandbox.elements[i].z);
+		if(z > maxZ) maxZ = z;
+	}
+	return maxZ;
+}
+
+cardMaster.sandbox.renderElement = function(el){
+	var selector = $("#sandbox");
+
+	var element = $("<div>", {
+		class: "element "+el.type,
+		"data-id" : el.id,
+		"data-value" : el.value
+	}).css({
+		position:"absolute",
+		top: el.y,
+		left: el.x,
+		"z-index": el.z
+	});
+	element.commands = $("<div>", {
+		class: "commands"
+	});
+	switch(el.type){
+		case "card":
+			element.content = $("<img>", {
+				class: "",
+				src : "./resources/img/cardRenders/"+el.value+".png"
+			});
+			element.show = $("<div>", {
+				class: "show cardZoom",
+				html: "<i class='fa fa-eye'></i>",
+				"data-img": "./resources/img/cardRenders/"+el.value+".png"
+			});
+			element.commands.append(element.show);
+			break;
+		default:
+			console.log("nothing here");
+	}
+	element.remove = $("<div>", {
+		class: "remove",
+		html: "<i class='fa fa-remove'></i>"
+	});
+	element.commands.append(element.remove);
+	element.append(element.content);
+	element.append(element.commands);
+	selector.append(element);
+	element.remove.on("click", function(){
+		var id = $(this).closest(".element").data("id");
+		cardMaster.sandbox.removeElement(id);
+		$(this).closest(".element").remove();
+	});
+	element.draggable({
+		containment: "parent",
+		start: function(event, ui){
+			var topZ = cardMaster.sandbox.getTopZ() + 1;
+			el.z = topZ;
+			element.css({
+				"z-index": topZ
+			})
+		},
+		stop: function( event, ui ) {
+			el.x = ui.position.left;
+			el.y = ui.position.top;
+			cardMaster.sandbox.updateLocalStorage();
+		}
+	});
+}
+
+cardMaster.sandbox.renderBoard = function(){
+	cardMaster.sandbox.syncLocalStorage();
+	for(var i in cardMaster.sandbox.elements){
+		var el = cardMaster.sandbox.elements[i];
+		cardMaster.sandbox.renderElement(el);
+	}
 }
 
 //animations
@@ -1966,7 +2150,9 @@ cardMaster.init = function(){
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
-					cardMaster.sandbox.init();
+					cardMaster.sandbox.init(function(){
+						cardMaster.sandbox.renderBoard();
+					});
 				});
 			});
 		});

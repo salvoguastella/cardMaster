@@ -112,6 +112,7 @@
     <div id="imageList" class="panel">
         <div class="list-wrapper">
             <div class="close"><i class="fa fa-close"></i></div>
+            <div class="header"></div>
             <div class="images" data-row="">
 
             </div>

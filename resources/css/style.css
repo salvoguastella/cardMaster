@@ -506,6 +506,12 @@ h1, h2, h3, h4, h5, h6 {
       top: -20px;
       font-size: 20px;
       cursor: pointer; }
+    #imageList .list-wrapper .header {
+      text-align: left;
+      font-size: 12px;
+      margin-bottom: 20px; }
+      #imageList .list-wrapper .header i {
+        margin-right: 7px; }
     #imageList .list-wrapper .images {
       height: 245px; }
       #imageList .list-wrapper .images .iconImage {
@@ -1012,6 +1018,8 @@ h1, h2, h3, h4, h5, h6 {
         width: 28px;
         height: 100%;
         margin-right: 5px; }
+        #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-icon.clickable {
+          cursor: pointer; }
       #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-name {
         float: left;
         height: 100%;
@@ -1022,6 +1030,8 @@ h1, h2, h3, h4, h5, h6 {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden; }
+        #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-name.clickable {
+          cursor: pointer; }
       #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-command {
         float: left;
         height: 100%;
@@ -1053,5 +1063,41 @@ h1, h2, h3, h4, h5, h6 {
 #sandbox {
   position: relative;
   height: calc(100vh - 90px); }
+  #sandbox .element {
+    cursor: move; }
+    #sandbox .element.card {
+      width: 150px; }
+      #sandbox .element.card img {
+        border-radius: 7px;
+        -webkit-transition: 0.2s box-shadow linear;
+        -moz-transition: 0.2s box-shadow linear;
+        -ms-transition: 0.2s box-shadow linear;
+        -o-transition: 0.2s box-shadow linear;
+        transition: 0.2s box-shadow linear;
+        display: block;
+        width: 100%;
+        box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
+    #sandbox .element.ui-draggable-dragging img {
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
+    #sandbox .element .commands {
+      text-align: center;
+      margin-top: 5px;
+      border-radius: 4px;
+      opacity: 0;
+      background-color: white;
+      -webkit-transition: 0.2s all linear;
+      -moz-transition: 0.2s all linear;
+      -ms-transition: 0.2s all linear;
+      -o-transition: 0.2s all linear;
+      transition: 0.2s all linear; }
+      #sandbox .element .commands > div {
+        display: inline-block;
+        margin: 0 10px; }
+        #sandbox .element .commands > div.show {
+          cursor: zoom-in; }
+        #sandbox .element .commands > div.remove {
+          cursor: pointer; }
+    #sandbox .element:hover .commands {
+      opacity: 1; }
 
 /*# sourceMappingURL=style.css.map */
