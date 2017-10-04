@@ -1870,10 +1870,17 @@ cardMaster.sidedeck.renderList = function(ctx){
 	}
 }
 
+cardMaster.sidedeck.toggleLocalStatus = function(){
+	var status = (localStorage.sidedeck_isToggled == "true");
+	localStorage.sidedeck_isToggled = !status;
+	console.log(localStorage.sidedeck_isToggled);
+};
+
 cardMaster.sidedeck.init = function(){
 	var sideDeck = $("<div>", {
 		id: "sideDeck"
 	});
+	if(localStorage.sidedeck_isToggled == "true") sideDeck.addClass('active');
 	sideDeck.trigger = $("<div>", {
 		class: "sidedeck-trigger",
 		html: "<i class='fa fa-hand-o-down'></i><i class='fa fa-list-ul'></i>"
@@ -1892,16 +1899,74 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
+	sideDeck.footer = $("<div>", {
+		class: "sidedeck-footer",
+		html: "<span class='title'>Comandi</span>"
+	});
+	sideDeck.emptyList = $("<div>", {
+		class: "sidedeck-command-line sidedeck-empty-list",
+		html: "<i class='fa fa-times-circle'></i> Svuota SideDeck"
+	});
+	sideDeck.wipeBoard = $("<div>", {
+		class: "sidedeck-command-line sidedeck-wipe-board",
+		html: "<i class='fa fa-ban'></i> Svuota Sandbox"
+	});
+	sideDeck.confirm = $("<div>", {
+		class: "confirm",
+		html: "<i class='fa fa-check'></i>"
+	});
+	sideDeck.cancel = $("<div>", {
+		class: "cancel",
+		html: "<i class='fa fa-remove'></i>"
+	});
 	sideDeck.append(sideDeck.trigger);
 	sideDeck.wrapper.append(sideDeck.header);
 	if(cardMaster.getPage() == "sandbox"){
 		sideDeck.wrapper.append(sideDeck.commonElements);
 	}
 	sideDeck.wrapper.append(sideDeck.body);
+	sideDeck.wrapper.append(sideDeck.footer);
+	sideDeck.emptyList.append(sideDeck.confirm.clone());
+	sideDeck.emptyList.append(sideDeck.cancel.clone());
+	sideDeck.wrapper.append(sideDeck.emptyList);
+	if(cardMaster.getPage() == "sandbox"){
+		sideDeck.wipeBoard.append(sideDeck.confirm.clone());
+		sideDeck.wipeBoard.append(sideDeck.cancel.clone());
+		sideDeck.wrapper.append(sideDeck.wipeBoard);
+	}
+
 	sideDeck.append(sideDeck.wrapper);
 	$("body").append(sideDeck);
+
+	//shows command row confirm buttons
+	$(".sidedeck-command-line").on("click", function(){
+		$(this).addClass('active');
+	});
+	//cancel command row action
+	$(".sidedeck-command-line .cancel").on("click", function(event){
+		event.stopImmediatePropagation();
+		$(this).parent().removeClass('active');
+	});
+	//confirm empty sidedeck
+	sideDeck.emptyList.find(".confirm").on("click", function(event){
+		event.stopImmediatePropagation();
+		cardMaster.sidedeck.empty();
+		$("#sideDeck").find(".sidedeck-body").html("");
+		$(this).parent().removeClass('active');
+	});
+	if(cardMaster.getPage() == "sandbox"){
+		//confirm empty sandbox
+		sideDeck.wipeBoard.find(".confirm").on("click", function(event){
+			event.stopImmediatePropagation();
+			cardMaster.sandbox.empty();
+			$("#sandbox").find(".element").remove();
+			$(this).parent().removeClass('active');
+		});
+	}
+
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
+		cardMaster.sidedeck.toggleLocalStatus();
 	});
 }
 
