@@ -989,6 +989,11 @@ h1, h2, h3, h4, h5, h6 {
         content: "";
         display: table;
         clear: both; }
+      #sideDeck .sidedeck-wrapper .sidedeck-commons ._token {
+        position: relative;
+        float: left;
+        margin-right: 7px;
+        cursor: pointer; }
     #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card {
       height: 28px;
       margin-bottom: 5px;
@@ -1112,6 +1117,15 @@ h1, h2, h3, h4, h5, h6 {
         display: block;
         width: 100%;
         box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
+    #sandbox .element.token ._token, #sandbox .element.health ._token {
+      -webkit-transition: 0.2s box-shadow linear;
+      -moz-transition: 0.2s box-shadow linear;
+      -ms-transition: 0.2s box-shadow linear;
+      -o-transition: 0.2s box-shadow linear;
+      transition: 0.2s box-shadow linear;
+      box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
+    #sandbox .element.token.ui-draggable-dragging ._token, #sandbox .element.health.ui-draggable-dragging ._token {
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
     #sandbox .element.ui-draggable-dragging img {
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
     #sandbox .element .commands {
@@ -1120,6 +1134,7 @@ h1, h2, h3, h4, h5, h6 {
       border-radius: 4px;
       opacity: 0;
       background-color: white;
+      color: black;
       -webkit-transition: 0.2s all linear;
       -moz-transition: 0.2s all linear;
       -ms-transition: 0.2s all linear;
@@ -1134,5 +1149,32 @@ h1, h2, h3, h4, h5, h6 {
           cursor: pointer; }
     #sandbox .element:hover .commands {
       opacity: 1; }
+
+._token {
+  display: block;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: #494949;
+  text-align: center;
+  color: white;
+  position: relative; }
+  ._token > i {
+    font-size: 20px;
+    line-height: 28px; }
+  ._token span {
+    color: #494949;
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); }
 
 /*# sourceMappingURL=style.css.map */

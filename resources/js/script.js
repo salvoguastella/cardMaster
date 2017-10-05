@@ -206,6 +206,11 @@ function _block(){
 	}
 }
 
+function _token(options){
+	this.type = options.type || "token";
+	this.value = options.value || 0;
+}
+
 function _sandboxItem(options){
 	this.id = options.id || "none";
 	this.type = options.type || undefined;
@@ -1876,6 +1881,32 @@ cardMaster.sidedeck.toggleLocalStatus = function(){
 	console.log(localStorage.sidedeck_isToggled);
 };
 
+cardMaster.sidedeck.commonElements = {
+	"healthToken" : function(value){
+		var el = new _token({"type":"health", "value": value});
+		el.$ = $("<div>", {
+			class: "_token _token_health",
+			html: "<i class='fa fa-heart'></i><span>"+value+"</span>",
+			"data-value": value,
+			"data-type": "token.health",
+			title: value + " Health"
+		});
+		return el;
+	},
+	"simpleToken" : function(){
+		var el = new _token({"type":"token"});
+		el.$ = $("<div>", {
+			class: "_token _token_simple",
+			html: "<i class='fa fa-user'></i>",
+			"data-value": "0",
+			"data-type": "token.simple",
+			title: "Token"
+		});
+		return el;
+	}
+};
+
+
 cardMaster.sidedeck.init = function(){
 	var sideDeck = $("<div>", {
 		id: "sideDeck"
@@ -1893,9 +1924,12 @@ cardMaster.sidedeck.init = function(){
 		html: "<span class='title'>SideDeck</span>"
 	});
 	sideDeck.commonElements = $("<div>", {
-		class: "sidedeck-commons",
-		html: "COMMONS HERE"
+		class: "sidedeck-commons"
 	});
+	sideDeck.health_token1 = cardMaster.sidedeck.commonElements.healthToken(1);
+	sideDeck.health_token5 = cardMaster.sidedeck.commonElements.healthToken(5);
+	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
+
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
@@ -1922,6 +1956,9 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.append(sideDeck.trigger);
 	sideDeck.wrapper.append(sideDeck.header);
 	if(cardMaster.getPage() == "sandbox"){
+		sideDeck.commonElements.append(sideDeck.health_token1.$);
+		sideDeck.commonElements.append(sideDeck.health_token5.$);
+		sideDeck.commonElements.append(sideDeck.simple_token.$);
 		sideDeck.wrapper.append(sideDeck.commonElements);
 	}
 	sideDeck.wrapper.append(sideDeck.body);
@@ -1963,6 +2000,36 @@ cardMaster.sidedeck.init = function(){
 			$(this).parent().removeClass('active');
 		});
 	}
+
+	function addElement(el){
+		var elementID = cardMaster.sandbox.generateID(el);
+		console.log(elementID);
+		var typeOffset = {};
+			typeOffset.x = 14;
+			typeOffset.y = 14;
+		var randomDisplace = 20;
+		var randomOffset = {};
+			randomOffset.x = Math.floor((Math.random() * randomDisplace) + 1);
+			randomOffset.y = Math.floor((Math.random() * randomDisplace) + 1);
+		var options = {};
+			options.id = elementID;
+			options.type = el.type;
+			options.value = el.value;
+			options.x = cardMaster.sandbox.spawnPoint.x - typeOffset.x + randomOffset.x;
+			options.y = cardMaster.sandbox.spawnPoint.y - typeOffset.y + randomOffset.y;
+			options.z = cardMaster.sandbox.getTopZ() + 1;
+		cardMaster.sandbox.addElement(options);
+	}
+
+	sideDeck.health_token1.$.on("click", function(){
+		addElement(sideDeck.health_token1);
+	});
+	sideDeck.health_token5.$.on("click", function(){
+		addElement(sideDeck.health_token5);
+	});
+	sideDeck.simple_token.$.on("click", function(){
+		addElement(sideDeck.simple_token);
+	});
 
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
@@ -2086,6 +2153,12 @@ cardMaster.sandbox.renderElement = function(el){
 				"data-img": "./resources/img/cardRenders/"+el.value+".png"
 			});
 			element.commands.append(element.show);
+			break;
+		case "health":
+			element.content = cardMaster.sidedeck.commonElements.healthToken(el.value).$;
+			break;
+		case "token":
+			element.content = cardMaster.sidedeck.commonElements.simpleToken().$;
 			break;
 		default:
 			console.log("nothing here");

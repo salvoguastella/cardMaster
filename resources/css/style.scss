@@ -1169,6 +1169,12 @@ h1,h2,h3,h4,h5,h6{
 			padding-bottom: 15px;
 			border-bottom:1px solid black;
 			margin-bottom:15px;
+			._token{
+				position:relative;
+				float:left;
+				margin-right: 7px;
+				cursor: pointer;
+			}
 		}
 		.sidedeck-body{
 			.sidedeck-card{
@@ -1301,6 +1307,17 @@ h1,h2,h3,h4,h5,h6{
 				box-shadow: 0 0 7px rgba(0,0,0,0.7);
 			}
 		}
+		&.token, &.health{
+			._token{
+				@include transition(0.2s box-shadow linear);
+				box-shadow: 0 0 7px rgba(0,0,0,0.7);
+			}
+			&.ui-draggable-dragging{
+				._token{
+					box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+				}
+			}
+		}
 		&.ui-draggable-dragging{
 			img{
 				box-shadow: 0 5px 10px rgba(0,0,0,0.5);
@@ -1312,6 +1329,7 @@ h1,h2,h3,h4,h5,h6{
 			border-radius: 4px;
 			opacity:0;
 			background-color: white;
+			color:black;
 			@include transition(0.2s all linear);
 			>div{
 				display:inline-block;
@@ -1329,5 +1347,28 @@ h1,h2,h3,h4,h5,h6{
 				opacity:1;
 			}
 		}
+	}
+}
+
+._token{
+	display:block;
+	height: $cardListRowHeight;
+	width: $cardListRowHeight;
+	border-radius: 50%;
+	background: $darkGrey;
+	text-align: center;
+	color:white;
+	position:relative;
+	>i{
+		font-size: 20px;
+		line-height: $cardListRowHeight;
+	}
+	span{
+		color: $darkGrey;
+		display: block;
+		text-align: center;
+		font-size: 12px;
+		font-weight: 700;
+		@include center;
 	}
 }
