@@ -8,3 +8,11 @@
     40%  {top: 17px}
     100% {top: 9px}
 }
+
+@keyframes hammer {
+    0%   {@include transform(scaleX(-1) rotate(0deg))}
+    20%  {@include transform(scaleX(-1) rotate(60deg))}
+    40%  {@include transform(scaleX(-1) rotate(0deg))}
+    60%  {@include transform(scaleX(-1) rotate(60deg))}
+    80%  {@include transform(scaleX(-1) rotate(0deg))}
+}

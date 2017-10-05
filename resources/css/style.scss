@@ -191,8 +191,78 @@ h1,h2,h3,h4,h5,h6{
 	@include clearfix;
 }
 
-.new_card_wrapper{
+.new_card_wrapper {
+	perspective: 10000px;
 	width:350px;
+	height: 616px;
+	.flipper {
+		transition: 0.6s all linear;
+		transform-style: preserve-3d;
+		position: relative;
+	}
+	form, .confirm {
+		backface-visibility: hidden;
+		display:block;
+		width:350px;
+		height: 616px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	form {
+		z-index: 2;
+		transform: rotateY(0deg);
+	}
+
+	.confirm {
+		transform: rotateY(180deg);
+		background: $transparentWhite;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@include flex(direction, column);
+		.caption{
+			font-size: 24px;
+		    border-top: 3px solid black;
+		    font-weight: 700;
+		    margin-top: 25px;
+		    padding-top: 20px;
+		}
+	}
+
+	&.done{
+		.flipper{
+			transform: rotateY(180deg);
+		}
+	}
+	.anim-block{
+		height:150px;
+		width: 150px;
+		//border:1px solid red;
+		position:relative;
+		.ra{
+			color:black;
+			position:absolute;
+		}
+		.hammer{
+			font-size:70px;
+			top: -5px;
+			right:-30px;
+			transform-origin: 10% 90%;
+			@include transform(scaleX(-1) rotate(0deg));
+		}
+		.anvil{
+			font-size:90px;
+			left:20px;
+			bottom: -10px;
+		}
+		&.play, &:hover{
+			.hammer{
+				animation-name: hammer;
+    			animation-duration: 1s;
+			}
+		}
+	}
 }
 
 #previewCard{

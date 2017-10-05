@@ -21,6 +21,37 @@
     top: 17px; }
   100% {
     top: 9px; } }
+@keyframes hammer {
+  0% {
+    -webkit-transform: scaleX(-1) rotate(0deg);
+    -moz-transform: scaleX(-1) rotate(0deg);
+    -ms-transform: scaleX(-1) rotate(0deg);
+    -o-transform: scaleX(-1) rotate(0deg);
+    transform: scaleX(-1) rotate(0deg); }
+  20% {
+    -webkit-transform: scaleX(-1) rotate(60deg);
+    -moz-transform: scaleX(-1) rotate(60deg);
+    -ms-transform: scaleX(-1) rotate(60deg);
+    -o-transform: scaleX(-1) rotate(60deg);
+    transform: scaleX(-1) rotate(60deg); }
+  40% {
+    -webkit-transform: scaleX(-1) rotate(0deg);
+    -moz-transform: scaleX(-1) rotate(0deg);
+    -ms-transform: scaleX(-1) rotate(0deg);
+    -o-transform: scaleX(-1) rotate(0deg);
+    transform: scaleX(-1) rotate(0deg); }
+  60% {
+    -webkit-transform: scaleX(-1) rotate(60deg);
+    -moz-transform: scaleX(-1) rotate(60deg);
+    -ms-transform: scaleX(-1) rotate(60deg);
+    -o-transform: scaleX(-1) rotate(60deg);
+    transform: scaleX(-1) rotate(60deg); }
+  80% {
+    -webkit-transform: scaleX(-1) rotate(0deg);
+    -moz-transform: scaleX(-1) rotate(0deg);
+    -ms-transform: scaleX(-1) rotate(0deg);
+    -o-transform: scaleX(-1) rotate(0deg);
+    transform: scaleX(-1) rotate(0deg); } }
 * {
   box-sizing: border-box; }
 
@@ -182,7 +213,67 @@ h1, h2, h3, h4, h5, h6 {
     clear: both; }
 
 .new_card_wrapper {
-  width: 350px; }
+  perspective: 10000px;
+  width: 350px;
+  height: 616px; }
+  .new_card_wrapper .flipper {
+    transition: 0.6s all linear;
+    transform-style: preserve-3d;
+    position: relative; }
+  .new_card_wrapper form, .new_card_wrapper .confirm {
+    backface-visibility: hidden;
+    display: block;
+    width: 350px;
+    height: 616px;
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .new_card_wrapper form {
+    z-index: 2;
+    transform: rotateY(0deg); }
+  .new_card_wrapper .confirm {
+    transform: rotateY(180deg);
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-box-flex-direction: column;
+    -moz-box-flex-direction: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column; }
+    .new_card_wrapper .confirm .caption {
+      font-size: 24px;
+      border-top: 3px solid black;
+      font-weight: 700;
+      margin-top: 25px;
+      padding-top: 20px; }
+  .new_card_wrapper.done .flipper {
+    transform: rotateY(180deg); }
+  .new_card_wrapper .anim-block {
+    height: 150px;
+    width: 150px;
+    position: relative; }
+    .new_card_wrapper .anim-block .ra {
+      color: black;
+      position: absolute; }
+    .new_card_wrapper .anim-block .hammer {
+      font-size: 70px;
+      top: -5px;
+      right: -30px;
+      transform-origin: 10% 90%;
+      -webkit-transform: scaleX(-1) rotate(0deg);
+      -moz-transform: scaleX(-1) rotate(0deg);
+      -ms-transform: scaleX(-1) rotate(0deg);
+      -o-transform: scaleX(-1) rotate(0deg);
+      transform: scaleX(-1) rotate(0deg); }
+    .new_card_wrapper .anim-block .anvil {
+      font-size: 90px;
+      left: 20px;
+      bottom: -10px; }
+    .new_card_wrapper .anim-block.play .hammer, .new_card_wrapper .anim-block:hover .hammer {
+      animation-name: hammer;
+      animation-duration: 1s; }
 
 #previewCard {
   position: relative; }
