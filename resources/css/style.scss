@@ -1301,7 +1301,7 @@ h1,h2,h3,h4,h5,h6{
 				}
 			}
 		}
-		.sidedeck-footer{
+		.sidedeck-caption{
 			margin-top:30px;
 			padding-bottom: 10px;
 			border-bottom:1px solid black;
@@ -1342,6 +1342,12 @@ h1,h2,h3,h4,h5,h6{
 					right:8px;
 				}
 			}
+		}
+		.sidedeck-notes{
+			width: 100%;
+		    max-width: 100%;
+		    min-height: 200px;
+		    max-height: 400px;
 		}
 	}
 	&.active{

@@ -1142,12 +1142,12 @@ h1, h2, h3, h4, h5, h6 {
         -ms-transform: translate(-5px, 0);
         -o-transform: translate(-5px, 0);
         transform: translate(-5px, 0); }
-    #sideDeck .sidedeck-wrapper .sidedeck-footer {
+    #sideDeck .sidedeck-wrapper .sidedeck-caption {
       margin-top: 30px;
       padding-bottom: 10px;
       border-bottom: 1px solid black;
       margin-bottom: 15px; }
-      #sideDeck .sidedeck-wrapper .sidedeck-footer .title {
+      #sideDeck .sidedeck-wrapper .sidedeck-caption .title {
         font-size: 12px;
         font-weight: 700;
         line-height: 12px; }
@@ -1180,6 +1180,11 @@ h1, h2, h3, h4, h5, h6 {
         right: 32px; }
       #sideDeck .sidedeck-wrapper .sidedeck-command-line.active .cancel {
         right: 8px; }
+    #sideDeck .sidedeck-wrapper .sidedeck-notes {
+      width: 100%;
+      max-width: 100%;
+      min-height: 200px;
+      max-height: 400px; }
   #sideDeck.active {
     right: 0; }
     #sideDeck.active .sidedeck-wrapper {

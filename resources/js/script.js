@@ -1907,8 +1907,12 @@ cardMaster.sidedeck.commonElements = {
 	}
 };
 
+cardMaster.sidedeck.updateNotes = function(text){
+	localStorage.sidedeck_notes = text;
+}
 
 cardMaster.sidedeck.init = function(){
+	var notes = localStorage.sidedeck_notes || "";
 	var sideDeck = $("<div>", {
 		id: "sideDeck"
 	});
@@ -1935,7 +1939,7 @@ cardMaster.sidedeck.init = function(){
 		class: "sidedeck-body"
 	});
 	sideDeck.footer = $("<div>", {
-		class: "sidedeck-footer",
+		class: "sidedeck-caption",
 		html: "<span class='title'>Comandi</span>"
 	});
 	sideDeck.emptyList = $("<div>", {
@@ -1953,6 +1957,15 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.cancel = $("<div>", {
 		class: "cancel",
 		html: "<i class='fa fa-remove'></i>"
+	});
+	sideDeck.notesCaption = $("<div>", {
+		class: "sidedeck-caption",
+		html: "<span class='title'>Notes</span>"
+	});
+	sideDeck.notes = $("<textarea>", {
+		class: "sidedeck-notes",
+		placeholder: "Notes...",
+		text: notes
 	});
 	sideDeck.append(sideDeck.trigger);
 	sideDeck.wrapper.append(sideDeck.header);
@@ -1972,6 +1985,8 @@ cardMaster.sidedeck.init = function(){
 		sideDeck.wipeBoard.append(sideDeck.cancel.clone());
 		sideDeck.wrapper.append(sideDeck.wipeBoard);
 	}
+	sideDeck.wrapper.append(sideDeck.notesCaption);
+	sideDeck.wrapper.append(sideDeck.notes);
 
 	sideDeck.append(sideDeck.wrapper);
 	$("body").append(sideDeck);
@@ -2001,6 +2016,10 @@ cardMaster.sidedeck.init = function(){
 			$(this).parent().removeClass('active');
 		});
 	}
+	sideDeck.notes.on("keyup", function(){
+		var text = $(this).val();
+		cardMaster.sidedeck.updateNotes(text);
+	});
 
 	function addElement(el){
 		var elementID = cardMaster.sandbox.generateID(el);
