@@ -326,6 +326,7 @@ cardMaster.collection.createCard = function(){
 			else{
 				cardMaster.collection.resetCardForm();
 				cardMaster.showMessage(res, "confirm");
+				cardMaster.animation.newCardCreated();
 			}
 		})
 		.fail(function() {
@@ -1878,7 +1879,7 @@ cardMaster.sidedeck.renderList = function(ctx){
 cardMaster.sidedeck.toggleLocalStatus = function(){
 	var status = (localStorage.sidedeck_isToggled == "true");
 	localStorage.sidedeck_isToggled = !status;
-	console.log(localStorage.sidedeck_isToggled);
+	//console.log(localStorage.sidedeck_isToggled);
 };
 
 cardMaster.sidedeck.commonElements = {
@@ -2203,11 +2204,26 @@ cardMaster.sandbox.renderBoard = function(){
 
 //animations
 
+cardMaster.animation.newCardCreated = function(){
+	$(".new_card_wrapper .flipper").one("oTransitionEnd transitionend webkitTransitionEnd", function(){
+		console.log("flip done");
+		$(".new_card_wrapper").find(".anim-block").addClass('play');
+		$(".new_card_wrapper").find(".anim-block").one("oanimationend animationend webkitAnimationEnd", function(){
+			console.log("hammer done");
+			setTimeout(function(){
+				$(".new_card_wrapper").find(".anim-block").removeClass('play');
+				$(".new_card_wrapper").removeClass("done");
+			}, 500);
+		})
+	})
+	$(".new_card_wrapper").addClass("done");
+}
+
 cardMaster.animation.cardToSidedeck = function(){
-	$("#sideDeck").addClass("anim-add");
-	setTimeout(function(){
+	$("#sideDeck").one("oanimationend animationend webkitAnimationEnd", function(){
 		$("#sideDeck").removeClass("anim-add");
-	},1200);
+	})
+	$("#sideDeck").addClass("anim-add");
 }
 
 cardMaster.init = function(){

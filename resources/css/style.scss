@@ -256,7 +256,7 @@ h1,h2,h3,h4,h5,h6{
 			left:20px;
 			bottom: -10px;
 		}
-		&.play, &:hover{
+		&.play{
 			.hammer{
 				animation-name: hammer;
     			animation-duration: 1s;
