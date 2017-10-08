@@ -235,11 +235,19 @@ cardMaster.cardZoom = function(){
 	//add exception if too close to edge
 
 	$(document).on("mouseenter", selector, function(event){
+		target.removeClass("active");
 		var source = $(this).attr("src");
 		if(source=="" || source === undefined) source = $(this).find("img").attr("src");
 		if(source=="" || source === undefined) source = $(this).data("img");
 		targetImg.attr("src",source);
+		targetImg.on("error", function(){
+			targetImg.attr("src", "./resources/img/card_parts/normal.png");
+		});
 		$("body").append(target);
+		setTimeout(function(){
+			target.addClass("active");
+		},50);
+
 		if(event.pageX > ($(window).width() / 2)) target.addClass("right");
 		else target.removeClass("right");
 		if(event.pageY > ($(window).height() / 2)) target.addClass("bottom");
@@ -248,6 +256,7 @@ cardMaster.cardZoom = function(){
 	})
 	$(document).on("mouseleave", selector, function(){
 		target.remove();
+		target.removeClass("active");
 	})
 	$( document ).on( "mousemove", function( event ) {
 		var xOffset = event.pageX+20;
@@ -259,7 +268,6 @@ cardMaster.cardZoom = function(){
 			if(target.hasClass("bottom")){
 				yOffset = event.pageY-310
 			}
-
 			target.css({
 				top:yOffset,
 				left:xOffset
@@ -553,6 +561,7 @@ cardMaster.collection.updateCount = function(){
 
 cardMaster.collection.loadList = function(callback){
 
+	$(".card-content").removeClass("loaded");
 	var filters = cardMaster.cardFilter.toQueryString();
 	//console.log(filters);
 
@@ -613,7 +622,201 @@ cardMaster.collection.hideIconBox = function(){
 	selector.find(".images").data("row","");
 }
 
+cardMaster.collection.switchView = function(mode){
+	localStorage.collection_viewMode = mode;
+	if(mode == "grid"){
+		cardMaster.collection.renderGrid();
+	}
+	else{
+		cardMaster.collection.renderList();
+	}
+}
+
+cardMaster.collection.switchViewCommands = function(){
+	var selector = $(".view-switch");
+	var container = $(".card-list, .card-grid");
+	selector.on("click", function(e){
+		e.stopImmediatePropagation();
+		if(!$(this).hasClass("active")){
+			selector.removeClass('active');
+			container.removeClass('active');
+			cardMaster.collection.switchView($(this).data("view"));
+		}
+	});
+}
+
+cardMaster.collection.render = function(){
+	$(".card-content").removeClass("loaded");
+	if(localStorage.collection_viewMode == "grid"){
+		cardMaster.collection.renderGrid();
+	}
+	else{
+		cardMaster.collection.renderList();
+	}
+}
+
+cardMaster.collection.renderGrid = function(){
+	$(".view-switch[data-view='grid']").addClass('active');
+	$(".card-grid").addClass('active');
+	var selector = $("#cardGrid");
+	//wipe cardGrid before render
+	selector.html("");
+	var pageSize = 15;
+	var cardNumber = cardMaster.cardList.length;
+	var pages = Math.ceil(cardNumber / pageSize);
+	console.log(pages);
+	var book = $("<div>", {
+		class:"book"
+	}).css({
+		opacity: 0
+	});
+	book.page = $("<div>", {
+		class:"book__page panel"
+	});
+	book.obscurer = $("<div>", {
+		class:"book__obscurer"
+	});
+	book.page_tracker = $("<div>", {
+		class:"book__tracker"
+	});
+	book.page.card = $("<div>", {
+		class:"book__card"
+	});
+	book.page.card.image = $("<img>", {
+		class:"book__card__image cardZoom"
+	});
+	var arrow = $("<div>",{
+		class: "page-arrow"
+	})
+	book.page.height = 0;
+	//keeps track of browsing pages
+	book.pageNumber = 0;
+	//will store last image for load callback
+	var lastImg;
+	for(var i = 0; i < pages; i++){
+		var newPage = book.page.clone();
+		var newObscurer = book.obscurer.clone();
+		var newTopTracker = book.page_tracker.clone();
+		newTopTracker.text((i+1) +" of "+pages);
+		var newBottomTracker = newTopTracker.clone();
+		newBottomTracker.addClass('bottom');
+		newPage.attr("data-page", i);
+		newObscurer.attr("data-page", i);
+		newPage.css({
+			"z-index": (pages - i)
+		});
+		newObscurer.css({
+			"z-index": (pages - i)
+		});
+		if(i == 0){
+			newObscurer.addClass('show');
+		}
+		newPage.append(newTopTracker);
+		for(var c = 0; c < pageSize; c++){
+			var el_index = pageSize*i + c;
+			var el = cardMaster.cardList[el_index];
+			if(el !== undefined){
+				var card = book.page.card.clone();
+				var img = book.page.card.image.clone();
+				//img.attr("title", el.getName());
+				img.attr("src", "./resources/img/cardRenders/"+el.id+".png?n="+Date.now());
+				card.append(img);
+				newPage.append(card);
+				img.on("error", function(){
+					$(this).attr("src", "./resources/img/card_parts/normal.png");
+				});
+				lastImg = img;
+				card.attr("data-id", el.id);
+				img.on("click", function(){
+					cardMaster.collection.renderCard($(this));
+					cardMaster.collection.startEdit($(this));
+				});
+				img.on("dblclick", function(){
+					var cardID = $(this).parent().data("id");
+					cardMaster.sidedeck.addCard(cardID);
+				});
+			}
+		}
+		newPage.append(newBottomTracker);
+		book.append(newPage);
+		book.append(newObscurer);
+	}
+	selector.append(book);
+
+	var prevArrow = arrow.clone();
+	prevArrow.addClass('prev');
+	prevArrow.html("<i class='fa fa-chevron-left'></i>");
+	selector.append(prevArrow);
+	prevArrow.on("click",function(){
+		if(book.pageNumber>0){
+			flipPage(-1);
+		}
+		updateArrows();
+	});
+
+	var nextArrow = arrow.clone();
+	nextArrow.addClass('next');
+	nextArrow.html("<i class='fa fa-chevron-right'></i>");
+	selector.append(nextArrow);
+	nextArrow.on("click",function(){
+		if(book.pageNumber<pages){
+			flipPage(1);
+		}
+		updateArrows();
+	});
+
+	updateArrows();
+
+	lastImg.on("load", function(){
+		pageHeightSetter();
+		$(".card-content").addClass("loaded");
+	})
+
+	function pageHeightSetter(){
+		book.find(".book__page").each(function(i,el){
+			if($(el).outerHeight() > book.page.height) book.page.height = $(el).outerHeight();
+		});
+		//console.log(book.page.height);
+		book.css({
+			height: book.page.height,
+			opacity:1
+		})
+	}
+
+	function flipPage(displace){
+		if(displace < 0) book.pageNumber+=displace;
+
+		var selector = $(".book__page[data-page='"+book.pageNumber+"']");
+		var o_selector = $(".book__obscurer[data-page='"+book.pageNumber+"']");
+		var o_selector_next = $(".book__obscurer[data-page='"+(book.pageNumber+1)+"']");
+		if(displace >= 0){
+			selector.addClass('flipped');
+			o_selector.addClass('flipped');
+			o_selector.removeClass('show');
+			o_selector_next.addClass('show');
+		}
+		else{
+			selector.removeClass('flipped');
+			o_selector.removeClass('flipped');
+			o_selector.addClass('show');
+			o_selector_next.removeClass('show');
+		}
+		if(displace >= 0) book.pageNumber+=displace;
+		console.log(book.pageNumber);
+	}
+
+	function updateArrows(){
+		if(book.pageNumber<=0) prevArrow.addClass('hidden');
+		else prevArrow.removeClass('hidden');
+
+		if(book.pageNumber>=(pages-1)) nextArrow.addClass('hidden');
+		else nextArrow.removeClass('hidden');
+	}
+}
+
 cardMaster.collection.renderList = function(){
+	$(".view-switch[data-view='list']").addClass('active');
+	$(".card-list").addClass('active');
 	var selector = $("#cardList");
 	//wipe cardList before render
 	selector.html("");
@@ -732,6 +935,7 @@ cardMaster.collection.renderList = function(){
 		});
 		//generate inline controls HERE
 		selector.append(cardRow);
+		$(".card-content").addClass("loaded");
 	});
 };
 
@@ -741,13 +945,13 @@ cardMaster.collection.orderList = function(){
 		if($(this).hasClass("sorted")){
 			$(this).removeClass("sorted");
 			cardMaster.cardFilter.orderBy = "";
-			cardMaster.collection.loadList(cardMaster.collection.renderList);
+			cardMaster.collection.loadList(cardMaster.collection.render);
 		}
 		else{
 			selector.removeClass('sorted');
 			$(this).addClass("sorted");
 			cardMaster.cardFilter.orderBy = $(this).data("sort");
-			cardMaster.collection.loadList(cardMaster.collection.renderList);
+			cardMaster.collection.loadList(cardMaster.collection.render);
 		}
 	});
 }
@@ -789,7 +993,7 @@ cardMaster.collection.addFilters = function(){
 		cardMaster.cardFilter.flags = flagValues.join("|");
 	});
 	submit.on("click", function(){
-		cardMaster.collection.loadList(cardMaster.collection.renderList);
+		cardMaster.collection.loadList(cardMaster.collection.render);
 	});
 	reset.on("click", function(){
 		cardMaster.cardFilter.reset();
@@ -804,7 +1008,7 @@ cardMaster.collection.addFilters = function(){
 			$(flag).prop("checked", false);
 		});
 		sortHeaders.removeClass("sorted");
-		cardMaster.collection.loadList(cardMaster.collection.renderList);
+		cardMaster.collection.loadList(cardMaster.collection.render);
 	});
 }
 
@@ -896,6 +1100,9 @@ cardMaster.collection.renderCard = function(selRow){
 	$image.prop("src", "./resources/img/cardRenders/"+rowID+".png?n="+Date.now());
 	var $name = selRow.parent().find(".card__name").text();
 	$image.prop("title", $name);
+	$image.on("error", function(){
+		$image.prop("src", "./resources/img/card_parts/normal.png");
+	});
 	console.log("card retrieve "+$name);
 	$selector.unbind("click");
 	$selector.on("click", function(){
@@ -2165,7 +2372,10 @@ cardMaster.sandbox.renderElement = function(el){
 		case "card":
 			element.content = $("<img>", {
 				class: "",
-				src : "./resources/img/cardRenders/"+el.value+".png"
+				src : "./resources/img/cardRenders/"+el.value+".png?n="+Date.now()
+			});
+			element.content.on("error", function(){
+				element.content.prop("src", "./resources/img/card_parts/normal.png");
 			});
 			element.show = $("<div>", {
 				class: "show cardZoom",
@@ -2266,9 +2476,10 @@ cardMaster.init = function(){
 		cardMaster.collection.recoverCard();
 	}
 	if(cardMaster.getPage() == "collection" || cardMaster.getPage() == "archive"){
+		cardMaster.collection.switchViewCommands();
 		cardMaster.loadLiteralElements(function(){
 			cardMaster.collection.loadList(function(){
-				cardMaster.collection.renderList();
+				cardMaster.collection.render();
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");

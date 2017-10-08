@@ -109,6 +109,13 @@ h1,h2,h3,h4,h5,h6{
   border-radius:13px;
   box-shadow: 0px 1px 15px 2px rgba(0,0,0,0.75);
   z-index:9999;
+  transition: opacity 0.3s, transform 0.3s;
+  @include scale(0.6);
+  opacity:0;
+  &.active{
+  	@include scale(1);
+    opacity:1;
+  }
   img{
     width:100%;
   }
@@ -391,10 +398,25 @@ h1,h2,h3,h4,h5,h6{
 	margin-bottom:20px;
 	.form-caption{
 		cursor: pointer;
+		@include clearfix;
 	}
 	.card_results_string{
 		font-size:12px;
 		font-weight: 400;
+	}
+	.view-switch{
+		float:right;
+		cursor:pointer;
+		opacity:0.5;
+		&[data-view='list']{
+			margin-top: 4px;
+		}
+		&[data-view='grid']{
+			margin-top: 5px;
+		}
+		&.active{
+			opacity:1;
+		}
 	}
 	.filter-box{
 		overflow:hidden;
@@ -476,9 +498,136 @@ h1,h2,h3,h4,h5,h6{
 	}
 }
 
-.card-list{
+.card-content{
+	min-height:1px;
 	float:left;
 	width:calc(100% - 380px);
+	.loading{
+		width:100%;
+		margin-bottom: 20px;
+		padding: 30px;
+		font-size: 30px;
+		text-align:center;
+		background: $transparentWhite;
+		border-radius: 2px;
+	}
+	&.loaded{
+		.loading{
+			display:none;
+		}
+	}
+}
+
+.card-grid{
+	width:100;
+	display:none;
+	position:relative;
+	&.active{
+		display:block;
+	}
+	.page-arrow{
+		position: absolute;
+		top: 50%;
+		cursor: pointer;
+		font-size: 30px;
+		@include transition(0.2s all linear);
+		opacity: 0.7;
+		@include translate(0, -50%);
+		&:hover{
+			opacity: 1;
+		}
+		&.prev{
+			left:3px;
+			&:hover{
+				left: 0;
+			}
+		}
+		&.next{
+			right:3px;
+			&:hover{
+				right: 0;
+			}
+		}
+	}
+	.book{
+		width: 100%;
+		min-height: 300px;
+		position:relative;
+		perspective: 3000px;
+		&__tracker{
+			float: left;
+			width: 100%;
+			text-align: center;
+			margin: 0 0 20px;
+			font-family: $specialFont;
+			font-size: 18px;
+			&.bottom{
+				margin: 10px 0 0;
+			}
+		}
+		&__page{
+			box-shadow: 2px 0 7px rgba(0, 0, 0, 0.15);
+			position:absolute;
+			top: 0;
+			left: 0;
+			width:100%;
+			//height: 100%;
+			padding-bottom: 20px;
+			background-image: url("../img/card_parts/seemless-parchment.png");
+			//border:1px solid red;
+			border-radius: 0 8px 8px 0 ;
+			@include flexbox;
+			@include flex(flow, row wrap);
+			justify-content: space-between;
+			transition: 0.6s all linear;
+			transform-style: preserve-3d;
+			transform-origin: 0 0;
+			backface-visibility: hidden;
+			&.flipped{
+				transform: rotateY(-90deg);
+			}
+		}
+		&__obscurer{
+			position:absolute;
+			top: 0;
+			left: 0;
+			width:100%;
+			height:100%;
+			border-radius: 0 8px 8px 0 ;
+			transition: 0.6s transform linear, 0.4s opacity linear;
+			transform-style: preserve-3d;
+			transform-origin: 0 0;
+			backface-visibility: hidden;
+			min-height: 200px;
+			background: linear-gradient(90deg, rgba(50,30,0,0.95), rgba(50,30,0,0.25));
+			pointer-events: none;
+			opacity: 1;
+			&.flipped{
+				transform: rotateY(-90deg);
+			}
+			&.show{
+				opacity: 0;
+			}
+		}
+		&__card{
+			width: calc(20% - (10px * 3 / 4));
+			margin-bottom: 10px;
+			cursor: pointer;
+			&__image{
+				width:100%;
+				display: block;
+				border-radius: 8px;
+    			box-shadow: 0 0 3px rgba(0, 0, 0, 1);
+			}
+		}
+	}
+}
+.card-list{
+	width:100%;
+	display:none;
+	&.active{
+		display:block;
+	}
 	.row{
 		@include clearfix;
 		height:$cardListRowHeight;

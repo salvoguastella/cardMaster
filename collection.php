@@ -5,25 +5,42 @@
 ?>
 
     <div class='main'>
-        <div class="card-list panel">
-            <div class="row header">
-                <span class="image"><i class="fa fa-file-image-o"></i></span>
-                <span class="sortable" data-sort="name">Name <i class="fa fa-sort"></i></span>
-                <span class="sortable" data-sort="class">Class <i class="fa fa-sort"></i></span>
-                <span class="sortable" data-sort="archetype">Archetype <i class="fa fa-sort"></i></span>
-                <span class="sortable" data-sort="type">Type <i class="fa fa-sort"></i></span>
-                <span><i class="ra ra-sword"></i></span>
-                <span><i class="ra ra-shield"></i></span>
-                <span>Flags</span>
-                <span></span>
-            </div>
-            <div id="cardList">
+        <div class="card-content">
+            <div class="loading"><i class="fa fa-spin fa-circle-o-notch"></i></div>
+            <div class="card-grid panel">
+                <div id="cardGrid">
 
+                </div>
+            </div>
+            <div class="card-list panel">
+                <div class="row header">
+                    <span class="image"><i class="fa fa-file-image-o"></i></span>
+                    <span class="sortable" data-sort="name">Name <i class="fa fa-sort"></i></span>
+                    <span class="sortable" data-sort="class">Class <i class="fa fa-sort"></i></span>
+                    <span class="sortable" data-sort="archetype">Archetype <i class="fa fa-sort"></i></span>
+                    <span class="sortable" data-sort="type">Type <i class="fa fa-sort"></i></span>
+                    <span><i class="ra ra-sword"></i></span>
+                    <span><i class="ra ra-shield"></i></span>
+                    <span>Flags</span>
+                    <span></span>
+                </div>
+                <div id="cardList">
+
+                </div>
             </div>
         </div>
         <div class="control-area">
             <div class='filter_panel panel'>
-                <h2 class="form-caption" id="filterTrigger"><i class="fa fa-list-ul"></i>Filters <span class="card_results_string"><span id="cardCount">0</span> results found</span></h2>
+                <h2 class="form-caption" id="filterTrigger">
+                    <i class="fa fa-list-ul"></i>
+                    Filters 
+                    <span class="card_results_string">
+                        <span id="cardCount">0</span>
+                         results found
+                    </span>
+                    <i class="fa fa-th-large view-switch" data-view="grid"></i>
+                    <i class="fa fa-navicon view-switch" data-view="list"></i>
+                </h2>
                 <div class="filter-box">
                     <div class="row">
                         <i class="fa fa-search"></i>
