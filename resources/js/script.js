@@ -2330,7 +2330,7 @@ cardMaster.sandbox.init = function(callback){
 	var spawn = cardMaster.sandbox.spawnPoint;
 	var sandbox = $("#sandbox");
 	spawn.x = sandbox.outerWidth()/2;
-	spawn.y = sandbox.outerHeight()/2;
+	spawn.y = sandbox.outerHeight()/3;
 
 	var visualPoint = $("<div>", {
 		class:"debug-point"
@@ -2338,7 +2338,7 @@ cardMaster.sandbox.init = function(callback){
 		position: "absolute",
 		left: spawn.x,
 		top: spawn.y,
-		background: "red",
+		background: "grey",
 		width: "10px",
 		height: "10px",
 		"border-radius": "50%",

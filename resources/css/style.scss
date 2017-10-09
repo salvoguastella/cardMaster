@@ -1536,10 +1536,50 @@ h1,h2,h3,h4,h5,h6{
 #sandbox{
 	position:relative;
 	height:calc(100vh - 90px);
+	min-height: 780px;
+	padding: 5px;
+	.area{
+		height: calc((100% - 40px) / 3);
+		border-radius: 5px;
+		border: 5px solid rgba(0,0,0,0.3);
+		margin: 10px 0;
+		padding: 30px;
+		position:absolute;
+		color: rgba(0,0,0,0.3);
+		font-size: 52px;
+		font-family: $specialFont;
+		display: flex;
+	    align-items: center;
+	    justify-content: center;
+		&.servants{
+			width: calc(50% - 15px);
+			top:0;
+		}
+		&.equip{
+			width: calc(50% - 15px);
+			top:calc(33.333% - 5px);
+		}
+		&.aura{
+			width: calc((50% / 3) - 15px);;
+			top:calc(66.666% - 10px);
+		}
+		&.left{
+			left: 0;
+			margin-left: 10px;
+			margin-right: 5px;
+			text-align: left;
+		}
+		&.right{
+			right:0;
+			margin-left: 5px;
+			margin-right: 10px;
+			text-align:right;
+		}
+	}
 	.element{
 		cursor: move;
 		&.card{
-			width:150px;
+			width:140px;
 			img{
 				border-radius:7px;
 				@include transition(0.2s box-shadow linear);
