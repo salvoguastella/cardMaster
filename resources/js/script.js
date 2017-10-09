@@ -354,6 +354,21 @@ cardMaster.getCardDataById = function(id){
 	return foundCard;
 };
 
+cardMaster.getRandomCardDataByClass = function(_class){
+	var foundCard = "none";
+	for(var i = 0; i < cardMaster.cardList.length; i++){
+		var randomIndex = Math.floor(Math.random() * cardMaster.cardList.length);
+		//console.log(randomIndex);
+		var card = cardMaster.cardList[randomIndex];
+		if(card.class == _class || _class == "none"){
+			foundCard = card;
+			break;
+		}
+		c++;
+	}
+	return foundCard;
+};
+
 cardMaster.getComboDataById = function(id){
 	var foundCombo = "none";
 	cardMaster.comboList.forEach(function(combo){
@@ -1957,6 +1972,14 @@ cardMaster.sidedeck.updateLocalStorage = function(){
 	console.log(localStorage.sidedeck);
 }
 
+cardMaster.sidedeck.addRandomCard = function(_class){
+	console.log(_class);
+	var r_card = cardMaster.getRandomCardDataByClass(_class);
+	var cardName = r_card .getName();
+	console.log(r_card);
+	cardMaster.sidedeck.addCard(r_card.id);
+}
+
 cardMaster.sidedeck.addCard = function(cardID){
 	var cardID = parseInt(cardID);
 	var deck = cardMaster.sidedeck.cards;
@@ -2145,10 +2168,40 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
-	sideDeck.footer = $("<div>", {
+	sideDeck.caption = $("<div>", {
 		class: "sidedeck-caption",
-		html: "<span class='title'>Comandi</span>"
+		html: "<span class='title'></span>"
 	});
+	sideDeck.randomCaption = sideDeck.caption.clone();
+	sideDeck.randomCaption.find(".title").text("Add random card");
+	sideDeck.randomRow = $("<div>", {
+		class: "sidedeck-random-row"
+	});
+	sideDeck.randomCard = $("<div>", {
+		class: "sidedeck-random-card"
+	});
+	for(c in cardMaster.classes){
+		var newRandomCard = sideDeck.randomCard.clone();
+		newRandomCard.attr("data-class", c);
+		newRandomCard.attr("title", "Add "+cardMaster.classes[c].name + " card");
+		newRandomCard.css({
+			"background-color": cardMaster.classes[c].color
+		});
+		sideDeck.randomRow.append(newRandomCard);
+	}
+	var newRandomCard = sideDeck.randomCard.clone();
+	newRandomCard.attr("data-class", "none");
+	newRandomCard.attr("title", "Add a random card");
+	newRandomCard.html("<i class='fa fa-star'></i>");
+	sideDeck.randomRow.append(newRandomCard);
+
+	sideDeck.randomRow.find(".sidedeck-random-card").on("click", function(){
+		var classRef = $(this).data("class");
+		cardMaster.sidedeck.addRandomCard(classRef);
+	})
+
+	sideDeck.footer = sideDeck.caption.clone();
+	sideDeck.footer.find(".title").text("Comandi");
 	sideDeck.emptyList = $("<div>", {
 		class: "sidedeck-command-line sidedeck-empty-list",
 		html: "<i class='fa fa-times-circle'></i> Svuota SideDeck"
@@ -2165,10 +2218,8 @@ cardMaster.sidedeck.init = function(){
 		class: "cancel",
 		html: "<i class='fa fa-remove'></i>"
 	});
-	sideDeck.notesCaption = $("<div>", {
-		class: "sidedeck-caption",
-		html: "<span class='title'>Notes</span>"
-	});
+	sideDeck.notesCaption = sideDeck.caption.clone();
+	sideDeck.notesCaption.find(".title").text("Notes");
 	sideDeck.notes = $("<textarea>", {
 		class: "sidedeck-notes",
 		placeholder: "Notes...",
@@ -2183,6 +2234,10 @@ cardMaster.sidedeck.init = function(){
 		sideDeck.wrapper.append(sideDeck.commonElements);
 	}
 	sideDeck.wrapper.append(sideDeck.body);
+	if(cardMaster.getPage() == "sandbox"){
+		sideDeck.wrapper.append(sideDeck.randomCaption);
+		sideDeck.wrapper.append(sideDeck.randomRow);
+	}
 	sideDeck.wrapper.append(sideDeck.footer);
 	sideDeck.emptyList.append(sideDeck.confirm.clone());
 	sideDeck.emptyList.append(sideDeck.cancel.clone());
@@ -2466,7 +2521,7 @@ cardMaster.init = function(){
 		cardMaster.collection.createCard();
 		cardMaster.cardZoom();
 		cardMaster.stickyPanel();
-		cardMaster.sidedeck.init();
+		
 	}
 
 	//page scripts
@@ -2481,6 +2536,7 @@ cardMaster.init = function(){
 			cardMaster.collection.loadList(function(){
 				cardMaster.collection.render();
 				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.init();
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
@@ -2499,6 +2555,7 @@ cardMaster.init = function(){
 			cardMaster.collection.loadList(function(){
 				cardMaster.collection.renderList();
 				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.init();
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
@@ -2522,6 +2579,7 @@ cardMaster.init = function(){
 					cardMaster.summary.populateArray(cardMaster.summary.renderBoxes);
 				});
 				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.init();
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
@@ -2532,6 +2590,7 @@ cardMaster.init = function(){
 		cardMaster.loadLiteralElements(function(){
 			cardMaster.collection.loadList(function(){
 				//populate sidedeck on page load. Card list needed
+				cardMaster.sidedeck.init();
 				cardMaster.sidedeck.syncLocalStorage(function(){
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 					cardMaster.sandbox.init(function(){

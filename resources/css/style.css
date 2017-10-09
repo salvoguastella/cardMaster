@@ -1288,6 +1288,21 @@ h1, h2, h3, h4, h5, h6 {
         -ms-transform: translate(-5px, 0);
         -o-transform: translate(-5px, 0);
         transform: translate(-5px, 0); }
+    #sideDeck .sidedeck-wrapper .sidedeck-random-row:after {
+      content: "";
+      display: table;
+      clear: both; }
+    #sideDeck .sidedeck-wrapper .sidedeck-random-row .sidedeck-random-card {
+      width: 20px;
+      height: 28px;
+      float: left;
+      border: 1px solid black;
+      cursor: pointer;
+      margin-right: 5px;
+      text-align: center;
+      border-radius: 3px; }
+      #sideDeck .sidedeck-wrapper .sidedeck-random-row .sidedeck-random-card i {
+        line-height: 28px; }
     #sideDeck .sidedeck-wrapper .sidedeck-caption {
       margin-top: 30px;
       padding-bottom: 10px;

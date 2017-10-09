@@ -1450,6 +1450,22 @@ h1,h2,h3,h4,h5,h6{
 				}
 			}
 		}
+		.sidedeck-random-row{
+			@include clearfix;
+			.sidedeck-random-card{
+				width: 20px;
+				height: 28px;
+				float:left;
+				border: 1px solid black;
+				cursor:pointer;
+				margin-right: 5px;
+				text-align: center;
+				border-radius: 3px;
+				i{
+					line-height: 28px;
+				}
+			}
+		}
 		.sidedeck-caption{
 			margin-top:30px;
 			padding-bottom: 10px;
