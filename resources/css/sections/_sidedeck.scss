@@ -1,0 +1,198 @@
+#sideDeck{
+	position: absolute;
+	top: 25px;
+	right:-300px;
+	@include clearfix;
+	@include transition(0.3s all linear);
+	.sidedeck-trigger{
+		float:left;
+		height:35px;
+		width: 35px;
+		position:relative;
+		font-size: 16px;
+		cursor:pointer;
+		overflow: hidden;
+		.fa-hand-o-down{
+			right:7px;
+			top:-16px;
+			position: absolute;
+		}
+		.fa-list-ul{
+			right:7px;
+			top:9px;
+			position: absolute;
+		}
+	}
+	.sidedeck-wrapper{
+		float:left;
+		width:300px;
+		background:rgba(255,255,255,0.9);
+		box-shadow: 0 0 0 rgba(0,0,0,0.5);
+		padding:20px 30px 25px;
+		.sidedeck-header{
+			padding-bottom: 10px;
+			border-bottom:1px solid black;
+			margin-bottom:15px;
+			position:relative;
+			.title{
+				font-size:16px;
+				font-weight: 700;
+				line-height: 16px;
+			}
+			.sidedeck-sort{
+				position: absolute;
+				top:0;
+				right:0;
+				cursor: pointer;
+				font-size: 16px;
+			}
+		}
+		.sidedeck-commons{
+			@include clearfix;
+			padding-bottom: 15px;
+			border-bottom:1px solid black;
+			margin-bottom:15px;
+			._token{
+				position:relative;
+				float:left;
+				margin-right: 7px;
+				cursor: pointer;
+			}
+		}
+		.sidedeck-body{
+			.sidedeck-card{
+				height: $cardListRowHeight;
+				margin-bottom:5px;
+				@include clearfix;
+				@include transition(0.15s all linear);
+				@include translate(0,0);
+				.sidedeck-class{
+					float:left;
+					width:5px;
+					height:100%;
+				}
+				.sidedeck-icon{
+					float:left;
+					width:$cardListRowHeight;
+					height:100%;
+					margin-right:5px;
+					&.clickable{
+						cursor: pointer;
+					}
+				}
+				.sidedeck-name{
+					float:left;
+					height:100%;
+					line-height:$cardListRowHeight;
+					font-size:12px;
+					margin-right: 5px;
+					width: calc(100% - (#{$cardListRowHeight}*3) - 15px);
+					text-overflow: ellipsis;
+					white-space: nowrap;
+	    			overflow: hidden;
+	    			&.clickable{
+						cursor: pointer;
+					}
+				}
+				.sidedeck-command{
+					float: left;
+					height:100%;
+					width:$cardListRowHeight;
+					text-align: center;
+					i{
+						line-height:$cardListRowHeight;
+					}
+					&.sidedeck-show{
+						cursor: zoom-in;
+					}
+					&.sidedeck-remove{
+						cursor: pointer;
+					}
+				}
+				&:hover{
+					@include translate(-5px,0);
+				}
+			}
+		}
+		.sidedeck-random-row{
+			@include clearfix;
+			.sidedeck-random-card{
+				width: 20px;
+				height: 28px;
+				float:left;
+				border: 1px solid black;
+				cursor:pointer;
+				margin-right: 5px;
+				text-align: center;
+				border-radius: 3px;
+				i{
+					line-height: 28px;
+				}
+			}
+		}
+		.sidedeck-caption{
+			margin-top:30px;
+			padding-bottom: 10px;
+			border-bottom:1px solid black;
+			margin-bottom:15px;
+			.title{
+				font-size:12px;
+				font-weight: 700;
+				line-height: 12px;
+			}
+		}
+		.sidedeck-command-line{
+			height: $cardListRowHeight;
+			margin-bottom:5px;
+			@include clearfix;
+			position:relative;
+			cursor: pointer;
+			overflow: hidden;
+			.fa{
+				font-size:16px;
+			}
+			.confirm, .cancel{
+				position: absolute;
+				top: 1px;
+				right: -20px;
+				@include transition(0.2s all linear);
+			}
+			.confirm{
+				color:$confirmGreen;
+			}
+			.cancel{
+				color:$errorRed;
+			}
+			&.active{
+				.confirm{
+					right: 32px;
+				}
+				.cancel{
+					right:8px;
+				}
+			}
+		}
+		.sidedeck-notes{
+			width: 100%;
+		    max-width: 100%;
+		    min-height: 200px;
+		    max-height: 400px;
+		}
+	}
+	&.active{
+		right:0;
+		.sidedeck-wrapper{
+			box-shadow: -2px 0 2px rgba(0,0,0,0.5);
+		}
+	}
+	&.anim-add{
+		.fa-hand-o-down{
+			animation-name: bounceSidedeckFinger;
+    		animation-duration: 1s;
+		}
+		.fa-list-ul{
+			animation-name: bounceSidedeckIcon;
+    		animation-duration: 1s;
+		}
+	}
+}

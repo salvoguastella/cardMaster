@@ -1213,11 +1213,18 @@ h1, h2, h3, h4, h5, h6 {
     #sideDeck .sidedeck-wrapper .sidedeck-header {
       padding-bottom: 10px;
       border-bottom: 1px solid black;
-      margin-bottom: 15px; }
+      margin-bottom: 15px;
+      position: relative; }
       #sideDeck .sidedeck-wrapper .sidedeck-header .title {
         font-size: 16px;
         font-weight: 700;
         line-height: 16px; }
+      #sideDeck .sidedeck-wrapper .sidedeck-header .sidedeck-sort {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        font-size: 16px; }
     #sideDeck .sidedeck-wrapper .sidedeck-commons {
       padding-bottom: 15px;
       border-bottom: 1px solid black;

@@ -1,0 +1,117 @@
+.summary{
+	.row{
+		@include clearfix;
+		margin-bottom:20px;
+		@include transition(0.3s all linear);
+		&.sub{
+			overflow: hidden;
+			//margin-left:10px;
+			margin-bottom:20px;
+			height:auto;
+			//max-height: 1000px;
+			&.collapsed{
+				margin-bottom:0;
+				max-height: 0;
+			}
+		}
+	}
+	.main_box, .main_detail_box{
+		//background-color: $transparentWhite;
+		background-image: url("../img/card_parts/seemless-parchment.png");
+		border: 10px solid $darkGrey;
+		padding: 50px 25px 40px;
+		@include clearfix;
+		text-align: center;
+		border-radius:5px;
+		width: 250px;
+		position:relative;
+		float:left;
+		margin-right:10px;
+		.main_title{
+			position:absolute;
+			width:100%;
+			top:5px;
+			left:0;
+			font-size: 13px;
+			text-transform: capitalize;
+			font-weight: 700;
+		}
+		.main_total{
+			font-size:48px;
+			line-height: 40px;
+			font-weight: 700;
+			float: left;
+			width:100%;
+			font-family: $specialFont;
+			color:black;
+			margin-bottom:5px;
+		}
+		.main_total_label{
+			float: left;
+			font-size: 16px;
+			text-transform: capitalize;
+			width:100%;
+			margin-bottom:20px;
+		}
+		.corner{
+			width:65px;
+			position:absolute;
+			&.corner_0{
+				top:5px;
+				left:5px;
+				@include rotate(90);
+			}
+			&.corner_1{
+				top:5px;
+				right:5px;
+				@include rotate(180);
+			}
+			&.corner_2{
+				bottom:5px;
+				right:5px;
+				@include rotate(-90);
+			}
+			&.corner_3{
+				bottom:5px;
+				left:5px;
+			}
+		}
+		.show_more{
+			position:absolute;
+			cursor:pointer;
+			bottom:4px;
+			left:50%;
+			@include translate(-50%, 0);
+			font-size:18px;
+		}
+	}
+	.detail_box{
+		border-radius:3px;
+		float:left;
+		margin:2px;
+		width:calc((100% / 3) - 4px);
+		padding:5px;
+		.detail_icon{
+			width: 30px;
+			margin:0 auto;
+			display: block;
+		}
+		.detail_total{
+			font-size:24px;
+			font-weight: 700;
+		}
+		.detail_icon+.detail_total{
+			font-size:20px;
+		}
+		.detail_title{
+			font-size: 10px;
+			text-transform: capitalize;
+		}
+	}
+	.row.sub{
+		.main_box, .main_detail_box{
+			border-color:lighten($darkGrey,20);
+		}
+	}
+
+}

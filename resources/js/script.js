@@ -746,10 +746,12 @@ cardMaster.collection.renderGrid = function(){
 					cardMaster.collection.renderCard($(this));
 					cardMaster.collection.startEdit($(this));
 				});
-				img.on("dblclick", function(){
-					var cardID = $(this).parent().data("id");
-					cardMaster.sidedeck.addCard(cardID);
-				});
+				if(cardMaster.getPage()!= "archive"){
+					img.on("dblclick", function(){
+						var cardID = $(this).parent().data("id");
+						cardMaster.sidedeck.addCard(cardID);
+					});
+				}
 			}
 		}
 		newPage.append(newBottomTracker);
@@ -926,6 +928,7 @@ cardMaster.collection.renderList = function(){
 					});
 					break;
 				case "to_sidedeck":
+					if(cardMaster.getPage()!= "archive"){
 						var cardField= $("<span>", {
 							class: "card__"+el
 						});
@@ -939,6 +942,7 @@ cardMaster.collection.renderList = function(){
 							cardMaster.sidedeck.addCard(cardID);
 						});
 						cardField.append(toSidedeck);
+					}
 					break;
 				default:
 					var cardField= $("<span>", {
@@ -1099,8 +1103,10 @@ cardMaster.collection.setImageToCard = function(rowID, imageID, src){
 
 cardMaster.stickyPanel = function(){
 	var selector = $(".control-area");
+	var container = $(".card-content");
 	$(document).on("scroll", function(){
-		if($(document).scrollTop()>60){
+		var tallContent = (container.outerHeight() > $(window).height());
+		if(tallContent && $(document).scrollTop()>60){
 			selector.addClass('sticky');
 		}
 		else selector.removeClass('sticky');
@@ -2023,6 +2029,17 @@ cardMaster.sidedeck.empty = function(){
 	cardMaster.sidedeck.updateLocalStorage();
 }
 
+cardMaster.sidedeck.sortList = function(){
+	cardMaster.sidedeck.cards.sort(function(a,b){
+		var a = cardMaster.getCardDataById(a);
+		var b = cardMaster.getCardDataById(b);
+		if(a.class < b.class) return -1;
+		else return 1;
+	});
+	cardMaster.sidedeck.updateLocalStorage();
+	cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
+}
+
 cardMaster.sidedeck.renderList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
 	$(ctx).html("");
@@ -2158,6 +2175,12 @@ cardMaster.sidedeck.init = function(){
 		class: "sidedeck-header",
 		html: "<span class='title'>SideDeck</span>"
 	});
+	sideDeck.sort = $("<div>", {
+		class: "sidedeck-sort",
+		html: "<i class='fa fa-sort'></i>",
+		title: "Sort list"
+	});
+	sideDeck.header.append(sideDeck.sort);
 	sideDeck.commonElements = $("<div>", {
 		class: "sidedeck-commons"
 	});
@@ -2253,6 +2276,10 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.append(sideDeck.wrapper);
 	$("body").append(sideDeck);
 
+	sideDeck.sort.on("click", function(){
+		cardMaster.sidedeck.sortList();
+	});
+
 	//shows command row confirm buttons
 	$(".sidedeck-command-line").on("click", function(){
 		$(this).addClass('active');
@@ -2317,6 +2344,7 @@ cardMaster.sidedeck.init = function(){
 		sideDeck.toggleClass('active');
 		cardMaster.sidedeck.toggleLocalStatus();
 	});
+
 }
 
 cardMaster.sandbox.generateID = function(el){
