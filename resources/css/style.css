@@ -1218,7 +1218,8 @@ h1, h2, h3, h4, h5, h6 {
       #sideDeck .sidedeck-wrapper .sidedeck-header .title {
         font-size: 16px;
         font-weight: 700;
-        line-height: 16px; }
+        line-height: 16px;
+        margin-right: 5px; }
       #sideDeck .sidedeck-wrapper .sidedeck-header .sidedeck-sort {
         position: absolute;
         top: 0;

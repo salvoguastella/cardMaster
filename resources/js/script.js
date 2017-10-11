@@ -2121,6 +2121,7 @@ cardMaster.sidedeck.renderList = function(ctx){
 		};
 		//console.log(c);
 	}
+	$("#sideDeck .sidedeck-count").text(cards.length + " cards");
 }
 
 cardMaster.sidedeck.toggleLocalStatus = function(){
@@ -2175,11 +2176,16 @@ cardMaster.sidedeck.init = function(){
 		class: "sidedeck-header",
 		html: "<span class='title'>SideDeck</span>"
 	});
+	sideDeck.count = $("<span>", {
+		class: "sidedeck-count",
+		text: "0 cards"
+	});
 	sideDeck.sort = $("<div>", {
 		class: "sidedeck-sort",
 		html: "<i class='fa fa-sort'></i>",
 		title: "Sort list"
 	});
+	sideDeck.header.append(sideDeck.count);
 	sideDeck.header.append(sideDeck.sort);
 	sideDeck.commonElements = $("<div>", {
 		class: "sidedeck-commons"
