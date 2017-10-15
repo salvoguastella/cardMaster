@@ -1423,6 +1423,18 @@ h1, h2, h3, h4, h5, h6 {
         display: block;
         width: 100%;
         box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
+      #sandbox .element.card.big {
+        width: 190px; }
+        #sandbox .element.card.big img {
+          border-radius: 10px; }
+      #sandbox .element.card.small {
+        width: 90px; }
+        #sandbox .element.card.small img {
+          border-radius: 4px; }
+      #sandbox .element.card.thumb {
+        width: 50px; }
+        #sandbox .element.card.thumb img {
+          border-radius: 2px; }
     #sandbox .element.token ._token, #sandbox .element.health ._token {
       -webkit-transition: 0.2s box-shadow linear;
       -moz-transition: 0.2s box-shadow linear;

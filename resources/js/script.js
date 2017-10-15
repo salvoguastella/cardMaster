@@ -218,6 +218,7 @@ function _sandboxItem(options){
 	this.y = options.y || 0;
 	this.value = options.value || "No value";
 	this.z = options.z || 1;
+	this.width = options.width || undefined;
 }
 
 cardMaster.getPage = function(){
@@ -2492,8 +2493,12 @@ cardMaster.sandbox.renderElement = function(el){
 		position:"absolute",
 		top: el.y,
 		left: el.x,
-		"z-index": el.z
+		"z-index": el.z,
 	});
+	if(el.width){
+		element.addClass(el.width);
+	}
+	//set also width
 	element.commands = $("<div>", {
 		class: "commands"
 	});
@@ -2550,6 +2555,42 @@ cardMaster.sandbox.renderElement = function(el){
 			cardMaster.sandbox.updateLocalStorage();
 		}
 	});
+	if(el.type == "card"){
+		element.resizable({
+	      grid: 50,
+	      maxWidth: 190,
+	      stop: function( event, ui ) {
+	      	var newSize = ui.size.width;
+	      	var element = ui.element;
+	      	var sizeClass = getClassName(newSize);
+	      	swapSize(element, sizeClass);
+	      	cardMaster.sandbox.updateElementSize(el, sizeClass);
+	      }
+	    });
+
+	    function getClassName(size){
+	    	var steps= {
+	    		40: "thumb",
+	    		90: "small",
+	    		140: "normal",
+	    		190: "big"
+	    	};
+	    	if(steps[size]) return steps[size];
+	    	else return "normal";
+	    }
+
+	    function swapSize(el, newSize){
+	    	el.removeClass('thumb').removeClass('small').removeClass('normal').removeClass('big');
+	    	el.addClass(newSize);
+	    }
+	}
+}
+
+cardMaster.sandbox.updateElementSize = function(el, sizeClass){
+	if(sizeClass) el.width = sizeClass;
+	cardMaster.sandbox.updateLocalStorage();
+	console.log(el.id+" is now "+sizeClass);
+		      	//save width in localStorage
 }
 
 cardMaster.sandbox.renderBoard = function(){

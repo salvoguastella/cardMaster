@@ -52,6 +52,24 @@
 				width:100%;
 				box-shadow: 0 0 7px rgba(0,0,0,0.7);
 			}
+			&.big{
+				width: 190px;
+				img{
+					border-radius:10px;
+				}
+			}
+			&.small{
+				width: 90px;
+				img{
+					border-radius:4px;
+				}
+			}
+			&.thumb{
+				width: 50px;
+				img{
+					border-radius:2px;
+				}
+			}
 		}
 		&.token, &.health{
 			._token{
