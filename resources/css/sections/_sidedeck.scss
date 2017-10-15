@@ -2,6 +2,7 @@
 	position: absolute;
 	top: 25px;
 	right:-300px;
+	z-index: 2000;
 	@include clearfix;
 	@include transition(0.3s all linear);
 	.sidedeck-trigger{
@@ -113,6 +114,13 @@
 				&:hover{
 					@include translate(-5px,0);
 				}
+			}
+			.sidedeck-sort-placeholder{
+				background: $lightGrey;
+				height: $cardListRowHeight;
+				border-radius: 2px;
+				border:1px solid $darkGrey;
+				margin-bottom:5px;
 			}
 		}
 		.sidedeck-random-row{

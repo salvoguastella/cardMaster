@@ -2040,15 +2040,51 @@ cardMaster.sidedeck.sortList = function(){
 	cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 }
 
+cardMaster.sidedeck.manualSortList = function(changedIndex){
+	var currentListCards = $("#sideDeck .sidedeck-body").find(".sidedeck-card");
+	//get original index (changedIndex)
+	//check where the row with the changedIndex is now
+	//add the element to that index
+	//remove element from the original index
+	var position;
+	$(currentListCards).each(function(i, el) {
+		console.log(el);
+		// console.log(currentListCards[i].dataset.id+ " at "+el);
+		if(el.dataset.index == changedIndex & !position){
+			console.log("found");
+			position = i;
+		}
+	});
+	console.log(changedIndex+" at "+position);
+	mble();
+	var movingElement = cardMaster.sidedeck.cards[changedIndex];
+	cardMaster.sidedeck.cards.splice(changedIndex,1);
+	cardMaster.sidedeck.cards.splice(position,0,movingElement);
+	mble();
+	cardMaster.sidedeck.updateLocalStorage();
+	cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
+}
+
+function mble(){
+	console.log("---STATE----------------");
+	cardMaster.sidedeck.cards.forEach(function(el) {
+		var name = cardMaster.getCardDataById(el).getName();
+		console.log(name);
+	});
+}
+
 cardMaster.sidedeck.renderList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
 	$(ctx).html("");
+	var originalIndex = 0;
 	for(var c_i in cards){
 		var c = cardMaster.getCardDataById(cards[c_i]);
 		var row = $("<div>",{
 			class: "sidedeck-card",
-			"data-id": cards[c_i]
+			"data-id": cards[c_i],
+			"data-index": originalIndex
 		});
+		originalIndex++;
 		row.class = $("<div>",{
 			class: "sidedeck-class"
 		}).css({
@@ -2121,6 +2157,13 @@ cardMaster.sidedeck.renderList = function(ctx){
 		};
 		//console.log(c);
 	}
+	$(ctx).sortable({
+		placeholder: "sidedeck-sort-placeholder",
+		stop: function( event, ui ) {
+			var changedIndex = ui.item.data("index");
+			cardMaster.sidedeck.manualSortList(changedIndex);
+		}
+	}).disableSelection();
 	$("#sideDeck .sidedeck-count").text(cards.length + " cards");
 }
 

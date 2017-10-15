@@ -1179,6 +1179,7 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   top: 25px;
   right: -300px;
+  z-index: 2000;
   -webkit-transition: 0.3s all linear;
   -moz-transition: 0.3s all linear;
   -ms-transition: 0.3s all linear;
@@ -1296,6 +1297,12 @@ h1, h2, h3, h4, h5, h6 {
         -ms-transform: translate(-5px, 0);
         -o-transform: translate(-5px, 0);
         transform: translate(-5px, 0); }
+    #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-sort-placeholder {
+      background: #e6e6e6;
+      height: 28px;
+      border-radius: 2px;
+      border: 1px solid #494949;
+      margin-bottom: 5px; }
     #sideDeck .sidedeck-wrapper .sidedeck-random-row:after {
       content: "";
       display: table;
