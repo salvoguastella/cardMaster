@@ -2048,30 +2048,27 @@ cardMaster.sidedeck.manualSortList = function(changedIndex){
 	//remove element from the original index
 	var position;
 	$(currentListCards).each(function(i, el) {
-		console.log(el);
-		// console.log(currentListCards[i].dataset.id+ " at "+el);
 		if(el.dataset.index == changedIndex & !position){
-			console.log("found");
 			position = i;
 		}
 	});
-	console.log(changedIndex+" at "+position);
-	mble();
+	//debugState();
 	var movingElement = cardMaster.sidedeck.cards[changedIndex];
 	cardMaster.sidedeck.cards.splice(changedIndex,1);
 	cardMaster.sidedeck.cards.splice(position,0,movingElement);
-	mble();
+	//debugState();
 	cardMaster.sidedeck.updateLocalStorage();
 	cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
+
+	function debugState(){
+		console.log("---STATE----------------");
+		cardMaster.sidedeck.cards.forEach(function(el) {
+			var name = cardMaster.getCardDataById(el).getName();
+			console.log(name);
+		});
+	}
 }
 
-function mble(){
-	console.log("---STATE----------------");
-	cardMaster.sidedeck.cards.forEach(function(el) {
-		var name = cardMaster.getCardDataById(el).getName();
-		console.log(name);
-	});
-}
 
 cardMaster.sidedeck.renderList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
