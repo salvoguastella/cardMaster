@@ -52,6 +52,9 @@
 				width:100%;
 				box-shadow: 0 0 7px rgba(0,0,0,0.7);
 			}
+			.thumb{
+				display: none;
+			}
 			&.big{
 				width: 190px;
 				img{
@@ -65,9 +68,15 @@
 				}
 			}
 			&.thumb{
-				width: 50px;
+				width: 40px;
 				img{
 					border-radius:2px;
+				}
+				.image{
+					display:none;
+				}
+				.thumb{
+					display: block;;
 				}
 			}
 		}

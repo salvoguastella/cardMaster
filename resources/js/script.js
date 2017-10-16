@@ -2504,9 +2504,15 @@ cardMaster.sandbox.renderElement = function(el){
 	});
 	switch(el.type){
 		case "card":
+			var obj = cardMaster.getCardDataById(el.value);
 			element.content = $("<img>", {
-				class: "",
+				class: "image",
 				src : "./resources/img/cardRenders/"+el.value+".png?n="+Date.now()
+			});
+			element.thumb = $("<img>", {
+				class: "thumb",
+				src : "./"+obj.image,
+				title : obj.getName()
 			});
 			element.content.on("error", function(){
 				element.content.prop("src", "./resources/img/card_parts/normal.png");
@@ -2533,6 +2539,7 @@ cardMaster.sandbox.renderElement = function(el){
 	});
 	element.commands.append(element.remove);
 	element.append(element.content);
+	if(element.thumb) element.append(element.thumb);
 	element.append(element.commands);
 	selector.append(element);
 	element.remove.on("click", function(){
