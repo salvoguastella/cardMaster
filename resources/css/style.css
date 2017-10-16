@@ -1252,11 +1252,15 @@ h1, h2, h3, h4, h5, h6 {
       -moz-transform: translate(0, 0);
       -ms-transform: translate(0, 0);
       -o-transform: translate(0, 0);
-      transform: translate(0, 0); }
+      transform: translate(0, 0);
+      cursor: ns-resize; }
       #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card:after {
         content: "";
         display: table;
         clear: both; }
+      #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card.ui-sortable-helper {
+        background: white;
+        border: 1px solid #494949; }
       #sideDeck .sidedeck-wrapper .sidedeck-body .sidedeck-card .sidedeck-class {
         float: left;
         width: 5px;

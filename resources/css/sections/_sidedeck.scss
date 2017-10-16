@@ -68,6 +68,11 @@
 				@include clearfix;
 				@include transition(0.15s all linear);
 				@include translate(0,0);
+				cursor: ns-resize;
+				&.ui-sortable-helper{
+					background: white;
+					border: 1px solid $darkGrey;
+				}
 				.sidedeck-class{
 					float:left;
 					width:5px;
