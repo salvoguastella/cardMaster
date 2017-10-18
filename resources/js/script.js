@@ -219,6 +219,7 @@ function _sandboxItem(options){
 	this.value = options.value || "No value";
 	this.z = options.z || 1;
 	this.width = options.width || undefined;
+	this.linked_elements || [];
 }
 
 cardMaster.getPage = function(){
@@ -2573,6 +2574,21 @@ cardMaster.sandbox.renderElement = function(el){
 	      	swapSize(element, sizeClass);
 	      	cardMaster.sandbox.updateElementSize(el, sizeClass);
 	      }
+	    });
+
+	    element.droppable({
+	    	accept: ".element.token, .element.health",
+	    	drop: function(event, ui){
+
+	    		//var topZ = cardMaster.sandbox.getTopZ() + 1;
+				//el.z = topZ;
+				console.log("dropped");
+	    		console.log(ui.draggable);
+	    	},
+	    	out: function(event, ui){
+	    		console.log("removed");
+	    		console.log(ui.draggable);
+	    	}
 	    });
 
 	    function getClassName(size){
