@@ -219,6 +219,7 @@ function _sandboxItem(options){
 	this.value = options.value || "No value";
 	this.z = options.z || 1;
 	this.width = options.width || undefined;
+	this.status = options.status || "normal";
 	this.linked_elements = options.linked_elements || [];
 	this.addLinkedElement = function(ID){
 		var checkID = this.linked_elements.indexOf(ID);
