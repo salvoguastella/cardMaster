@@ -219,7 +219,15 @@ function _sandboxItem(options){
 	this.value = options.value || "No value";
 	this.z = options.z || 1;
 	this.width = options.width || undefined;
-	this.linked_elements || [];
+	this.linked_elements = options.linked_elements || [];
+	this.addLinkedElement = function(ID){
+		var checkID = this.linked_elements.indexOf(ID);
+		if (checkID <= -1) this.linked_elements.push(ID);
+	};
+	this.removeLinkedElement = function(ID){
+		var checkID = this.linked_elements.indexOf(ID);
+		if (checkID > -1) this.linked_elements.splice(checkID, 1);
+	}
 }
 
 cardMaster.getPage = function(){
@@ -1977,14 +1985,14 @@ cardMaster.sidedeck.syncLocalStorage = function(callback){
 cardMaster.sidedeck.updateLocalStorage = function(){
 	var status = JSON.stringify(cardMaster.sidedeck.cards);
 	localStorage.sidedeck = status;
-	console.log(localStorage.sidedeck);
+	//console.log(localStorage.sidedeck);
 }
 
 cardMaster.sidedeck.addRandomCard = function(_class){
-	console.log(_class);
+	//console.log(_class);
 	var r_card = cardMaster.getRandomCardDataByClass(_class);
 	var cardName = r_card .getName();
-	console.log(r_card);
+	//console.log(r_card);
 	cardMaster.sidedeck.addCard(r_card.id);
 }
 
@@ -2117,7 +2125,7 @@ cardMaster.sidedeck.renderList = function(ctx){
 
 		row.remove.on("click", function(){
 			var rowID = $(this).closest(".sidedeck-card").data("id");
-			console.log(rowID);
+			//console.log(rowID);
 			cardMaster.sidedeck.removeCard(rowID);
 		})
 
@@ -2360,7 +2368,7 @@ cardMaster.sidedeck.init = function(){
 
 	function addElement(el){
 		var elementID = cardMaster.sandbox.generateID(el);
-		console.log(elementID);
+		//console.log(elementID);
 		var typeOffset = {};
 			typeOffset.x = 14;
 			typeOffset.y = 14;
@@ -2430,7 +2438,10 @@ cardMaster.sandbox.init = function(callback){
 cardMaster.sandbox.syncLocalStorage = function(callback){
 	var status = localStorage.sandbox;
 	if(status !== undefined){
-		cardMaster.sandbox.elements = JSON.parse(status);
+		var statusOBJ = JSON.parse(status);
+		statusOBJ.forEach(function(obj){
+			cardMaster.sandbox.elements.push(new _sandboxItem(obj));
+		});
 		if(typeof callback === "function"){
 			callback();
 		}
@@ -2441,7 +2452,7 @@ cardMaster.sandbox.syncLocalStorage = function(callback){
 cardMaster.sandbox.updateLocalStorage = function(){
 	var status = JSON.stringify(cardMaster.sandbox.elements);
 	localStorage.sandbox = status;
-	console.log(localStorage.sandbox);
+	//console.log(localStorage.sandbox);
 }
 
 cardMaster.sandbox.empty = function(){
@@ -2454,7 +2465,7 @@ cardMaster.sandbox.addElement = function(options){
 	cardMaster.sandbox.elements.push(element);
 	cardMaster.sandbox.updateLocalStorage();
 	cardMaster.sandbox.renderElement(element);
-	console.log(element);
+	//console.log(element);
 }
 
 cardMaster.sandbox.removeElement = function(elementID){
@@ -2484,6 +2495,7 @@ cardMaster.sandbox.getTopZ = function(){
 }
 
 cardMaster.sandbox.renderElement = function(el){
+	//console.log(el);
 	var selector = $("#sandbox");
 
 	var element = $("<div>", {
@@ -2555,7 +2567,41 @@ cardMaster.sandbox.renderElement = function(el){
 			el.z = topZ;
 			element.css({
 				"z-index": topZ
-			})
+			});
+			//checks if element has linked elements and set initial offset for them
+			el.linked_elements.forEach(function(linkedID){
+				topZ = cardMaster.sandbox.getTopZ() + 1;
+				var child = cardMaster.sandbox.getElementByID(linkedID);
+				if(child){
+					child = cardMaster.sandbox.updateElementByID(linkedID, {
+						z: topZ,
+						offsetX: child.x - ui.position.left,
+						offsetY: child.y - ui.position.top
+					});
+					var childElement = $(".element[data-id='"+linkedID+"']")
+					childElement.css({
+						"z-index": topZ
+					});
+				}
+				else el.removeLinkedElement(linkedID);
+			});
+		},
+		drag: function(event, ui){
+			//checks if element has linked elements and move them as well
+			el.linked_elements.forEach(function(linkedID){
+				var child = cardMaster.sandbox.getElementByID(linkedID);
+				if(child){
+					child = cardMaster.sandbox.updateElementByID(linkedID, {
+						x : ui.position.left + child.offsetX,
+						y : ui.position.top + child.offsetY
+					});
+					var childElement = $(".element[data-id='"+linkedID+"']")
+					childElement.css({
+						"left": child.x,
+						"top": child.y
+					});
+				}
+			});
 		},
 		stop: function( event, ui ) {
 			el.x = ui.position.left;
@@ -2579,15 +2625,16 @@ cardMaster.sandbox.renderElement = function(el){
 	    element.droppable({
 	    	accept: ".element.token, .element.health",
 	    	drop: function(event, ui){
-
-	    		//var topZ = cardMaster.sandbox.getTopZ() + 1;
-				//el.z = topZ;
-				console.log("dropped");
-	    		console.log(ui.draggable);
+				//console.log("dropped");
+				var addID = ui.draggable.data("id");
+				el.addLinkedElement(addID);
+				//console.log(el.linked_elements);
 	    	},
 	    	out: function(event, ui){
-	    		console.log("removed");
-	    		console.log(ui.draggable);
+	    		//console.log("removed");
+	    		var removeID = ui.draggable.data("id");
+	    		el.removeLinkedElement(removeID);
+	    		//console.log(el.linked_elements);
 	    	}
 	    });
 
@@ -2609,11 +2656,35 @@ cardMaster.sandbox.renderElement = function(el){
 	}
 }
 
+cardMaster.sandbox.getElementByID = function(elemID){
+	var found = undefined;
+	cardMaster.sandbox.elements.forEach(function(el){
+		if(el.id == elemID){
+			found = el;
+		}
+	});
+	return found;
+}
+
+cardMaster.sandbox.updateElementByID = function(elemID, options){
+	var found = undefined;
+	cardMaster.sandbox.elements.forEach(function(el){
+		if(el.id == elemID){
+			if(options.z) el.z = options.z;
+			if(options.x) el.x = options.x;
+			if(options.y) el.y = options.y;
+			if(options.offsetX) el.offsetX = options.offsetX;
+			if(options.offsetY) el.offsetY = options.offsetY;
+			found = el;
+		}
+	});
+	return found;
+}
+
 cardMaster.sandbox.updateElementSize = function(el, sizeClass){
 	if(sizeClass) el.width = sizeClass;
 	cardMaster.sandbox.updateLocalStorage();
 	console.log(el.id+" is now "+sizeClass);
-		      	//save width in localStorage
 }
 
 cardMaster.sandbox.renderBoard = function(){
