@@ -2203,6 +2203,28 @@ cardMaster.sidedeck.commonElements = {
 			title: "Token"
 		});
 		return el;
+	},
+	"randomCard" : function(_class){
+		var el = $("<div>", {
+			class: "sidedeck-random-card",
+			"data-class" : _class
+		});
+
+		if(_class != "none"){
+			el.attr("title", "Add "+cardMaster.classes[_class].name + " card");
+			el.css({
+				"background-color": cardMaster.classes[_class].color
+			});
+		}
+		else{
+			el.attr("title", "Add a random card");
+			el.html("<i class='fa fa-star'></i>");
+		}
+
+		return el;
+	},
+	"counter" : function(){
+		//counter element
 	}
 };
 
@@ -2257,22 +2279,11 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.randomRow = $("<div>", {
 		class: "sidedeck-random-row"
 	});
-	sideDeck.randomCard = $("<div>", {
-		class: "sidedeck-random-card"
-	});
 	for(c in cardMaster.classes){
-		var newRandomCard = sideDeck.randomCard.clone();
-		newRandomCard.attr("data-class", c);
-		newRandomCard.attr("title", "Add "+cardMaster.classes[c].name + " card");
-		newRandomCard.css({
-			"background-color": cardMaster.classes[c].color
-		});
+		var newRandomCard = cardMaster.sidedeck.commonElements.randomCard(c);
 		sideDeck.randomRow.append(newRandomCard);
 	}
-	var newRandomCard = sideDeck.randomCard.clone();
-	newRandomCard.attr("data-class", "none");
-	newRandomCard.attr("title", "Add a random card");
-	newRandomCard.html("<i class='fa fa-star'></i>");
+	var newRandomCard = cardMaster.sidedeck.commonElements.randomCard("none");
 	sideDeck.randomRow.append(newRandomCard);
 
 	sideDeck.randomRow.find(".sidedeck-random-card").on("click", function(){
@@ -2332,6 +2343,8 @@ cardMaster.sidedeck.init = function(){
 
 	sideDeck.append(sideDeck.wrapper);
 	$("body").append(sideDeck);
+
+	//listeners-------------------------------------------------------------------------
 
 	sideDeck.sort.on("click", function(){
 		cardMaster.sidedeck.sortList();
@@ -2512,7 +2525,6 @@ cardMaster.sandbox.renderElement = function(el){
 	if(el.width){
 		element.addClass(el.width);
 	}
-	//set also width
 	element.commands = $("<div>", {
 		class: "commands"
 	});
