@@ -211,6 +211,16 @@ function _token(options){
 	this.value = options.value || 0;
 }
 
+function _counter(options){
+	console.log(options);
+	//inherit _sandboxItem
+	this.type = "counter";
+	this.value = options.value || 10;
+	this.changeValue = function(){
+		console.log("ok");
+	}
+}
+
 function _sandboxItem(options){
 	this.id = options.id || "none";
 	this.type = options.type || undefined;
@@ -2223,8 +2233,36 @@ cardMaster.sidedeck.commonElements = {
 
 		return el;
 	},
-	"counter" : function(){
-		//counter element
+	"counter" : function(options){
+		var el = new _counter(options);
+		el.$ = $("<div>", {
+			class: "_counterToken",
+			html: "<i class='fa fa-square-o'></i><span>10</span>",
+			"data-value": "0",
+			"data-type": "counter",
+			title: "Counter"
+		});
+		return el;
+	},
+	"activeCounter" : function(options){
+		var el = new _counter(options);
+		el.$ = $("<div>", {
+			class: "_counter",
+			html: "<span>"+el.value+"</span>",
+			"data-value": el.value,
+			"data-type": "counter",
+			title: "Counter"
+		});
+		var command = $("<div>", {
+			class: "command"
+		});
+		command.add = command.clone();
+		command.add.addClass('add').data('change', "add").text("+");
+		command.sub = command.clone();
+		command.sub.addClass('sub').data('change', "sub").text("-");
+		el.$.append(command.add);
+		el.$.append(command.sub);
+		return el;
 	}
 };
 
@@ -2266,7 +2304,8 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.health_token1 = cardMaster.sidedeck.commonElements.healthToken(1);
 	sideDeck.health_token5 = cardMaster.sidedeck.commonElements.healthToken(5);
 	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
-
+	console.log("1");
+	sideDeck.counter = cardMaster.sidedeck.commonElements.counter({});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
@@ -2322,6 +2361,7 @@ cardMaster.sidedeck.init = function(){
 		sideDeck.commonElements.append(sideDeck.health_token1.$);
 		sideDeck.commonElements.append(sideDeck.health_token5.$);
 		sideDeck.commonElements.append(sideDeck.simple_token.$);
+		sideDeck.commonElements.append(sideDeck.counter.$);
 		sideDeck.wrapper.append(sideDeck.commonElements);
 	}
 	sideDeck.wrapper.append(sideDeck.body);
@@ -2408,6 +2448,9 @@ cardMaster.sidedeck.init = function(){
 	});
 	sideDeck.simple_token.$.on("click", function(){
 		addElement(sideDeck.simple_token);
+	});
+	sideDeck.counter.$.on("click", function(){
+		addElement(sideDeck.counter);
 	});
 
 	sideDeck.trigger.on("click", function(){
@@ -2556,6 +2599,12 @@ cardMaster.sandbox.renderElement = function(el){
 		case "token":
 			element.content = cardMaster.sidedeck.commonElements.simpleToken().$;
 			break;
+		case "counter":
+			element.content = cardMaster.sidedeck.commonElements.activeCounter({
+				value: el.value
+			}).$;
+			console.log(element.content);
+			break;
 		default:
 			console.log("nothing here");
 	}
@@ -2622,6 +2671,16 @@ cardMaster.sandbox.renderElement = function(el){
 			cardMaster.sandbox.updateLocalStorage();
 		}
 	});
+	if(el.type == "counter"){
+		var add = element.content.find(".add");
+		var sub = element.content.find(".sub");
+		$(add).on("click", function(){
+			console.log("add here");
+		});
+		$(sub).on("click", function(){
+			console.log("sub here");
+		});
+	}
 	if(el.type == "card"){
 		element.resizable({
 	      grid: 50,
