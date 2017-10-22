@@ -211,16 +211,6 @@ function _token(options){
 	this.value = options.value || 0;
 }
 
-function _counter(options){
-	console.log(options);
-	//inherit _sandboxItem
-	this.type = "counter";
-	this.value = options.value || 10;
-	this.changeValue = function(){
-		console.log("ok");
-	}
-}
-
 function _sandboxItem(options){
 	this.id = options.id || "none";
 	this.type = options.type || undefined;
@@ -231,15 +221,38 @@ function _sandboxItem(options){
 	this.width = options.width || undefined;
 	this.status = options.status || "normal";
 	this.linked_elements = options.linked_elements || [];
-	this.addLinkedElement = function(ID){
+}
+
+_sandboxItem.prototype = {
+	addLinkedElement : function(ID){
 		var checkID = this.linked_elements.indexOf(ID);
 		if (checkID <= -1) this.linked_elements.push(ID);
-	};
-	this.removeLinkedElement = function(ID){
+	},
+	removeLinkedElement : function(ID){
 		var checkID = this.linked_elements.indexOf(ID);
 		if (checkID > -1) this.linked_elements.splice(checkID, 1);
 	}
 }
+
+function _counter(options){
+	console.log(options);
+	//inherit _sandboxItem
+	_sandboxItem.call(this, options);
+	this.type = "counter";
+	this.value = options.value || 10;
+}
+
+_counter.prototype = Object.create(_sandboxItem.prototype);
+
+//_counter.prototype.constructor = _counter;
+_counter.prototype.changeValue = function(type){
+	if(type == "add"){
+		this.value++;
+	}
+	else if(type=="sub"){
+		if(this.value > 0) this.value--;
+	}
+};
 
 cardMaster.getPage = function(){
 	return document.title;
@@ -2304,7 +2317,6 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.health_token1 = cardMaster.sidedeck.commonElements.healthToken(1);
 	sideDeck.health_token5 = cardMaster.sidedeck.commonElements.healthToken(5);
 	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
-	console.log("1");
 	sideDeck.counter = cardMaster.sidedeck.commonElements.counter({});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
@@ -2461,8 +2473,11 @@ cardMaster.sidedeck.init = function(){
 }
 
 cardMaster.sandbox.generateID = function(el){
+	console.log(el);
 	var count = cardMaster.sandbox.elements.length+1;
-	var id = el.constructor.name +"_"+ count;
+	var id;
+	if(el.constructor.name == "_card") id = el.constructor.name +"_"+ count;
+	else id = "_"+el.type +"_"+ count;
 	return id;
 }
 
@@ -2497,7 +2512,11 @@ cardMaster.sandbox.syncLocalStorage = function(callback){
 	if(status !== undefined){
 		var statusOBJ = JSON.parse(status);
 		statusOBJ.forEach(function(obj){
-			cardMaster.sandbox.elements.push(new _sandboxItem(obj));
+			console.log(obj.type);
+			if(obj.type == "counter"){
+				cardMaster.sandbox.elements.push(new _counter(obj));
+			}
+			else cardMaster.sandbox.elements.push(new _sandboxItem(obj));
 		});
 		if(typeof callback === "function"){
 			callback();
@@ -2518,7 +2537,9 @@ cardMaster.sandbox.empty = function(){
 }
 
 cardMaster.sandbox.addElement = function(options){
-	var element = new _sandboxItem(options);
+	var element;
+	if(options.type == "counter") element = new _counter(options);
+	else element = new _sandboxItem(options);
 	cardMaster.sandbox.elements.push(element);
 	cardMaster.sandbox.updateLocalStorage();
 	cardMaster.sandbox.renderElement(element);
@@ -2676,10 +2697,19 @@ cardMaster.sandbox.renderElement = function(el){
 		var sub = element.content.find(".sub");
 		$(add).on("click", function(){
 			console.log("add here");
+			el.changeValue("add");
+			updateValue()
 		});
 		$(sub).on("click", function(){
 			console.log("sub here");
+			el.changeValue("sub");
+			updateValue()
 		});
+
+		function updateValue(){
+			element.content.find("span").text(el.value);
+			cardMaster.sandbox.updateLocalStorage();
+		}
 	}
 	if(el.type == "card"){
 		element.resizable({
