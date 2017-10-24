@@ -219,6 +219,7 @@ function _sandboxItem(options){
 	this.value = options.value || "No value";
 	this.z = options.z || 1;
 	this.width = options.width || undefined;
+	//might have a "tapped" state
 	this.status = options.status || "normal";
 	this.linked_elements = options.linked_elements || [];
 }
@@ -235,7 +236,6 @@ _sandboxItem.prototype = {
 }
 
 function _counter(options){
-	console.log(options);
 	//inherit _sandboxItem
 	_sandboxItem.call(this, options);
 	this.type = "counter";
@@ -244,7 +244,6 @@ function _counter(options){
 
 _counter.prototype = Object.create(_sandboxItem.prototype);
 
-//_counter.prototype.constructor = _counter;
 _counter.prototype.changeValue = function(type){
 	if(type == "add"){
 		this.value++;
@@ -253,6 +252,36 @@ _counter.prototype.changeValue = function(type){
 		if(this.value > 0) this.value--;
 	}
 };
+
+function _deck(options){
+	console.log(options)
+	//inherit _sandboxItem
+	_sandboxItem.call(this, options);
+	this.type = "deck";
+}
+
+_deck.prototype = Object.create(_sandboxItem.prototype);
+
+_deck.prototype = {
+	shuffle : function(){
+		var i = 0;
+		var j = 0;
+		var temp = null;
+
+		for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
+			j = Math.floor(Math.random() * (i + 1))
+			temp = this.linked_elements[i]
+			this.linked_elements[i] = this.linked_elements[j]
+			this.linked_elements[j] = temp
+		}
+	},
+	drawCard: function(){
+
+	}
+	addCard: function(cardID){
+
+	}
+}
 
 cardMaster.getPage = function(){
 	return document.title;
