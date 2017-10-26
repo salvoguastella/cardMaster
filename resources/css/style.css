@@ -1235,7 +1235,7 @@ h1, h2, h3, h4, h5, h6 {
         content: "";
         display: table;
         clear: both; }
-      #sideDeck .sidedeck-wrapper .sidedeck-commons ._token, #sideDeck .sidedeck-wrapper .sidedeck-commons ._counterToken {
+      #sideDeck .sidedeck-wrapper .sidedeck-commons ._token, #sideDeck .sidedeck-wrapper .sidedeck-commons ._counterToken, #sideDeck .sidedeck-wrapper .sidedeck-commons ._emptyDeckToken {
         position: relative;
         float: left;
         margin-right: 7px;
@@ -1475,10 +1475,12 @@ h1, h2, h3, h4, h5, h6 {
           cursor: zoom-in; }
         #sandbox .element .commands > div.remove {
           cursor: pointer; }
+        #sandbox .element .commands > div.shuffle {
+          cursor: pointer; }
     #sandbox .element:hover .commands {
       opacity: 1; }
 
-._token, ._counterToken {
+._token, ._counterToken, ._emptyDeckToken {
   display: block;
   height: 28px;
   width: 28px;
@@ -1487,10 +1489,10 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   color: white;
   position: relative; }
-  ._token > i, ._counterToken > i {
+  ._token > i, ._counterToken > i, ._emptyDeckToken > i {
     font-size: 20px;
     line-height: 28px; }
-  ._token span, ._counterToken span {
+  ._token span, ._counterToken span, ._emptyDeckToken span {
     color: #494949;
     display: block;
     text-align: center;
@@ -1512,6 +1514,11 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
   font-size: 10px;
   font-weight: 400; }
+
+._emptyDeckToken > i {
+  font-size: 17px;
+  line-height: 30px;
+  padding-left: 2px; }
 
 ._counter {
   width: 40px;
@@ -1543,5 +1550,18 @@ h1, h2, h3, h4, h5, h6 {
       left: 0; }
     ._counter .command.sub {
       right: 0; }
+
+._deck {
+  width: 160px;
+  height: 180px;
+  background: #e6e6e6;
+  border: 2px solid #494949;
+  border-radius: 8px;
+  color: #494949;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 80px;
+  padding: 50px; }
 
 /*# sourceMappingURL=style.css.map */

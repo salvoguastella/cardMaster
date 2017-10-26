@@ -262,26 +262,26 @@ function _deck(options){
 
 _deck.prototype = Object.create(_sandboxItem.prototype);
 
-_deck.prototype = {
-	shuffle : function(){
-		var i = 0;
-		var j = 0;
-		var temp = null;
-
-		for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
-			j = Math.floor(Math.random() * (i + 1))
-			temp = this.linked_elements[i]
-			this.linked_elements[i] = this.linked_elements[j]
-			this.linked_elements[j] = temp
-		}
-	},
-	drawCard: function(){
-
+_deck.prototype.shuffle = function(){
+	var i = 0;
+	var j = 0;
+	var temp = null;
+	console.log(this.linked_elements);
+	for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
+		j = Math.floor(Math.random() * (i + 1))
+		temp = this.linked_elements[i]
+		this.linked_elements[i] = this.linked_elements[j]
+		this.linked_elements[j] = temp
 	}
-	addCard: function(cardID){
+	console.log(this.linked_elements);
+};
+_deck.prototype.drawCard = function(){
 
-	}
-}
+};
+
+_deck.prototype.addCard = function(cardID){
+
+};
 
 cardMaster.getPage = function(){
 	return document.title;
@@ -2305,6 +2305,29 @@ cardMaster.sidedeck.commonElements = {
 		el.$.append(command.add);
 		el.$.append(command.sub);
 		return el;
+	},
+	"emptyDeck" : function(options){
+		var el = new _deck(options);
+		el.$ = $("<div>", {
+			class: "_emptyDeckToken",
+			html: "<i class='fa fa-folder-open-o'>",
+			"data-value": "0",
+			"data-type": "deck",
+			title: "Empty deck"
+		});
+		return el;
+	},
+	"activeEmptyDeck" : function(options){
+		var el = new _deck(options);
+		el.$ = $("<div>", {
+			class: "_deck",
+			text: "Empty",
+			//html: "<i class='fa fa-folder-open-o'>",
+			"data-value": "0",
+			"data-type": "deck",
+			title: "Deck"
+		});
+		return el;
 	}
 };
 
@@ -2347,6 +2370,7 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.health_token5 = cardMaster.sidedeck.commonElements.healthToken(5);
 	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
 	sideDeck.counter = cardMaster.sidedeck.commonElements.counter({});
+	sideDeck.emptyDeck = cardMaster.sidedeck.commonElements.emptyDeck({});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
@@ -2403,6 +2427,7 @@ cardMaster.sidedeck.init = function(){
 		sideDeck.commonElements.append(sideDeck.health_token5.$);
 		sideDeck.commonElements.append(sideDeck.simple_token.$);
 		sideDeck.commonElements.append(sideDeck.counter.$);
+		sideDeck.commonElements.append(sideDeck.emptyDeck.$);
 		sideDeck.wrapper.append(sideDeck.commonElements);
 	}
 	sideDeck.wrapper.append(sideDeck.body);
@@ -2493,6 +2518,9 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.counter.$.on("click", function(){
 		addElement(sideDeck.counter);
 	});
+	sideDeck.emptyDeck.$.on("click", function(){
+		addElement(sideDeck.emptyDeck);
+	});
 
 	sideDeck.trigger.on("click", function(){
 		sideDeck.toggleClass('active');
@@ -2545,6 +2573,9 @@ cardMaster.sandbox.syncLocalStorage = function(callback){
 			if(obj.type == "counter"){
 				cardMaster.sandbox.elements.push(new _counter(obj));
 			}
+			else if(obj.type == "deck"){
+				cardMaster.sandbox.elements.push(new _deck(obj));
+			}
 			else cardMaster.sandbox.elements.push(new _sandboxItem(obj));
 		});
 		if(typeof callback === "function"){
@@ -2568,6 +2599,7 @@ cardMaster.sandbox.empty = function(){
 cardMaster.sandbox.addElement = function(options){
 	var element;
 	if(options.type == "counter") element = new _counter(options);
+	else if(options.type == "emptyDeck") element = new _deck(options);
 	else element = new _sandboxItem(options);
 	cardMaster.sandbox.elements.push(element);
 	cardMaster.sandbox.updateLocalStorage();
@@ -2655,8 +2687,19 @@ cardMaster.sandbox.renderElement = function(el){
 			}).$;
 			console.log(element.content);
 			break;
+		case "deck":
+			element.content = cardMaster.sidedeck.commonElements.activeEmptyDeck({
+				value: el.value
+			}).$;
+
+			element.shuffle = $("<div>", {
+				class: "shuffle",
+				html: "<i class='fa fa-retweet'></i>"
+			});
+			element.commands.append(element.shuffle);
+			break;
 		default:
-			console.log("nothing here");
+			console.log(el.type + " has no graphic yet");
 	}
 	element.remove = $("<div>", {
 		class: "remove",
@@ -2700,20 +2743,22 @@ cardMaster.sandbox.renderElement = function(el){
 		},
 		drag: function(event, ui){
 			//checks if element has linked elements and move them as well
-			el.linked_elements.forEach(function(linkedID){
-				var child = cardMaster.sandbox.getElementByID(linkedID);
-				if(child){
-					child = cardMaster.sandbox.updateElementByID(linkedID, {
-						x : ui.position.left + child.offsetX,
-						y : ui.position.top + child.offsetY
-					});
-					var childElement = $(".element[data-id='"+linkedID+"']")
-					childElement.css({
-						"left": child.x,
-						"top": child.y
-					});
-				}
-			});
+			if(el.type == "card"){
+				el.linked_elements.forEach(function(linkedID){
+					var child = cardMaster.sandbox.getElementByID(linkedID);
+					if(child){
+						child = cardMaster.sandbox.updateElementByID(linkedID, {
+							x : ui.position.left + child.offsetX,
+							y : ui.position.top + child.offsetY
+						});
+						var childElement = $(".element[data-id='"+linkedID+"']")
+						childElement.css({
+							"left": child.x,
+							"top": child.y
+						});
+					}
+				});
+			}
 		},
 		stop: function( event, ui ) {
 			el.x = ui.position.left;
@@ -2739,6 +2784,23 @@ cardMaster.sandbox.renderElement = function(el){
 			element.content.find("span").text(el.value);
 			cardMaster.sandbox.updateLocalStorage();
 		}
+	};
+	if(el.type == "deck"){
+		element.shuffle.on("click", function(){
+			el.shuffle();
+		});
+
+		element.droppable({
+	    	accept: ".element.card",
+	    	drop: function(event, ui){
+	    		//do right stuff here
+				console.log("dropped");
+				var addID = ui.draggable.data("id");
+				el.addLinkedElement(addID);
+				console.log(el.linked_elements);
+	    	}
+	    });
+
 	}
 	if(el.type == "card"){
 		element.resizable({

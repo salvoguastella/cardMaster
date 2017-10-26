@@ -113,6 +113,9 @@
 				&.remove{
 					cursor: pointer;
 				}
+				&.shuffle{
+					cursor: pointer;
+				}
 			}
 		}
 		&:hover{
@@ -123,7 +126,7 @@
 	}
 }
 
-._token, ._counterToken{
+._token, ._counterToken, ._emptyDeckToken{
 	display:block;
 	height: $cardListRowHeight;
 	width: $cardListRowHeight;
@@ -155,6 +158,14 @@
 		color: white;
 		font-size: 10px;
 		font-weight: 400;
+	}
+}
+
+._emptyDeckToken{
+	>i{
+		font-size: 17px;
+		line-height: ($cardListRowHeight + 2);
+		padding-left: 2px;
 	}
 }
 
@@ -192,4 +203,18 @@
 			right: 0;
 		}
 	}
+}
+
+._deck{
+	width: 160px;
+	height: 180px;
+	background: $lightGrey;
+	border: 2px solid $darkGrey;
+	border-radius: 8px;
+	color: $darkGrey;
+	font-size: 14px;
+	font-weight:700;
+	text-align: center;
+	line-height: 80px;
+	padding: 50px;
 }
