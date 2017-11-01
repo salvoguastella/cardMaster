@@ -227,11 +227,22 @@ function _sandboxItem(options){
 _sandboxItem.prototype = {
 	addLinkedElement : function(ID){
 		var checkID = this.linked_elements.indexOf(ID);
-		if (checkID <= -1) this.linked_elements.push(ID);
+		if (checkID <= -1){
+			this.linked_elements.push(ID);
+			//console.log("after push status ----------");
+			//console.log(this.linked_elements);
+			//console.log("-------");
+			return true;
+		}
+		else return false;
 	},
 	removeLinkedElement : function(ID){
 		var checkID = this.linked_elements.indexOf(ID);
-		if (checkID > -1) this.linked_elements.splice(checkID, 1);
+		if (checkID > -1){
+			this.linked_elements.splice(checkID, 1);
+			return true;
+		}
+		else return false;
 	}
 }
 
@@ -262,17 +273,20 @@ function _deck(options){
 
 _deck.prototype = Object.create(_sandboxItem.prototype);
 
-_deck.prototype.shuffle = function(){
+_deck.prototype.shuffle = function(callback){
 	var i = 0;
 	var j = 0;
 	var temp = null;
-	console.log(this.linked_elements);
 	for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
 		j = Math.floor(Math.random() * (i + 1))
 		temp = this.linked_elements[i]
 		this.linked_elements[i] = this.linked_elements[j]
 		this.linked_elements[j] = temp
 	}
+	if(typeof callback === "function") callback();
+
+	//BUG SOMETIMES DELETES RANDOM ITEMS
+	console.log("shuffle deck");
 	console.log(this.linked_elements);
 };
 _deck.prototype.drawCard = function(){
@@ -2617,7 +2631,7 @@ cardMaster.sandbox.removeElement = function(elementID){
 		}
 	}
 	if(removeIndex && removeIndex > -1){
-		var elName = cardMaster.sandbox.elements[removeIndex];
+		var elName = cardMaster.sandbox.elements[removeIndex].id;
 	    list.splice(removeIndex, 1);
 		console.log("Element '"+elName+"' has been removed from Sandbox!");
 		cardMaster.sandbox.updateLocalStorage();
@@ -2786,8 +2800,10 @@ cardMaster.sandbox.renderElement = function(el){
 		}
 	};
 	if(el.type == "deck"){
-		element.shuffle.on("click", function(){
-			el.shuffle();
+		element.shuffle.on("click", function(e){
+			e.stopImmediatePropagation();
+			el.shuffle(cardMaster.sandbox.updateLocalStorage);
+			//cardMaster.sandbox.updateLocalStorage();
 		});
 
 		element.droppable({
@@ -2795,10 +2811,29 @@ cardMaster.sandbox.renderElement = function(el){
 	    	drop: function(event, ui){
 	    		//do right stuff here
 				console.log("dropped");
-				var addID = ui.draggable.data("id");
-				el.addLinkedElement(addID);
-				console.log(el.linked_elements);
+				var removeID = ui.draggable.data("id");
+				var cardID = ui.draggable.data("value");
+				if(el.addLinkedElement(cardID)){
+					console.log("add card to deck");
+					console.log(el.linked_elements);
+					//remove card from sandbox, data and element
+					cardMaster.sandbox.removeElement(removeID);
+					cardMaster.sandbox.updateLocalStorage();
+					ui.draggable.remove();
+					//change graphic
+				}
+				else{
+					console.log("deck already contains this card");
+				}
 	    	}
+	    });
+
+	    element.on("click", function(){
+	    	if(el.linked_elements.length > 0){
+	    		console.log("pick card from deck");
+	    		console.log(el.linked_elements);
+	    	}
+	    	else console.log("deck is empty");
 	    });
 
 	}
