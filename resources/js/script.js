@@ -279,6 +279,7 @@ _deck.prototype.shuffle = function(callback){
 	var temp = null;
 	for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
 		j = Math.floor(Math.random() * (i + 1))
+		console.log("swap "+ this.linked_elements[i] + " with "+this.linked_elements[j]);
 		temp = this.linked_elements[i]
 		this.linked_elements[i] = this.linked_elements[j]
 		this.linked_elements[j] = temp
@@ -290,7 +291,8 @@ _deck.prototype.shuffle = function(callback){
 	console.log(this.linked_elements);
 };
 _deck.prototype.drawCard = function(){
-
+	var cardID = this.linked_elements.shift();
+	return cardID;
 };
 
 _deck.prototype.addCard = function(cardID){
@@ -2870,8 +2872,10 @@ cardMaster.sandbox.renderElement = function(el){
 
 	    element.on("click", function(){
 	    	if(el.linked_elements.length > 0){
-	    		console.log("pick card from deck");
+	    		var pickedCardId = el.drawCard();
+	    		console.log("pick card from deck: "+pickedCardId);
 	    		console.log(el.linked_elements);
+	    		cardMaster.sandbox.updateLocalStorage();
 	    	}
 	    	else console.log("deck is empty");
 	    });
