@@ -8,6 +8,7 @@ cardMaster.sandbox = {};
 cardMaster.animation = {};
 
 //element lists
+cardMaster.allCards = [];
 cardMaster.cardList = [];
 cardMaster.comboList = [];
 cardMaster.summary = [];
@@ -25,14 +26,14 @@ cardMaster.attributes = [];
 cardMaster.editMode = false;
 
 
-function _cardFilter(){
+function _cardFilter(options){
 	this.active="1";
-	this.lemma="";
-	this.orderBy="";
-	this.class = "";
-	this.archetype = "";
-	this.type = "";
-	this.flags = "";
+	this.lemma= options.lemma || "";
+	this.orderBy=options.orderBy || "";
+	this.class = options.class || "";
+	this.archetype = options.archetype || "";
+	this.type = options.type || "";
+	this.flags = options.flags || "";
 	this.showArchive = function(){
 		this.active="0";
 	}
@@ -121,12 +122,12 @@ function _imageLoader(){
 	this.page = 0;
 }
 
-function _comboFilter(){
+function _comboFilter(options){
 	this.active="1";
-	this.lemma="";
-	this.orderBy="";
-	this.class = "";
-	this.card = "";
+	this.lemma= options.lemma || "";
+	this.orderBy= options.orderBy || "";
+	this.class = options.class || "";
+	this.card = options.card || "";
 	this.showArchive = function(){
 		this.active="0";
 	}
@@ -265,7 +266,6 @@ _counter.prototype.changeValue = function(type){
 };
 
 function _deck(options){
-	console.log(options)
 	//inherit _sandboxItem
 	_sandboxItem.call(this, options);
 	this.type = "deck";
@@ -299,6 +299,23 @@ _deck.prototype.addCard = function(cardID){
 
 cardMaster.getPage = function(){
 	return document.title;
+}
+
+cardMaster.setUrlVar = function(param, value){
+	var _url = new URL(window.location);
+	var _params = new URLSearchParams(_url.search.slice(1));
+	console.log(param+" "+value);
+	if(value != "")	_params.set(param, value);
+	else _params.delete(param);
+	window.history.replaceState({}, '', `${location.pathname}?${_params}`);
+}
+
+cardMaster.getUrlVars = function() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
 }
 
 cardMaster.cardZoom = function(){
@@ -628,7 +645,8 @@ cardMaster.loadLiteralElements = function(callback){
 	$.ajax({
 		url: "resources/php_scripts/getElementsJSON.php",
 		type: "GET",
-		dataType: 'json'
+		dataType: 'json',
+		async : false
 	})
 	.done(function(data){
 		$.each(data, function(index, el) {
@@ -651,11 +669,29 @@ cardMaster.collection.updateCount = function(){
 	selector.text(cardCount);
 }
 
+cardMaster.setURLfilters = function(){
+	var filters = cardMaster.cardFilter.toQueryString();
+	if(cardMaster.cardFilter.lemma && cardMaster.cardFilter.lemma != "") cardMaster.setUrlVar("lemma", cardMaster.cardFilter.lemma);
+	else cardMaster.setUrlVar("lemma", "");
+	if(cardMaster.cardFilter.orderBy && cardMaster.cardFilter.orderBy != "") cardMaster.setUrlVar("orderBy", cardMaster.cardFilter.orderBy);
+	else cardMaster.setUrlVar("orderBy", "");
+	if(cardMaster.cardFilter.class && cardMaster.cardFilter.class != "") cardMaster.setUrlVar("class", cardMaster.cardFilter.class);
+	else cardMaster.setUrlVar("class", "");
+	if(cardMaster.cardFilter.archetype && cardMaster.cardFilter.archetype != "") cardMaster.setUrlVar("archetype", cardMaster.cardFilter.archetype);
+	else cardMaster.setUrlVar("archetype", "");
+	if(cardMaster.cardFilter.type && cardMaster.cardFilter.type != "") cardMaster.setUrlVar("type", cardMaster.cardFilter.type);
+	else cardMaster.setUrlVar("type", "");
+}
+
+cardMaster.collection.updateFilterBox = function(){
+	console.log("will update filters on page load")
+};
+
 cardMaster.collection.loadList = function(callback){
 
 	$(".card-content").removeClass("loaded");
+
 	var filters = cardMaster.cardFilter.toQueryString();
-	//console.log(filters);
 
 	$.ajax({
 		url: "resources/php_scripts/getCardList.php",
@@ -1041,12 +1077,14 @@ cardMaster.collection.orderList = function(){
 		if($(this).hasClass("sorted")){
 			$(this).removeClass("sorted");
 			cardMaster.cardFilter.orderBy = "";
+			cardMaster.setURLfilters();
 			cardMaster.collection.loadList(cardMaster.collection.render);
 		}
 		else{
 			selector.removeClass('sorted');
 			$(this).addClass("sorted");
 			cardMaster.cardFilter.orderBy = $(this).data("sort");
+			cardMaster.setURLfilters();
 			cardMaster.collection.loadList(cardMaster.collection.render);
 		}
 	});
@@ -1089,6 +1127,7 @@ cardMaster.collection.addFilters = function(){
 		cardMaster.cardFilter.flags = flagValues.join("|");
 	});
 	submit.on("click", function(){
+		cardMaster.setURLfilters();
 		cardMaster.collection.loadList(cardMaster.collection.render);
 	});
 	reset.on("click", function(){
@@ -1104,6 +1143,7 @@ cardMaster.collection.addFilters = function(){
 			$(flag).prop("checked", false);
 		});
 		sortHeaders.removeClass("sorted");
+		cardMaster.setURLfilters();
 		cardMaster.collection.loadList(cardMaster.collection.render);
 	});
 }
@@ -2949,16 +2989,18 @@ cardMaster.animation.cardToSidedeck = function(){
 
 cardMaster.init = function(){
 	if(cardMaster.getPage() != "index"){
-		cardMaster.cardFilter = new _cardFilter();
-		cardMaster.comboFilter = new _comboFilter();
+		var URLfilters = cardMaster.getUrlVars();
+		cardMaster.cardFilter = new _cardFilter(URLfilters);
+		cardMaster.comboFilter = new _comboFilter(URLfilters);
 		cardMaster.imageLoader = new _imageLoader();
+		//load unfiltered cardlist
+		//bind all card data get methods to it
 		cardMaster.collection.syncArchetypes();
 		cardMaster.collection.generateFlags();
 		cardMaster.collection.showServantFields();
 		cardMaster.collection.createCard();
 		cardMaster.cardZoom();
 		cardMaster.stickyPanel();
-		
 	}
 
 	//page scripts
@@ -2970,11 +3012,14 @@ cardMaster.init = function(){
 	if(cardMaster.getPage() == "collection" || cardMaster.getPage() == "archive"){
 		cardMaster.collection.switchViewCommands();
 		cardMaster.loadLiteralElements(function(){
+			cardMaster.setURLfilters();
 			cardMaster.collection.loadList(function(){
+				cardMaster.collection.updateFilterBox();
 				cardMaster.collection.render();
 				//populate sidedeck on page load. Card list needed
 				cardMaster.sidedeck.init();
 				cardMaster.sidedeck.syncLocalStorage(function(){
+					//CANNOT ACCESS class literals if URL has filters
 					cardMaster.sidedeck.renderList("#sideDeck .sidedeck-body");
 				});
 			});
