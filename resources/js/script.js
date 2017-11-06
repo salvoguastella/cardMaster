@@ -274,6 +274,9 @@ function _deck(options){
 _deck.prototype = Object.create(_sandboxItem.prototype);
 
 _deck.prototype.shuffle = function(callback){
+	console.log("shuffle deck function --------------");
+	console.log("pre shuffle: ");
+	console.log(this.linked_elements);
 	var i = 0;
 	var j = 0;
 	var temp = null;
@@ -287,7 +290,7 @@ _deck.prototype.shuffle = function(callback){
 	if(typeof callback === "function") callback();
 
 	//BUG SOMETIMES DELETES RANDOM ITEMS
-	console.log("shuffle deck");
+	console.log("post shuffle: ");
 	console.log(this.linked_elements);
 };
 _deck.prototype.drawCard = function(){
@@ -301,6 +304,42 @@ _deck.prototype.addCard = function(cardID){
 
 cardMaster.getPage = function(){
 	return document.title;
+}
+
+//Loads an unfiltered list of all cards
+cardMaster.loadAllCards = function(){
+	$.ajax({
+		url: "resources/php_scripts/getCardList.php",
+		type: "GET",
+		//async: false,
+		dataType: 'json'
+	})
+	.done(function(data) {
+		//console.log("success " + data);
+		cardMaster.allCards = [];
+		$.each(data, function(i,_single_card){
+			var single_card = {};
+
+			single_card.id = _single_card.id || 0;
+			single_card.name_eng = _single_card.name;
+			single_card.description_eng = _single_card.description;
+			single_card.name_ita = _single_card.name;
+			single_card.description_ita = _single_card.description;
+			single_card.class = _single_card.class;
+			single_card.archetype = _single_card.archetype;
+			single_card.type = _single_card.type;
+			single_card.attack = _single_card.attack;
+			single_card.health = _single_card.health;
+			single_card.flags = _single_card.flags;
+			single_card.image = _single_card.path.replace("./","");
+
+			var card = new _card(single_card);
+			cardMaster.allCards.push(card);
+		});
+	})
+	.fail(function() {
+		cardMaster.showMessage("Error retrieving card list", "error");
+	})
 }
 
 cardMaster.setUrlVar = function(param, value){
@@ -441,7 +480,7 @@ cardMaster.collection.createCard = function(){
 
 cardMaster.getCardDataById = function(id){
 	var foundCard = "none";
-	cardMaster.cardList.forEach(function(card){
+	cardMaster.allCards.forEach(function(card){
 		var testId = parseInt(card.id);
 		if(testId == id){
 			foundCard = card;
@@ -452,10 +491,10 @@ cardMaster.getCardDataById = function(id){
 
 cardMaster.getRandomCardDataByClass = function(_class){
 	var foundCard = "none";
-	for(var i = 0; i < cardMaster.cardList.length; i++){
-		var randomIndex = Math.floor(Math.random() * cardMaster.cardList.length);
+	for(var i = 0; i < cardMaster.allCards.length; i++){
+		var randomIndex = Math.floor(Math.random() * cardMaster.allCards.length);
 		//console.log(randomIndex);
-		var card = cardMaster.cardList[randomIndex];
+		var card = cardMaster.allCards[randomIndex];
 		if(card.class == _class || _class == "none"){
 			foundCard = card;
 			break;
@@ -686,7 +725,34 @@ cardMaster.setURLfilters = function(){
 }
 
 cardMaster.collection.updateFilterBox = function(){
-	console.log("will update filters on page load")
+	//console.log("will update filters on page load")
+	//console.log(cardMaster.cardFilter);
+
+	var cf = cardMaster.cardFilter;
+
+	var selector = $("#filterTrigger");
+	var textSearch = $("#textSearch");
+	var classSearch = $(".filter_panel .card_class");
+	var archetypeSearch = $(".filter_panel .card_archetype");
+	var typeSearch = $(".filter_panel .card_type");
+	//var flagElement = $(".filter_panel .single_flag");
+	var sortHeaders = $(".header > .sortable");
+
+	if(cf.lemma && cf.lemma != "" ) textSearch.val(cf.lemma);
+	else textSearch.val("");
+
+	if(cf.class && cf.class != "" ) classSearch.val(cf.class);
+	else classSearch.val(0);
+
+	if(cf.archetype && cf.archetype != "" ) archetypeSearch.val(cf.archetype);
+	else archetypeSearch.val(0);
+
+	if(cf.type && cf.type != "" ) typeSearch.val(cf.type);
+	else typeSearch.val(0);
+
+	if(cf.orderBy && cf.orderBy != "" ) sortHeaders.filter("*[data-sort='"+cf.orderBy+"']").addClass("sorted");
+	else sortHeaders.removeClass("sorted");
+
 };
 
 cardMaster.collection.loadList = function(callback){
@@ -724,7 +790,6 @@ cardMaster.collection.loadList = function(callback){
 			var card = new _card(single_card);
 			cardMaster.cardList.push(card);
 		});
-		//console.dir(cardMaster.cardList);
 		cardMaster.collection.updateCount();
 		if(typeof callback === "function") callback();
 	})
@@ -2844,6 +2909,10 @@ cardMaster.sandbox.renderElement = function(el){
 	if(el.type == "deck"){
 		element.shuffle.on("click", function(e){
 			e.stopImmediatePropagation();
+			//check here for shuffle bug
+			console.log("PRE function -------------");
+			console.log(el.linked_elements);
+			console.log("--------------------------");
 			el.shuffle(cardMaster.sandbox.updateLocalStorage);
 			//cardMaster.sandbox.updateLocalStorage();
 		});
@@ -2999,6 +3068,7 @@ cardMaster.init = function(){
 		cardMaster.imageLoader = new _imageLoader();
 		//load unfiltered cardlist
 		//bind all card data get methods to it
+		cardMaster.loadAllCards();
 		cardMaster.collection.syncArchetypes();
 		cardMaster.collection.generateFlags();
 		cardMaster.collection.showServantFields();
