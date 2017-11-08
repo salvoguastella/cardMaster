@@ -277,6 +277,7 @@ _deck.prototype.shuffle = function(callback){
 	console.log("shuffle deck function --------------");
 	console.log("pre shuffle: ");
 	console.log(this.linked_elements);
+	/*
 	var i = 0;
 	var j = 0;
 	var temp = null;
@@ -287,6 +288,23 @@ _deck.prototype.shuffle = function(callback){
 		this.linked_elements[i] = this.linked_elements[j]
 		this.linked_elements[j] = temp
 	}
+
+	*/
+	var currentIndex = this.linked_elements.length, temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = this.linked_elements[currentIndex];
+		this.linked_elements[currentIndex] = this.linked_elements[randomIndex];
+		this.linked_elements[randomIndex] = temporaryValue;
+	}
+
 	if(typeof callback === "function") callback();
 
 	//BUG SOMETIMES DELETES RANDOM ITEMS
@@ -2707,9 +2725,17 @@ cardMaster.sandbox.syncLocalStorage = function(callback){
 }
 
 cardMaster.sandbox.updateLocalStorage = function(){
+/*	console.log("PRE - memory");
+	console.log(cardMaster.sandbox.elements);
+	console.log("PRE - localstorage");
+	console.log(localStorage.sandbox);*/
 	var status = JSON.stringify(cardMaster.sandbox.elements);
 	localStorage.sandbox = status;
-	//console.log(localStorage.sandbox);
+/*	console.log("---------------");console.log("---------------");console.log("---------------");
+	console.log("POST - memory");
+	console.log(cardMaster.sandbox.elements);
+	console.log("POST - localstorage");
+	console.log(localStorage.sandbox);*/
 }
 
 cardMaster.sandbox.empty = function(){
@@ -2845,22 +2871,24 @@ cardMaster.sandbox.renderElement = function(el){
 				"z-index": topZ
 			});
 			//checks if element has linked elements and set initial offset for them
-			el.linked_elements.forEach(function(linkedID){
-				topZ = cardMaster.sandbox.getTopZ() + 1;
-				var child = cardMaster.sandbox.getElementByID(linkedID);
-				if(child){
-					child = cardMaster.sandbox.updateElementByID(linkedID, {
-						z: topZ,
-						offsetX: child.x - ui.position.left,
-						offsetY: child.y - ui.position.top
-					});
-					var childElement = $(".element[data-id='"+linkedID+"']")
-					childElement.css({
-						"z-index": topZ
-					});
-				}
-				else el.removeLinkedElement(linkedID);
-			});
+			if(el.type == "card"){
+				el.linked_elements.forEach(function(linkedID){
+					topZ = cardMaster.sandbox.getTopZ() + 1;
+					var child = cardMaster.sandbox.getElementByID(linkedID);
+					if(child){
+						child = cardMaster.sandbox.updateElementByID(linkedID, {
+							z: topZ,
+							offsetX: child.x - ui.position.left,
+							offsetY: child.y - ui.position.top
+						});
+						var childElement = $(".element[data-id='"+linkedID+"']")
+						childElement.css({
+							"z-index": topZ
+						});
+					}
+					else el.removeLinkedElement(linkedID);
+				});
+			}
 		},
 		drag: function(event, ui){
 			//checks if element has linked elements and move them as well
@@ -2910,11 +2938,15 @@ cardMaster.sandbox.renderElement = function(el){
 		element.shuffle.on("click", function(e){
 			e.stopImmediatePropagation();
 			//check here for shuffle bug
-			console.log("PRE function -------------");
-			console.log(el.linked_elements);
-			console.log("--------------------------");
-			el.shuffle(cardMaster.sandbox.updateLocalStorage);
-			//cardMaster.sandbox.updateLocalStorage();
+			if(el.linked_elements.length >= 5){
+				//el.shuffle();
+				el.shuffle(cardMaster.sandbox.updateLocalStorage);
+				//cardMaster.sandbox.updateLocalStorage();
+			}
+			else{
+				debugger;
+				el.shuffle(cardMaster.sandbox.updateLocalStorage);
+			}
 		});
 
 		element.droppable({
