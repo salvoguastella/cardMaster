@@ -2937,16 +2937,7 @@ cardMaster.sandbox.renderElement = function(el){
 	if(el.type == "deck"){
 		element.shuffle.on("click", function(e){
 			e.stopImmediatePropagation();
-			//check here for shuffle bug
-			if(el.linked_elements.length >= 5){
-				//el.shuffle();
-				el.shuffle(cardMaster.sandbox.updateLocalStorage);
-				//cardMaster.sandbox.updateLocalStorage();
-			}
-			else{
-				debugger;
-				el.shuffle(cardMaster.sandbox.updateLocalStorage);
-			}
+			el.shuffle(cardMaster.sandbox.updateLocalStorage);
 		});
 
 		element.droppable({
@@ -2976,9 +2967,28 @@ cardMaster.sandbox.renderElement = function(el){
 	    		var pickedCardId = el.drawCard();
 	    		console.log("pick card from deck: "+pickedCardId);
 	    		console.log(el.linked_elements);
-	    		cardMaster.sandbox.updateLocalStorage();
+				var c = cardMaster.getCardDataById(pickedCardId);
+				addElement(c, el);
+				//console.log(el);
+	    		//cardMaster.sandbox.updateLocalStorage();
 	    	}
 	    	else console.log("deck is empty");
+
+
+		    function addElement(el, spawn){
+				var elementID = cardMaster.sandbox.generateID(el);
+				var typeOffset = {};
+					typeOffset.x = 10;
+					typeOffset.y = -25;
+				var options = {};
+					options.id = elementID;
+					options.type = "card";
+					options.value = el.id;
+					options.x = spawn.x + typeOffset.x;
+					options.y = spawn.y + typeOffset.y;
+					options.z = cardMaster.sandbox.getTopZ() + 1;
+				cardMaster.sandbox.addElement(options);
+			}
 	    });
 
 	}
