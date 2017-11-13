@@ -2510,6 +2510,7 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
 	sideDeck.counter = cardMaster.sidedeck.commonElements.counter({});
 	sideDeck.emptyDeck = cardMaster.sidedeck.commonElements.emptyDeck({});
+	sideDeck.activeEmptyDeck = cardMaster.sidedeck.commonElements.activeEmptyDeck({});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
@@ -2626,6 +2627,7 @@ cardMaster.sidedeck.init = function(){
 	});
 
 	function addElement(el){
+		//console.log(el);
 		var elementID = cardMaster.sandbox.generateID(el);
 		//console.log(elementID);
 		var typeOffset = {};
@@ -2658,7 +2660,7 @@ cardMaster.sidedeck.init = function(){
 		addElement(sideDeck.counter);
 	});
 	sideDeck.emptyDeck.$.on("click", function(){
-		addElement(sideDeck.emptyDeck);
+		addElement(sideDeck.activeEmptyDeck);
 	});
 
 	sideDeck.trigger.on("click", function(){
@@ -2746,7 +2748,7 @@ cardMaster.sandbox.empty = function(){
 cardMaster.sandbox.addElement = function(options){
 	var element;
 	if(options.type == "counter") element = new _counter(options);
-	else if(options.type == "emptyDeck") element = new _deck(options);
+	else if(options.type == "emptyDeck" || options.type == "deck") element = new _deck(options);
 	else element = new _sandboxItem(options);
 	cardMaster.sandbox.elements.push(element);
 	cardMaster.sandbox.updateLocalStorage();
@@ -2937,16 +2939,7 @@ cardMaster.sandbox.renderElement = function(el){
 	if(el.type == "deck"){
 		element.shuffle.on("click", function(e){
 			e.stopImmediatePropagation();
-			//check here for shuffle bug
-			if(el.linked_elements.length >= 5){
-				//el.shuffle();
-				el.shuffle(cardMaster.sandbox.updateLocalStorage);
-				//cardMaster.sandbox.updateLocalStorage();
-			}
-			else{
-				debugger;
-				el.shuffle(cardMaster.sandbox.updateLocalStorage);
-			}
+			el.shuffle(cardMaster.sandbox.updateLocalStorage);
 		});
 
 		element.droppable({
@@ -2976,9 +2969,28 @@ cardMaster.sandbox.renderElement = function(el){
 	    		var pickedCardId = el.drawCard();
 	    		console.log("pick card from deck: "+pickedCardId);
 	    		console.log(el.linked_elements);
-	    		cardMaster.sandbox.updateLocalStorage();
+				var c = cardMaster.getCardDataById(pickedCardId);
+				addElement(c, el);
+				//console.log(el);
+	    		//cardMaster.sandbox.updateLocalStorage();
 	    	}
 	    	else console.log("deck is empty");
+
+
+		    function addElement(el, spawn){
+				var elementID = cardMaster.sandbox.generateID(el);
+				var typeOffset = {};
+					typeOffset.x = 10;
+					typeOffset.y = -25;
+				var options = {};
+					options.id = elementID;
+					options.type = "card";
+					options.value = el.id;
+					options.x = spawn.x + typeOffset.x;
+					options.y = spawn.y + typeOffset.y;
+					options.z = cardMaster.sandbox.getTopZ() + 1;
+				cardMaster.sandbox.addElement(options);
+			}
 	    });
 
 	}
