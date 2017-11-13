@@ -91,6 +91,26 @@
 				}
 			}
 		}
+		&.deck{
+			._deck{
+				width: 160px;
+				height: 180px;
+				background: $lightGrey;
+				border: 2px solid $darkGrey;
+				border-radius: 8px;
+				color: $darkGrey;
+				font-size: 14px;
+				font-weight:700;
+				text-align: center;
+				line-height: 80px;
+				padding: 50px;
+			}
+			&.empty{
+				._deck{
+					color: $errorRed;
+				}
+			}
+		}
 		&.ui-draggable-dragging{
 			img{
 				box-shadow: 0 5px 10px rgba(0,0,0,0.5);
@@ -203,18 +223,4 @@
 			right: 0;
 		}
 	}
-}
-
-._deck{
-	width: 160px;
-	height: 180px;
-	background: $lightGrey;
-	border: 2px solid $darkGrey;
-	border-radius: 8px;
-	color: $darkGrey;
-	font-size: 14px;
-	font-weight:700;
-	text-align: center;
-	line-height: 80px;
-	padding: 50px;
 }

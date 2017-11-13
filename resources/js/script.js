@@ -274,22 +274,10 @@ function _deck(options){
 _deck.prototype = Object.create(_sandboxItem.prototype);
 
 _deck.prototype.shuffle = function(callback){
-	console.log("shuffle deck function --------------");
+/*	console.log("shuffle deck function --------------");
 	console.log("pre shuffle: ");
-	console.log(this.linked_elements);
-	/*
-	var i = 0;
-	var j = 0;
-	var temp = null;
-	for (i = this.linked_elements.length - 1; i > 0; i -= 1) {
-		j = Math.floor(Math.random() * (i + 1))
-		console.log("swap "+ this.linked_elements[i] + " with "+this.linked_elements[j]);
-		temp = this.linked_elements[i]
-		this.linked_elements[i] = this.linked_elements[j]
-		this.linked_elements[j] = temp
-	}
+	console.log(this.linked_elements);*/
 
-	*/
 	var currentIndex = this.linked_elements.length, temporaryValue, randomIndex;
 
 	// While there remain elements to shuffle...
@@ -307,12 +295,11 @@ _deck.prototype.shuffle = function(callback){
 
 	if(typeof callback === "function") callback();
 
-	//BUG SOMETIMES DELETES RANDOM ITEMS
 	console.log("post shuffle: ");
 	console.log(this.linked_elements);
 };
 _deck.prototype.drawCard = function(){
-	var cardID = this.linked_elements.shift();
+	var cardID = this.linked_elements.pop();
 	return cardID;
 };
 
@@ -2845,6 +2832,8 @@ cardMaster.sandbox.renderElement = function(el){
 				class: "shuffle",
 				html: "<i class='fa fa-retweet'></i>"
 			});
+			console.log(el.linked_elements.length);
+			if(el.linked_elements.length <= 0) element.addClass('empty');
 			element.commands.append(element.shuffle);
 			break;
 		default:
@@ -2956,6 +2945,7 @@ cardMaster.sandbox.renderElement = function(el){
 					cardMaster.sandbox.removeElement(removeID);
 					cardMaster.sandbox.updateLocalStorage();
 					ui.draggable.remove();
+					element.removeClass('empty');
 					//change graphic
 				}
 				else{
@@ -2971,6 +2961,8 @@ cardMaster.sandbox.renderElement = function(el){
 	    		console.log(el.linked_elements);
 				var c = cardMaster.getCardDataById(pickedCardId);
 				addElement(c, el);
+				if(el.linked_elements.length <= 0) element.addClass('empty');
+				else element.removeClass('empty');
 				//console.log(el);
 	    		//cardMaster.sandbox.updateLocalStorage();
 	    	}

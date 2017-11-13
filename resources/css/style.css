@@ -1454,6 +1454,20 @@ h1, h2, h3, h4, h5, h6 {
       box-shadow: 0 0 7px rgba(0, 0, 0, 0.7); }
     #sandbox .element.token.ui-draggable-dragging ._token, #sandbox .element.health.ui-draggable-dragging ._token {
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
+    #sandbox .element.deck ._deck {
+      width: 160px;
+      height: 180px;
+      background: #e6e6e6;
+      border: 2px solid #494949;
+      border-radius: 8px;
+      color: #494949;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 80px;
+      padding: 50px; }
+    #sandbox .element.deck.empty ._deck {
+      color: #DC182F; }
     #sandbox .element.ui-draggable-dragging img {
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
     #sandbox .element .commands {
@@ -1550,18 +1564,5 @@ h1, h2, h3, h4, h5, h6 {
       left: 0; }
     ._counter .command.sub {
       right: 0; }
-
-._deck {
-  width: 160px;
-  height: 180px;
-  background: #e6e6e6;
-  border: 2px solid #494949;
-  border-radius: 8px;
-  color: #494949;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 80px;
-  padding: 50px; }
 
 /*# sourceMappingURL=style.css.map */
