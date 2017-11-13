@@ -2510,6 +2510,7 @@ cardMaster.sidedeck.init = function(){
 	sideDeck.simple_token = cardMaster.sidedeck.commonElements.simpleToken();
 	sideDeck.counter = cardMaster.sidedeck.commonElements.counter({});
 	sideDeck.emptyDeck = cardMaster.sidedeck.commonElements.emptyDeck({});
+	sideDeck.activeEmptyDeck = cardMaster.sidedeck.commonElements.activeEmptyDeck({});
 	sideDeck.body = $("<div>", {
 		class: "sidedeck-body"
 	});
@@ -2626,6 +2627,7 @@ cardMaster.sidedeck.init = function(){
 	});
 
 	function addElement(el){
+		//console.log(el);
 		var elementID = cardMaster.sandbox.generateID(el);
 		//console.log(elementID);
 		var typeOffset = {};
@@ -2658,7 +2660,7 @@ cardMaster.sidedeck.init = function(){
 		addElement(sideDeck.counter);
 	});
 	sideDeck.emptyDeck.$.on("click", function(){
-		addElement(sideDeck.emptyDeck);
+		addElement(sideDeck.activeEmptyDeck);
 	});
 
 	sideDeck.trigger.on("click", function(){
@@ -2746,7 +2748,7 @@ cardMaster.sandbox.empty = function(){
 cardMaster.sandbox.addElement = function(options){
 	var element;
 	if(options.type == "counter") element = new _counter(options);
-	else if(options.type == "emptyDeck") element = new _deck(options);
+	else if(options.type == "emptyDeck" || options.type == "deck") element = new _deck(options);
 	else element = new _sandboxItem(options);
 	cardMaster.sandbox.elements.push(element);
 	cardMaster.sandbox.updateLocalStorage();
