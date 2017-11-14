@@ -1465,9 +1465,23 @@ h1, h2, h3, h4, h5, h6 {
       font-weight: 700;
       text-align: center;
       line-height: 80px;
-      padding: 50px; }
-    #sandbox .element.deck.empty ._deck {
-      color: #DC182F; }
+      padding: 50px;
+      position: relative; }
+    #sandbox .element.deck .available_cards {
+      pointer-events: none;
+      padding: 30px;
+      border: 6px solid #3d332e;
+      border-radius: 5px;
+      background-image: url("../img/card_parts/seemless-parchment.png");
+      font-size: 16px;
+      text-align: center;
+      width: 140px;
+      height: 195px;
+      position: absolute;
+      left: 8px;
+      top: -26px; }
+    #sandbox .element.deck.empty .available_cards {
+      display: none; }
     #sandbox .element.ui-draggable-dragging img {
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); }
     #sandbox .element .commands {

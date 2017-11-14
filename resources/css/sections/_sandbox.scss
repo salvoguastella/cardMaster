@@ -104,10 +104,25 @@
 				text-align: center;
 				line-height: 80px;
 				padding: 50px;
+				position:relative;
+			}
+			.available_cards{
+				pointer-events: none;
+				padding: 30px;
+				border:6px solid $border-brown;
+				border-radius: 5px;
+				background-image: url("../img/card_parts/seemless-parchment.png");
+				font-size: 16px;
+				text-align: center;
+				width: 140px;
+				height: 195px;
+				position:absolute;
+				left:8px;
+				top: -26px;
 			}
 			&.empty{
-				._deck{
-					color: $errorRed;
+				.available_cards{
+					display:none;
 				}
 			}
 		}

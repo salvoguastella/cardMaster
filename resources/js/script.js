@@ -2828,6 +2828,13 @@ cardMaster.sandbox.renderElement = function(el){
 				value: el.value
 			}).$;
 
+			element.cardPlaceholder = $("<div>", {
+				class: "available_cards",
+				html: "<span class='n'>"+el.linked_elements.length+"</span> cards"
+			});
+
+			element.content.append(element.cardPlaceholder);
+
 			element.shuffle = $("<div>", {
 				class: "shuffle",
 				html: "<i class='fa fa-retweet'></i>"
@@ -2941,6 +2948,7 @@ cardMaster.sandbox.renderElement = function(el){
 				if(el.addLinkedElement(cardID)){
 					console.log("add card to deck");
 					console.log(el.linked_elements);
+					element.find(".available_cards .n").text(el.linked_elements.length);
 					//remove card from sandbox, data and element
 					cardMaster.sandbox.removeElement(removeID);
 					cardMaster.sandbox.updateLocalStorage();
@@ -2954,11 +2962,17 @@ cardMaster.sandbox.renderElement = function(el){
 	    	}
 	    });
 
+	    element.cardPlaceholder.droppable({
+	    	accept: ".element.card"
+	    	//bubbles in container
+	    });
+
 	    element.on("click", function(){
 	    	if(el.linked_elements.length > 0){
 	    		var pickedCardId = el.drawCard();
 	    		console.log("pick card from deck: "+pickedCardId);
 	    		console.log(el.linked_elements);
+	    		element.find(".available_cards .n").text(el.linked_elements.length);
 				var c = cardMaster.getCardDataById(pickedCardId);
 				addElement(c, el);
 				if(el.linked_elements.length <= 0) element.addClass('empty');
