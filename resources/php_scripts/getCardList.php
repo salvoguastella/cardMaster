@@ -12,7 +12,7 @@
 	$flags=isset($_REQUEST['flags']) ? $_REQUEST['flags'] : "";
 	$orderBy=isset($_REQUEST['orderBy']) ? $_REQUEST['orderBy'] : "";
 
-	$SQL = "SELECT card_data.id,card_it.name,description,class,archetype,type,attack,health,flags,path FROM card_data JOIN card_it ON ref = card_data.id JOIN icons ON image = icons.id WHERE active='$active'";
+	$SQL = "SELECT card_data.id,card_it.name,description,class,archetype,type,attack,health,flags,path FROM card_data JOIN card_it ON ref = card_data.id JOIN icons ON image = icons.id WHERE active='$active'";// AND image = '587'";
 
 	$tail = "";
 

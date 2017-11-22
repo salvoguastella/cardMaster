@@ -316,7 +316,7 @@ cardMaster.loadAllCards = function(){
 	$.ajax({
 		url: "resources/php_scripts/getCardList.php",
 		type: "GET",
-		//async: false,
+		async: false,
 		dataType: 'json'
 	})
 	.done(function(data) {
@@ -350,7 +350,7 @@ cardMaster.loadAllCards = function(){
 cardMaster.setUrlVar = function(param, value){
 	var _url = new URL(window.location);
 	var _params = new URLSearchParams(_url.search.slice(1));
-	console.log(param+" "+value);
+	//console.log(param+" "+value);
 	if(value != "")	_params.set(param, value);
 	else _params.delete(param);
 	window.history.replaceState({}, '', `${location.pathname}?${_params}`);
@@ -534,6 +534,7 @@ cardMaster.collection.sendChangeRequest = function(form){
 			else{
 				cardMaster.collection.resetCardForm();
 				cardMaster.collection.removeCardPreview();
+				cardMaster.loadAllCards();
 				cardMaster.collection.loadList(cardMaster.collection.renderList);
 				cardMaster.showMessage(res, "confirm");
 				cardMaster.editMode = false;
@@ -650,7 +651,7 @@ cardMaster.showMessage = function(msg,type){
 	selector.addClass(type);
 	selector.find("span").text(msg+" - "+cardMaster.getTimeStamp());
 	console.log(msg+" - "+cardMaster.getTimeStamp());
-	cardMaster.showToast(msg+" - "+cardMaster.getTimeStamp(), type);
+	//cardMaster.showToast(msg+" - "+cardMaster.getTimeStamp(), type);
 };
 
 cardMaster.showToast = function(msg,type){
@@ -2261,9 +2262,11 @@ cardMaster.sidedeck.manualSortList = function(changedIndex){
 
 cardMaster.sidedeck.renderList = function(ctx){
 	var cards = cardMaster.sidedeck.cards;
+	console.log(cards);
 	$(ctx).html("");
 	var originalIndex = 0;
 	for(var c_i in cards){
+		console.log(cards[c_i]);
 		var c = cardMaster.getCardDataById(cards[c_i]);
 		var row = $("<div>",{
 			class: "sidedeck-card",
