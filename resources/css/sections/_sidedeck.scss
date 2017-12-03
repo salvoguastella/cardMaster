@@ -5,6 +5,7 @@
 	z-index: 2000;
 	@include clearfix;
 	@include transition(0.3s all linear);
+	pointer-events: none;
 	.sidedeck-trigger{
 		float:left;
 		height:35px;
@@ -13,6 +14,7 @@
 		font-size: 16px;
 		cursor:pointer;
 		overflow: hidden;
+		pointer-events: auto;
 		.fa-hand-o-down{
 			right:7px;
 			top:-16px;
@@ -195,6 +197,7 @@
 	}
 	&.active{
 		right:0;
+		pointer-events: auto;
 		.sidedeck-wrapper{
 			box-shadow: -2px 0 2px rgba(0,0,0,0.5);
 		}

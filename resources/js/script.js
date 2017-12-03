@@ -379,7 +379,7 @@ cardMaster.cardZoom = function(){
 		var source = $(this).attr("src");
 		if(source=="" || source === undefined) source = $(this).find("img").attr("src");
 		if(source=="" || source === undefined) source = $(this).data("img");
-		targetImg.attr("src",source);
+		targetImg.attr("src",source+"?n="+Date.now());
 		targetImg.on("error", function(){
 			targetImg.attr("src", "./resources/img/card_parts/normal.png");
 		});
@@ -2802,7 +2802,7 @@ cardMaster.sandbox.renderElement = function(el){
 			element.thumb = $("<img>", {
 				class: "thumb",
 				src : "./"+obj.image,
-				title : obj.getName()
+				title : obj.getName().replace(/\\'/g, "'")
 			});
 			element.content.on("error", function(){
 				element.content.prop("src", "./resources/img/card_parts/normal.png");

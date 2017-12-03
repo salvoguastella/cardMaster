@@ -1184,7 +1184,8 @@ h1, h2, h3, h4, h5, h6 {
   -moz-transition: 0.3s all linear;
   -ms-transition: 0.3s all linear;
   -o-transition: 0.3s all linear;
-  transition: 0.3s all linear; }
+  transition: 0.3s all linear;
+  pointer-events: none; }
   #sideDeck:after {
     content: "";
     display: table;
@@ -1196,7 +1197,8 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     font-size: 16px;
     cursor: pointer;
-    overflow: hidden; }
+    overflow: hidden;
+    pointer-events: auto; }
     #sideDeck .sidedeck-trigger .fa-hand-o-down {
       right: 7px;
       top: -16px;
@@ -1366,7 +1368,8 @@ h1, h2, h3, h4, h5, h6 {
       min-height: 200px;
       max-height: 400px; }
   #sideDeck.active {
-    right: 0; }
+    right: 0;
+    pointer-events: auto; }
     #sideDeck.active .sidedeck-wrapper {
       box-shadow: -2px 0 2px rgba(0, 0, 0, 0.5); }
   #sideDeck.anim-add .fa-hand-o-down {
